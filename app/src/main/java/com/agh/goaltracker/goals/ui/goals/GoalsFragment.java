@@ -18,10 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GoalsFragment extends Fragment {
@@ -56,7 +56,9 @@ public class GoalsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+        goalsViewModel = new ViewModelProvider(this, new GoalsViewModelFactory(
+                ((GoalTrackerApplication) getActivity().getApplication()).getGoalRepository()
+        )).get(GoalsViewModel.class);
         goalsViewModel.getGoals().observe(getViewLifecycleOwner(), new Observer<List<Goal>>() {
             @Override
             public void onChanged(List<Goal> goals) {

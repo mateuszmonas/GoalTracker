@@ -3,6 +3,7 @@
     package="com.agh.goaltracker">
 
     <application
+        android:name=".GoalTrackerApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
