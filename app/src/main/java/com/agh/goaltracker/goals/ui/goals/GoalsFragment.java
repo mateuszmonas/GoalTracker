@@ -1,6 +1,7 @@
 package com.agh.goaltracker.goals.ui.goals;
 
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
@@ -13,10 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.agh.goaltracker.R;
+import com.agh.goaltracker.model.Goal;
+
+import java.util.List;
 
 public class GoalsFragment extends Fragment {
 
-    private GoalsViewModel mViewModel;
+    private GoalsViewModel goalsViewModel;
 
     public static GoalsFragment newInstance() {
         return new GoalsFragment();
@@ -32,8 +36,13 @@ public class GoalsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(GoalsViewModel.class);
-        // TODO: Use the ViewModel
+        goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+        goalsViewModel.getGoals().observe(getViewLifecycleOwner(), new Observer<List<Goal>>() {
+            @Override
+            public void onChanged(List<Goal> goals) {
+                // TODO: 08/02/20
+            }
+        });
     }
 
 }
