@@ -9,7 +9,7 @@ import androidx.room.InvalidationTracker;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-@Database(entities = Goal.class, version = 1)
+@Database(entities = Goal.class, version = 1, exportSchema = false)
 public abstract class GoalDatabase extends RoomDatabase {
-    abstract GoalDao goalDao();
+    public abstract GoalDao goalDao();
 }

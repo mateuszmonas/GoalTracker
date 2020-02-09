@@ -10,19 +10,25 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class GoalLocalDataSource implements GoalDataSource {
+    private GoalDao goalDao;
+
+    public GoalLocalDataSource(GoalDao goalDao) {
+        this.goalDao = goalDao;
+    }
 
     @Override
     public LiveData<List<Goal>> observeGoals() {
-        MutableLiveData<List<Goal>> g = new MutableLiveData<>();
-        ArrayList<Goal> goalArrayList = new ArrayList<>();
-        for (int i = 1; i < 10; i++) {
-            StringBuilder title = new StringBuilder();
-            for (int j = 0; j < i; j++) {
-                title.append(i);
-            }
-            goalArrayList.add(new Goal(title.toString()));
-        }
-        g.setValue(goalArrayList);
-        return g;
+//        MutableLiveData<List<Goal>> g = new MutableLiveData<>();
+//        ArrayList<Goal> goalArrayList = new ArrayList<>();
+//        for (int i = 1; i < 10; i++) {
+//            StringBuilder title = new StringBuilder();
+//            for (int j = 0; j < i; j++) {
+//                title.append(i);
+//            }
+//            goalArrayList.add(new Goal(title.toString()));
+//        }
+//        g.setValue(goalArrayList);
+//        return g;
+        return goalDao.observeGoals();
     }
 }

@@ -8,10 +8,10 @@ import androidx.room.PrimaryKey;
 public class Goal {
     @PrimaryKey
     @ColumnInfo(name = "goal_id")
-    private int goalId;
+    public int goalId;
 
     @ColumnInfo(name = "title")
-    private String title;
+    public String title;
 
     public Goal(String title) {
         this.title = title;
@@ -19,5 +19,9 @@ public class Goal {
 
     public String getTitle() {
         return title;
+    }
+
+    public int getGoalId() {
+        return goalId;
     }
 }
