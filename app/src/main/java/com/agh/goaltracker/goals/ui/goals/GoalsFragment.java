@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -83,6 +84,27 @@ public class GoalsFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.goals_menu, menu);
+        goalsViewModel.filters.observe(getViewLifecycleOwner(), goalsFilterTypes -> {
+            menu.findItem(R.id.current_goals).setChecked(goalsFilterTypes.contains(GoalsViewModel.GoalsFilterType.CURRENT_GOALS));
+            menu.findItem(R.id.completed_goals).setChecked(goalsFilterTypes.contains(GoalsViewModel.GoalsFilterType.COMPLETED_GOALS));
+            menu.findItem(R.id.failed_goals).setChecked(goalsFilterTypes.contains(GoalsViewModel.GoalsFilterType.FAILED_GOALS));
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.current_goals:
+                goalsViewModel.setFiltering(GoalsViewModel.GoalsFilterType.CURRENT_GOALS);
+                return true;
+            case R.id.completed_goals:
+                goalsViewModel.setFiltering(GoalsViewModel.GoalsFilterType.COMPLETED_GOALS);
+                return true;
+            case R.id.failed_goals:
+                goalsViewModel.setFiltering(GoalsViewModel.GoalsFilterType.FAILED_GOALS);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
