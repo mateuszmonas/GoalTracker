@@ -1,10 +1,13 @@
 package com.agh.goaltracker.addgoal.ui.addgoal;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -20,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import butterknife.BindView;
@@ -85,8 +89,8 @@ public class AddGoalFragment extends Fragment {
 
     @OnClick(R.id.choose_date)
     public void setDueDate() { // TODO choose date from calendar
-        Toast.makeText(getContext(), "display calendar", Toast.LENGTH_SHORT).show();
-        chosenDate = Calendar.getInstance().getTime();
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
     }
 
     @OnClick(R.id.set_goal)
@@ -104,6 +108,26 @@ public class AddGoalFragment extends Fragment {
             case R.id.radio_as_min:
                 if (checked) countAsMinutes = true;
                 break;
+        }
+    }
+
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+            Toast.makeText(getContext(), year+" "+month+" "+day, Toast.LENGTH_SHORT).show();
         }
     }
 
