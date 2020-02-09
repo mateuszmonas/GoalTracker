@@ -68,7 +68,7 @@ public class GoalsFragment extends Fragment {
 
     @OnClick(R.id.add_goal_fab)
     public void addGoal() {
-        Intent intent = AddGoalActivity.createIntent(getContext());
+        Intent intent = AddGoalActivity.createIntent(getContext()); // TODO start act for result?
         startActivity(intent);
     }
 }

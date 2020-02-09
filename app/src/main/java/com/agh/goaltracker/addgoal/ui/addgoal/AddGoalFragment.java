@@ -7,19 +7,32 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
+import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 
 public class AddGoalFragment extends Fragment {
 
     private AddGoalViewModel addGoalViewModel;
+    private Unbinder unbinder;
+
+    @BindView(R.id.goal_name_txt)
+    EditText goalName;
 
     public static AddGoalFragment newInstance() {
         return new AddGoalFragment();
@@ -29,7 +42,9 @@ public class AddGoalFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.add_goal_fragment, container, false);
+        View view = inflater.inflate(R.layout.add_goal_fragment, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -39,6 +54,28 @@ public class AddGoalFragment extends Fragment {
                 ((GoalTrackerApplication) getActivity().getApplication()).getGoalRepository()
         )).get(AddGoalViewModel.class);
         // TODO: Use the ViewModel
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @OnClick(R.id.create_goal_btn)
+    public void addGoal(){
+        if (TextUtils.isEmpty(goalName.getText())) {
+            Toast.makeText(getContext(), "Goal name cannot be empty!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            String name = goalName.getText().toString();
+            addGoalViewModel.saveGoal(new Goal(name));
+            Toast.makeText(
+                    getContext(),
+                    "saved!",
+                    Toast.LENGTH_SHORT).show();
+            getActivity().finish();
+        }
     }
 
 }
