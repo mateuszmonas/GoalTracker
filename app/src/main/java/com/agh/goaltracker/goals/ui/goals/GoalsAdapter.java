@@ -19,6 +19,11 @@ import butterknife.ButterKnife;
 public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> {
 
     private List<Goal> goals = new ArrayList<>();
+    private final GoalsFragment.GoalsListListener goalsListListener;
+
+    public GoalsAdapter(GoalsFragment.GoalsListListener goalsListListener) {
+        this.goalsListListener = goalsListListener;
+    }
 
     @NonNull
     @Override
@@ -30,7 +35,13 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Goal goal = goals.get(position);
+        holder.goal = goal;
         holder.goalTitle.setText(goal.getTitle());
+        holder.itemView.setOnClickListener(v -> goalsListListener.goToGoalDetailsActivity(goal));
+        holder.itemView.setOnLongClickListener(v -> {
+            goalsListListener.goToEditGoalDetailsActivity(goal);
+            return true;
+        });
     }
 
     @Override
@@ -44,6 +55,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        Goal goal;
         @BindView(R.id.goal_title)
         TextView goalTitle;
 

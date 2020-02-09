@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.addgoal.AddGoalActivity;
+import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,17 @@ public class GoalsFragment extends Fragment {
     private GoalsViewModel goalsViewModel;
     private GoalsAdapter goalsAdapter;
     private Unbinder unbinder;
+    private GoalsListListener goalsListListener = new GoalsListListener() {
+        @Override
+        public void goToGoalDetailsActivity(Goal goal) {
+            // TODO: 09/02/20 implement goal details
+        }
+
+        @Override
+        public void goToEditGoalDetailsActivity(Goal goal) {
+            // TODO: 09/02/20 implement edit goal details
+        }
+    };
 
     public static GoalsFragment newInstance() {
         return new GoalsFragment();
@@ -37,7 +49,7 @@ public class GoalsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        goalsAdapter = new GoalsAdapter();
+        goalsAdapter = new GoalsAdapter(goalsListListener);
     }
 
     @Nullable
@@ -67,8 +79,14 @@ public class GoalsFragment extends Fragment {
     }
 
     @OnClick(R.id.add_goal_fab)
-    public void addGoal() {
+    public void goToAddGoalActivity() {
         Intent intent = AddGoalActivity.createIntent(getContext());
         startActivity(intent);
+    }
+
+    interface GoalsListListener {
+        void goToGoalDetailsActivity(Goal goal);
+
+        void goToEditGoalDetailsActivity(Goal goal);
     }
 }
