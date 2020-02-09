@@ -1,19 +1,6 @@
 package com.agh.goaltracker.goals.ui.goals;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +11,24 @@ import com.agh.goaltracker.model.Goal;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class GoalsFragment extends Fragment {
 
-    private GoalsViewModel goalsViewModel;
-    private GoalsAdapter goalsAdapter;
-    Unbinder unbinder;
     @BindView(R.id.goals_recycler_view)
     RecyclerView goalsRecyclerView;
+    private GoalsViewModel goalsViewModel;
+    private GoalsAdapter goalsAdapter;
+    private Unbinder unbinder;
 
     public static GoalsFragment newInstance() {
         return new GoalsFragment();
@@ -67,4 +65,9 @@ public class GoalsFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

@@ -1,9 +1,6 @@
 package com.agh.goaltracker.goals.ui.goals;
 
-import com.agh.goaltracker.goals.ui.goals.GoalsViewModel;
 import com.agh.goaltracker.model.source.GoalRepository;
-
-import java.lang.reflect.InvocationTargetException;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;

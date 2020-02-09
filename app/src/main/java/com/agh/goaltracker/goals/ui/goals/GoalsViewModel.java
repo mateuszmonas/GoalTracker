@@ -9,15 +9,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 public class GoalsViewModel extends ViewModel {
-    LiveData<List<Goal>> goals;
-    GoalRepository goalRepository;
+    private LiveData<List<Goal>> goals;
+    private GoalRepository goalRepository;
 
     public GoalsViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
     }
 
     public LiveData<List<Goal>> getGoals() {
-        if(goals==null){
+        if (goals == null) {
             goals = goalRepository.observeObjects();
         }
         return goals;
