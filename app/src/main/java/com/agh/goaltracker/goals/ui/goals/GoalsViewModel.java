@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
@@ -28,17 +29,7 @@ public class GoalsViewModel extends ViewModel {
     }
 
     public LiveData<List<Goal>> getGoals() {
-        return Transformations.switchMap(filters, new Function<Set<GoalsFilterType>, LiveData<List<Goal>>>() {
-            @Override
-            public LiveData<List<Goal>> apply(Set<GoalsFilterType> filterList) {
-                return Transformations.switchMap(goals, new Function<List<Goal>, LiveData<List<Goal>>>() {
-                    @Override
-                    public LiveData<List<Goal>> apply(List<Goal> input) {
-                        return new MutableLiveData<>(applyFilters(input, filterList));
-                    }
-                });
-            }
-        });
+        return Transformations.switchMap(filters, filterList -> Transformations.switchMap(goals, goalList -> new MutableLiveData<>(applyFilters(goalList, filterList))));
     }
 
     public void setFiltering(GoalsFilterType filterType) {
@@ -51,6 +42,7 @@ public class GoalsViewModel extends ViewModel {
         filters.setValue(currentFilters);
     }
 
+    // TODO: 09/02/20 implement filtering
     List<Goal> applyFilters(List<Goal> goals, Set<GoalsFilterType> filterTypes) {
         return goals;
     }
