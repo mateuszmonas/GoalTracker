@@ -1,6 +1,6 @@
 package com.agh.goaltracker.addgoal.ui.addgoal;
 
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
@@ -12,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
+import com.agh.goaltracker.util.ViewModelFactory;
 
 
 public class AddGoalFragment extends Fragment {
 
-    private AddGoalViewModel mViewModel;
+    private AddGoalViewModel addGoalViewModel;
 
     public static AddGoalFragment newInstance() {
         return new AddGoalFragment();
@@ -33,7 +35,9 @@ public class AddGoalFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AddGoalViewModel.class);
+        addGoalViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                ((GoalTrackerApplication) getActivity().getApplication()).getGoalRepository()
+        )).get(AddGoalViewModel.class);
         // TODO: Use the ViewModel
     }
 

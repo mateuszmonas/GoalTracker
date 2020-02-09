@@ -1,4 +1,4 @@
-package com.agh.goaltracker.goals.ui.goals;
+package com.agh.goaltracker.util;
 
 import com.agh.goaltracker.model.source.GoalRepository;
 
@@ -6,11 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-public class GoalsViewModelFactory implements ViewModelProvider.Factory {
+public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private GoalRepository goalRepository;
 
-    public GoalsViewModelFactory(GoalRepository goalRepository) {
+    public ViewModelFactory(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
     }
 

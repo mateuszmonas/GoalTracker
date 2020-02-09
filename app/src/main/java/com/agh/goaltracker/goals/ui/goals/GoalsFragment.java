@@ -7,14 +7,11 @@ import android.view.ViewGroup;
 
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
-import com.agh.goaltracker.model.Goal;
-
-import java.util.List;
+import com.agh.goaltracker.util.ViewModelFactory;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,7 +52,7 @@ public class GoalsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        goalsViewModel = new ViewModelProvider(this, new GoalsViewModelFactory(
+        goalsViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 ((GoalTrackerApplication) getActivity().getApplication()).getGoalRepository()
         )).get(GoalsViewModel.class);
         goalsViewModel.getGoals().observe(getViewLifecycleOwner(), goals -> goalsAdapter.updateData(goals));
