@@ -58,12 +58,7 @@ public class GoalsFragment extends Fragment {
         goalsViewModel = new ViewModelProvider(this, new GoalsViewModelFactory(
                 ((GoalTrackerApplication) getActivity().getApplication()).getGoalRepository()
         )).get(GoalsViewModel.class);
-        goalsViewModel.getGoals().observe(getViewLifecycleOwner(), new Observer<List<Goal>>() {
-            @Override
-            public void onChanged(List<Goal> goals) {
-                goalsAdapter.updateData(goals);
-            }
-        });
+        goalsViewModel.getGoals().observe(getViewLifecycleOwner(), goals -> goalsAdapter.updateData(goals));
     }
 
     @Override
@@ -74,6 +69,5 @@ public class GoalsFragment extends Fragment {
 
     @OnClick(R.id.add_goal_fab)
     public void addGoal() {
-        goalsViewModel.saveGoal();
     }
 }

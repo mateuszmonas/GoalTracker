@@ -22,8 +22,4 @@ public class GoalsViewModel extends ViewModel {
         }
         return goals;
     }
-
-    public void saveGoal() {
-        goalRepository.saveGoal(new Goal("asd"));
-    }
 }
