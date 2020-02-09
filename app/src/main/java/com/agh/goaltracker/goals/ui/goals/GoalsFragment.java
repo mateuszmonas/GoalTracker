@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 

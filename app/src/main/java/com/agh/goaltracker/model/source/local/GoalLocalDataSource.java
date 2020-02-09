@@ -3,11 +3,9 @@ package com.agh.goaltracker.model.source.local;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalDataSource;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 public class GoalLocalDataSource implements GoalDataSource {
     private GoalDao goalDao;
