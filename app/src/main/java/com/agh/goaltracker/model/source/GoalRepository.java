@@ -8,6 +8,6 @@ import androidx.lifecycle.LiveData;
 
 public interface GoalRepository {
 
-    LiveData<List<Goal>> observeObjects();
+    LiveData<List<Goal>> observeGoals();
 
 }

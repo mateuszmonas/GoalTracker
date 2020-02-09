@@ -18,7 +18,7 @@ public class GoalsViewModel extends ViewModel {
 
     public LiveData<List<Goal>> getGoals() {
         if (goals == null) {
-            goals = goalRepository.observeObjects();
+            goals = goalRepository.observeGoals();
         }
         return goals;
     }
