@@ -1,7 +1,6 @@
 package com.agh.goaltracker.goals;
 
 import android.os.Bundle;
-import android.view.Menu;
 
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.goals.ui.goals.GoalsFragment;

@@ -18,8 +18,8 @@ import butterknife.ButterKnife;
 
 public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> {
 
-    private List<Goal> goals = new ArrayList<>();
     private final GoalsFragment.GoalsListListener goalsListListener;
+    private List<Goal> goals = new ArrayList<>();
 
     public GoalsAdapter(GoalsFragment.GoalsListListener goalsListListener) {
         this.goalsListListener = goalsListListener;

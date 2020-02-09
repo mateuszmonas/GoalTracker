@@ -1,13 +1,6 @@
 package com.agh.goaltracker.addgoal.ui.addgoal;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +8,11 @@ import android.view.ViewGroup;
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.util.ViewModelFactory;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 
 public class AddGoalFragment extends Fragment {

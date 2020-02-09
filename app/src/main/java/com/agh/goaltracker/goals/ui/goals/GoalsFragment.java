@@ -29,12 +29,12 @@ import butterknife.Unbinder;
 
 public class GoalsFragment extends Fragment {
 
+    private static final String TAG = "GoalsFragment";
     @BindView(R.id.goals_recycler_view)
     RecyclerView goalsRecyclerView;
     private GoalsViewModel goalsViewModel;
     private GoalsAdapter goalsAdapter;
     private Unbinder unbinder;
-    private static final String TAG = "GoalsFragment";
     private GoalsListListener goalsListListener = new GoalsListListener() {
         @Override
         public void goToGoalDetailsActivity(Goal goal) {
@@ -93,7 +93,7 @@ public class GoalsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.current_goals:
                 goalsViewModel.setFiltering(GoalsViewModel.GoalsFilterType.CURRENT_GOALS);
                 return true;

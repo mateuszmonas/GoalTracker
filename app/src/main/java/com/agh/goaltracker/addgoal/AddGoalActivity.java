@@ -1,13 +1,13 @@
 package com.agh.goaltracker.addgoal;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.addgoal.ui.addgoal.AddGoalFragment;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AddGoalActivity extends AppCompatActivity {
 
