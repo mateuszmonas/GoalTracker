@@ -1,5 +1,6 @@
 package com.agh.goaltracker.goals.ui.goals;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
+import com.agh.goaltracker.addgoal.AddGoalActivity;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 import androidx.annotation.NonNull;
@@ -66,5 +68,7 @@ public class GoalsFragment extends Fragment {
 
     @OnClick(R.id.add_goal_fab)
     public void addGoal() {
+        Intent intent = AddGoalActivity.createIntent(getContext());
+        startActivity(intent);
     }
 }
