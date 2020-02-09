@@ -23,4 +23,24 @@ public class DefaultGoalRepository implements GoalRepository {
     public void saveGoal(Goal goal) {
         GoalDatabase.databaseWriteExecutor.execute(() -> localGoalDataSource.saveGoal(goal));
     }
+
+    @Override
+    public LiveData<Goal> observeGoal(int goalId) {
+        return localGoalDataSource.observeGoal(goalId);
+    }
+
+    @Override
+    public void updateGoal(Goal goal) {
+        localGoalDataSource.updateGoal(goal);
+    }
+
+    @Override
+    public void deleteGoals(List<Goal> goals) {
+        localGoalDataSource.deleteGoals(goals);
+    }
+
+    @Override
+    public void deleteGoal(Goal goal) {
+        localGoalDataSource.deleteGoal(goal);
+    }
 }

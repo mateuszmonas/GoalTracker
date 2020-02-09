@@ -21,6 +21,27 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void saveGoal(Goal goal) {
-        goalDao.insert(goal);
+        goalDao.insertGoal(goal);
+    }
+
+
+    @Override
+    public LiveData<Goal> observeGoal(int goalId) {
+        return goalDao.observeGoal(goalId);
+    }
+
+    @Override
+    public void updateGoal(Goal goal) {
+        goalDao.updateGoal(goal);
+    }
+
+    @Override
+    public void deleteGoals(List<Goal> goals) {
+        goalDao.deleteGoals(goals);
+    }
+
+    @Override
+    public void deleteGoal(Goal goal) {
+        goalDao.deleteGoal(goal);
     }
 }
