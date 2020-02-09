@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/filter"
+        android:checkableBehavior="single"
+
+        ><item android:id="@+id/current_goals"
+        android:checked="true"
+        android:checkable="true"
+        android:title="current goals"/>
+        <item android:id="@+id/completed_goals"
+            android:checkable="true"
+            android:title="completed goals" />
+        <item android:id="@+id/failed_goals"
+            android:checkable="true"
+            android:title="failed goals" /></group>
+
+    <item android:id="@+id/settings"
+        android:title="settings" />
+</menu>

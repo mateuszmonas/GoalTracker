@@ -2,7 +2,10 @@ package com.agh.goaltracker.goals.ui.goals;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,15 +33,18 @@ public class GoalsFragment extends Fragment {
     private GoalsViewModel goalsViewModel;
     private GoalsAdapter goalsAdapter;
     private Unbinder unbinder;
+    private static final String TAG = "GoalsFragment";
     private GoalsListListener goalsListListener = new GoalsListListener() {
         @Override
         public void goToGoalDetailsActivity(Goal goal) {
             // TODO: 09/02/20 implement goal details
+            Log.d(TAG, "goToGoalDetailsActivity() called with: goal = [" + goal + "]");
         }
 
         @Override
         public void goToEditGoalDetailsActivity(Goal goal) {
             // TODO: 09/02/20 implement edit goal details
+            Log.d(TAG, "goToEditGoalDetailsActivity() called with: goal = [" + goal + "]");
         }
     };
 
@@ -49,6 +55,7 @@ public class GoalsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         goalsAdapter = new GoalsAdapter(goalsListListener);
     }
 
@@ -73,13 +80,19 @@ public class GoalsFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.goals_menu, menu);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
     @OnClick(R.id.add_goal_fab)
-    public void goToAddGoalActivity() {
+    public void navigateToAddGoalActivity() {
         Intent intent = AddGoalActivity.createIntent(getContext());
         startActivity(intent);
     }
