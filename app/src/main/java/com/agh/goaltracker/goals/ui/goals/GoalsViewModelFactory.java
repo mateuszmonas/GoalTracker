@@ -3,13 +3,15 @@ package com.agh.goaltracker.goals.ui.goals;
 import com.agh.goaltracker.goals.ui.goals.GoalsViewModel;
 import com.agh.goaltracker.model.source.GoalRepository;
 
+import java.lang.reflect.InvocationTargetException;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 public class GoalsViewModelFactory implements ViewModelProvider.Factory {
 
-    GoalRepository goalRepository;
+    private GoalRepository goalRepository;
 
     public GoalsViewModelFactory(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
@@ -18,9 +20,10 @@ public class GoalsViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(GoalsViewModel.class)) {
-            return (T) new GoalsViewModel(goalRepository);
+        try {
+            return modelClass.getConstructor(GoalRepository.class).newInstance(goalRepository);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot create an instance of " + modelClass, e);
         }
-        throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }
