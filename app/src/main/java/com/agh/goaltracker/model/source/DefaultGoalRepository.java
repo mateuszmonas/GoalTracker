@@ -19,4 +19,9 @@ public class DefaultGoalRepository implements GoalRepository {
     public LiveData<List<Goal>> observeGoals() {
         return localGoalDataSource.observeGoals();
     }
+
+    @Override
+    public void saveGoal(Goal goal) {
+        localGoalDataSource.saveGoal(goal);
+    }
 }

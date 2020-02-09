@@ -10,4 +10,5 @@ public interface GoalDataSource {
 
     LiveData<List<Goal>> observeGoals();
 
+    void saveGoal(Goal goal);
 }

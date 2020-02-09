@@ -10,4 +10,6 @@ public interface GoalRepository {
 
     LiveData<List<Goal>> observeGoals();
 
+    void saveGoal(Goal goal);
+
 }

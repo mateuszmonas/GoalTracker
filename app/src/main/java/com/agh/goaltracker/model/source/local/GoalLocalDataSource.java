@@ -18,17 +18,11 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public LiveData<List<Goal>> observeGoals() {
-//        MutableLiveData<List<Goal>> g = new MutableLiveData<>();
-//        ArrayList<Goal> goalArrayList = new ArrayList<>();
-//        for (int i = 1; i < 10; i++) {
-//            StringBuilder title = new StringBuilder();
-//            for (int j = 0; j < i; j++) {
-//                title.append(i);
-//            }
-//            goalArrayList.add(new Goal(title.toString()));
-//        }
-//        g.setValue(goalArrayList);
-//        return g;
         return goalDao.observeGoals();
+    }
+
+    @Override
+    public void saveGoal(Goal goal) {
+        goalDao.insert(goal);
     }
 }
