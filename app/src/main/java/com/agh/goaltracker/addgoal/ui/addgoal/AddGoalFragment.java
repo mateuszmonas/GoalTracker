@@ -1,23 +1,11 @@
 package com.agh.goaltracker.addgoal.ui.addgoal;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agh.goaltracker.GoalTrackerApplication;
@@ -27,15 +15,22 @@ import com.agh.goaltracker.util.ViewModelFactory;
 
 import java.util.Calendar;
 import java.util.Date;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 
 public class AddGoalFragment extends Fragment {
 
-    private AddGoalViewModel addGoalViewModel;
-    private Unbinder unbinder;
-
     @BindView(R.id.goal_name_txt)
     EditText goalName;
+    private AddGoalViewModel addGoalViewModel;
+    private Unbinder unbinder;
 
     public static AddGoalFragment newInstance() {
         return new AddGoalFragment();
@@ -66,11 +61,10 @@ public class AddGoalFragment extends Fragment {
     }
 
     @OnClick(R.id.create_goal_btn)
-    public void addGoal(){
+    public void addGoal() {
         if (TextUtils.isEmpty(goalName.getText())) {
             Toast.makeText(getContext(), "Goal name cannot be empty!", Toast.LENGTH_SHORT).show();
-        }
-        else{
+        } else {
             String name = goalName.getText().toString();
             Date currentTime = Calendar.getInstance().getTime();
             addGoalViewModel.saveGoal(new Goal(name, currentTime));

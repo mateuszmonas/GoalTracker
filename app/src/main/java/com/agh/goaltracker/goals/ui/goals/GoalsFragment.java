@@ -2,13 +2,18 @@ package com.agh.goaltracker.goals.ui.goals;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.addgoal.AddGoalActivity;
+import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 import androidx.annotation.NonNull;
@@ -24,11 +29,25 @@ import butterknife.Unbinder;
 
 public class GoalsFragment extends Fragment {
 
+    private static final String TAG = "GoalsFragment";
     @BindView(R.id.goals_recycler_view)
     RecyclerView goalsRecyclerView;
     private GoalsViewModel goalsViewModel;
     private GoalsAdapter goalsAdapter;
     private Unbinder unbinder;
+    private GoalsListListener goalsListListener = new GoalsListListener() {
+        @Override
+        public void goToGoalDetailsActivity(Goal goal) {
+            // TODO: 09/02/20 implement goal details
+            Log.d(TAG, "goToGoalDetailsActivity() called with: goal = [" + goal + "]");
+        }
+
+        @Override
+        public void goToEditGoalDetailsActivity(Goal goal) {
+            // TODO: 09/02/20 implement edit goal details
+            Log.d(TAG, "goToEditGoalDetailsActivity() called with: goal = [" + goal + "]");
+        }
+    };
 
     public static GoalsFragment newInstance() {
         return new GoalsFragment();
@@ -37,7 +56,8 @@ public class GoalsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        goalsAdapter = new GoalsAdapter();
+        setHasOptionsMenu(true);
+        goalsAdapter = new GoalsAdapter(goalsListListener);
     }
 
     @Nullable
@@ -61,14 +81,47 @@ public class GoalsFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.goals_menu, menu);
+        goalsViewModel.filters.observe(getViewLifecycleOwner(), goalsFilterTypes -> {
+            menu.findItem(R.id.current_goals).setChecked(goalsFilterTypes.contains(GoalsViewModel.GoalsFilterType.CURRENT_GOALS));
+            menu.findItem(R.id.completed_goals).setChecked(goalsFilterTypes.contains(GoalsViewModel.GoalsFilterType.COMPLETED_GOALS));
+            menu.findItem(R.id.failed_goals).setChecked(goalsFilterTypes.contains(GoalsViewModel.GoalsFilterType.FAILED_GOALS));
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.current_goals:
+                goalsViewModel.setFiltering(GoalsViewModel.GoalsFilterType.CURRENT_GOALS);
+                return true;
+            case R.id.completed_goals:
+                goalsViewModel.setFiltering(GoalsViewModel.GoalsFilterType.COMPLETED_GOALS);
+                return true;
+            case R.id.failed_goals:
+                goalsViewModel.setFiltering(GoalsViewModel.GoalsFilterType.FAILED_GOALS);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
 
     @OnClick(R.id.add_goal_fab)
-    public void addGoal() {
+    public void navigateToAddGoalActivity() {
         Intent intent = AddGoalActivity.createIntent(getContext()); // TODO start act for result?
         startActivity(intent);
+    }
+
+    interface GoalsListListener {
+        void goToGoalDetailsActivity(Goal goal);
+
+        void goToEditGoalDetailsActivity(Goal goal);
     }
 }

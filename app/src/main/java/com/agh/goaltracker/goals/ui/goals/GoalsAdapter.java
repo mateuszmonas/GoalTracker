@@ -22,7 +22,12 @@ import butterknife.ButterKnife;
 
 public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> {
 
+    private final GoalsFragment.GoalsListListener goalsListListener;
     private List<Goal> goals = new ArrayList<>();
+
+    public GoalsAdapter(GoalsFragment.GoalsListListener goalsListListener) {
+        this.goalsListListener = goalsListListener;
+    }
 
     @NonNull
     @Override
@@ -34,6 +39,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Goal goal = goals.get(position);
+        holder.goal = goal;
         holder.goalTitle.setText(goal.getTitle());
 
         DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy", Locale.ENGLISH);
@@ -43,6 +49,11 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         }else{
             holder.dueDate.setText(dateFormat.format(goal.getDueDate()));
         }
+        holder.itemView.setOnClickListener(v -> goalsListListener.goToGoalDetailsActivity(goal));
+        holder.itemView.setOnLongClickListener(v -> {
+            goalsListListener.goToEditGoalDetailsActivity(goal);
+            return true;
+        });
     }
 
     @Override
@@ -56,6 +67,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        Goal goal;
         @BindView(R.id.goal_title) TextView goalTitle;
         @BindView(R.id.due_date) TextView dueDate;
 
