@@ -1,6 +1,7 @@
 package com.agh.goaltracker.model.source;
 
 import com.agh.goaltracker.model.Goal;
+import com.agh.goaltracker.model.source.local.GoalDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,6 @@ public class DefaultGoalRepository implements GoalRepository {
 
     @Override
     public void saveGoal(Goal goal) {
-        localGoalDataSource.saveGoal(goal);
+        GoalDatabase.databaseWriteExecutor.execute(() -> localGoalDataSource.saveGoal(goal));
     }
 }
