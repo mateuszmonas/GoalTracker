@@ -25,6 +25,9 @@ import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class AddGoalFragment extends Fragment {
 
@@ -69,7 +72,8 @@ public class AddGoalFragment extends Fragment {
         }
         else{
             String name = goalName.getText().toString();
-            addGoalViewModel.saveGoal(new Goal(name));
+            Date currentTime = Calendar.getInstance().getTime();
+            addGoalViewModel.saveGoal(new Goal(name, currentTime));
             Toast.makeText(
                     getContext(),
                     "saved!",
