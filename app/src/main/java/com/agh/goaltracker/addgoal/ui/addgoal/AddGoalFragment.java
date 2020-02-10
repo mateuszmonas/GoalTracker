@@ -3,15 +3,12 @@ package com.agh.goaltracker.addgoal.ui.addgoal;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agh.goaltracker.GoalTrackerApplication;
@@ -21,6 +18,7 @@ import com.agh.goaltracker.util.ViewModelFactory;
 
 import java.util.Calendar;
 import java.util.Date;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -28,7 +26,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
@@ -37,10 +34,9 @@ public class AddGoalFragment extends Fragment {
 
     @BindView(R.id.goal_name_txt)
     EditText goalName;
-    private boolean countAsMinutes=true;
+    Date chosenDate = null;
+    private boolean countAsMinutes = true;
     private int goal = 0;
-    Date chosenDate=null;
-
     private AddGoalViewModel addGoalViewModel;
     private Unbinder unbinder;
 
@@ -63,7 +59,8 @@ public class AddGoalFragment extends Fragment {
         addGoalViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 ((GoalTrackerApplication) getActivity().getApplication()).getGoalRepository()
         )).get(AddGoalViewModel.class);
-        // TODO: Use the ViewModel
+        addGoalViewModel.finishActivity.observe(getViewLifecycleOwner(), this::finishActivity);
+        addGoalViewModel.saveTaskErrorMessage.observe(getViewLifecycleOwner(), this::showErrorMessage);
     }
 
     @Override
@@ -74,11 +71,22 @@ public class AddGoalFragment extends Fragment {
 
     @OnClick(R.id.create_goal_btn)
     public void addGoal() {
-        if (TextUtils.isEmpty(goalName.getText())) {
-            Toast.makeText(getContext(), "Goal name cannot be empty!", Toast.LENGTH_SHORT).show();
-        } else {
-            String name = goalName.getText().toString();
-            addGoalViewModel.saveGoal(new Goal(name, chosenDate, countAsMinutes, goal));
+        String name = goalName.getText().toString();
+        addGoalViewModel.saveGoal(new Goal(name, chosenDate, countAsMinutes, goal));
+    }
+
+    private void showErrorMessage(AddGoalViewModel.SaveGoalError error) {
+        String message = "";
+        switch (error) {
+            case EMPTY_TITLE:
+                message = "Goal name cannot be empty!";
+                break;
+        }
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void finishActivity(boolean success) {
+        if (success) {
             Toast.makeText(
                     getContext(),
                     "saved!",
@@ -95,7 +103,7 @@ public class AddGoalFragment extends Fragment {
 
     @OnClick(R.id.set_goal)
     public void setGoal() { // TODO set goal
-        Toast.makeText(getContext(), countAsMinutes ? "display hour and minute chooser popup": "display popup to enter nr of events", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), countAsMinutes ? "display hour and minute chooser popup" : "display popup to enter nr of events", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick({R.id.radio_as_events, R.id.radio_as_min})
@@ -127,7 +135,7 @@ public class AddGoalFragment extends Fragment {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
-            Toast.makeText(getContext(), year+" "+month+" "+day, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), year + " " + month + " " + day, Toast.LENGTH_SHORT).show();
         }
     }
 
