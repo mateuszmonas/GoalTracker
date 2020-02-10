@@ -28,6 +28,8 @@ import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.dialog.MaterialDialogs;
 
 public class GoalDetailsFragment extends Fragment {
     private static final String TAG = "GoalDetailsFragment";
@@ -110,10 +112,12 @@ public class GoalDetailsFragment extends Fragment {
     }
 
     @OnClick(R.id.repeat_button)
-    void setRepeat() {
-        GoalDetailsRepeatDialogFragment goalDetailsRepeatDialogFragment = GoalDetailsRepeatDialogFragment.newInstance();
+    void openChangeRepeatDialog() {
+
+
+                GoalDetailsRepeatDialogFragment goalDetailsRepeatDialogFragment = GoalDetailsRepeatDialogFragment.newInstance();
         goalDetailsRepeatDialogFragment.setTargetFragment(this, REPEAT_DIALOG_FRAGMENT_REQUEST_CODE);
-        goalDetailsRepeatDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+        goalDetailsRepeatDialogFragment.show(getActivity().getSupportFragmentManager(), GoalDetailsRepeatDialogFragment.TAG);
     }
 
     @Override

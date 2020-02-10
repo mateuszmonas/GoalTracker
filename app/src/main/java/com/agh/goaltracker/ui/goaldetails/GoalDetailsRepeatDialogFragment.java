@@ -1,5 +1,6 @@
 package com.agh.goaltracker.ui.goaldetails;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 
 import com.agh.goaltracker.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,8 +18,9 @@ import butterknife.OnCheckedChanged;
 import butterknife.Unbinder;
 
 public class GoalDetailsRepeatDialogFragment extends DialogFragment {
+    public static String TAG = "GoalDetailsRepeatDialogFragment";
 
-    Unbinder unbinder;
+    private Unbinder unbinder;
     static final int RESULT_CODE_NEVER = 0;
     static final int RESULT_CODE_DAILY = 1;
     static final int RESULT_CODE_WEEKLY= 2;
@@ -29,6 +32,12 @@ public class GoalDetailsRepeatDialogFragment extends DialogFragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        return new MaterialAlertDialogBuilder(getContext()).setView(R.layout.goal_details_repeat_dialog_fragment).create();
     }
 
     @Nullable
