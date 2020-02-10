@@ -44,9 +44,9 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
 
         DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy", Locale.ENGLISH);
         Date date = goal.getDueDate();
-        if(date == null) {
+        if (date == null) {
             holder.dueDate.setText("unlimited");
-        }else{
+        } else {
             holder.dueDate.setText(dateFormat.format(goal.getDueDate()));
         }
         holder.itemView.setOnClickListener(v -> goalsListListener.goToGoalDetailsActivity(goal));
@@ -68,8 +68,10 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder {
         Goal goal;
-        @BindView(R.id.goal_title) TextView goalTitle;
-        @BindView(R.id.due_date) TextView dueDate;
+        @BindView(R.id.goal_title)
+        TextView goalTitle;
+        @BindView(R.id.due_date)
+        TextView dueDate;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
