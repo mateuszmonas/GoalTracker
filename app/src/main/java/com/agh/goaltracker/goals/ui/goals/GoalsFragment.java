@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.agh.goaltracker.GoalDetailsActivity;
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.addgoal.AddGoalActivity;
@@ -37,15 +38,15 @@ public class GoalsFragment extends Fragment {
     private Unbinder unbinder;
     private GoalsListListener goalsListListener = new GoalsListListener() {
         @Override
-        public void goToGoalDetailsActivity(Goal goal) {
-            // TODO: 09/02/20 implement goal details
-            Log.d(TAG, "goToGoalDetailsActivity() called with: goal = [" + goal + "]");
+        public void goToGoalDetailsActivity(int goalId) {
+            Intent intent = GoalDetailsActivity.createIntent(getContext(), goalId);
+            startActivity(intent);
         }
 
         @Override
-        public void goToEditGoalDetailsActivity(Goal goal) {
+        public void goToEditGoalDetailsActivity(int goalId) {
             // TODO: 09/02/20 implement edit goal details
-            Log.d(TAG, "goToEditGoalDetailsActivity() called with: goal = [" + goal + "]");
+            Log.d(TAG, "goToEditGoalDetailsActivity() called with: goalId = [" + goalId + "]");
         }
     };
 
@@ -120,8 +121,8 @@ public class GoalsFragment extends Fragment {
     }
 
     interface GoalsListListener {
-        void goToGoalDetailsActivity(Goal goal);
+        void goToGoalDetailsActivity(int goalId);
 
-        void goToEditGoalDetailsActivity(Goal goal);
+        void goToEditGoalDetailsActivity(int goalId);
     }
 }

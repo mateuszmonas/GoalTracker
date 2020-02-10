@@ -8,10 +8,9 @@
     tools:context=".ui.goaldetails.GoalDetailsFragment">
 
     <TextView
-        android:id="@+id/message"
+        android:id="@+id/goal_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GoalDetailsFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
