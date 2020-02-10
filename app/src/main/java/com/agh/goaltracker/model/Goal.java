@@ -23,7 +23,7 @@ public class Goal {
     public boolean progressAsMinutes;
 
     @ColumnInfo(name = "current_progress")
-    public int currentProgress ;
+    public int currentProgress;
 
     @ColumnInfo(name = "total_goal")
     public int totalGoal;
@@ -32,6 +32,7 @@ public class Goal {
     public Goal(String title) {
         this(title, null);
     }
+
     @Ignore
     public Goal(String title, Date dueDate) {
         this(title, dueDate, false, 0);
