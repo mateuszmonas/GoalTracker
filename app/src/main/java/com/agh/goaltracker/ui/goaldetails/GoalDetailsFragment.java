@@ -15,11 +15,16 @@ import android.view.ViewGroup;
 import com.agh.goaltracker.R;
 
 public class GoalDetailsFragment extends Fragment {
+    private static final String EXTRA_GOAL_ID = "GOAL_ID";
 
     private GoalDetailsViewModel mViewModel;
 
-    public static GoalDetailsFragment newInstance() {
-        return new GoalDetailsFragment();
+    public static GoalDetailsFragment newInstance(int goalId) {
+        GoalDetailsFragment fragment = new GoalDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(EXTRA_GOAL_ID, goalId);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Nullable
