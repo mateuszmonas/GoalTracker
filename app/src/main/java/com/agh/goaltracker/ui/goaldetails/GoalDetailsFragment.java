@@ -12,6 +12,8 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
+import com.agh.goaltracker.ui.goals.GoalsViewModel;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 public class GoalDetailsFragment extends Fragment {
@@ -38,6 +41,12 @@ public class GoalDetailsFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -55,6 +64,12 @@ public class GoalDetailsFragment extends Fragment {
         )).get(GoalDetailsViewModel.class);
         goalDetailsViewModel.goal.observe(getViewLifecycleOwner(), this::showGoal);
         goalDetailsViewModel.start(getArguments().getInt(EXTRA_GOAL_ID));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.goal_details_menu, menu);
     }
 
     void showGoal(Goal goal) {
