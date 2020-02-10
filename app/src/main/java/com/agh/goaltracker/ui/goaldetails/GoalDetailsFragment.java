@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import android.util.Log;
@@ -18,6 +19,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.agh.goaltracker.GoalTrackerApplication;
@@ -35,6 +38,12 @@ public class GoalDetailsFragment extends Fragment {
 
     @BindView(R.id.goal_name)
     TextView goalName;
+    @BindView(R.id.goal_progress_image)
+    ImageView goalProgressImageView;
+    @BindView(R.id.goal_progress_bar)
+    ProgressBar goalProgressBar;
+    @BindView(R.id.due_date)
+    TextView dueDate;
 
     public static GoalDetailsFragment newInstance(int goalId) {
         GoalDetailsFragment fragment = new GoalDetailsFragment();
@@ -82,6 +91,26 @@ public class GoalDetailsFragment extends Fragment {
             Log.d(TAG, "onOptionsItemSelected() called with: item = [" + item + "]");
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.record_progress_button)
+    void recordPastProgress() {
+
+    }
+
+    @OnClick(R.id.contribute_now_button)
+    void contributeNow() {
+
+    }
+
+    @OnClick(R.id.set_notification_button)
+    void setNotification() {
+
+    }
+
+    @OnClick(R.id.repeat_button)
+    void setRepeat() {
+
     }
 
     void showGoal(Goal goal) {
