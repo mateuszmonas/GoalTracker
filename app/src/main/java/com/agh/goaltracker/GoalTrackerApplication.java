@@ -2,6 +2,7 @@ package com.agh.goaltracker;
 
 import android.app.Application;
 
+import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.DefaultGoalRepository;
 import com.agh.goaltracker.model.source.GoalRepository;
 import com.agh.goaltracker.model.source.local.GoalDatabase;
@@ -19,6 +20,9 @@ public class GoalTrackerApplication extends Application {
 //        deleteDatabase("goals"); TODO uncomment
         GoalDatabase goalDatabase = Room.databaseBuilder(getApplicationContext(), GoalDatabase.class, "goals").build();
         goalRepository = new DefaultGoalRepository(new GoalLocalDataSource(goalDatabase.goalDao()));
+        goalRepository.saveGoal(new Goal("first"));
+        goalRepository.saveGoal(new Goal("second"));
+        goalRepository.saveGoal(new Goal("last"));
     }
 
     public GoalRepository getGoalRepository() {

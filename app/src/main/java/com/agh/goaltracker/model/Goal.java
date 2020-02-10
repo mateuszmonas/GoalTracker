@@ -7,6 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+// TODO: 10/02/20 repeat goal never/daily/weekly/monthly
 @Entity(tableName = "goals")
 public class Goal {
     @PrimaryKey(autoGenerate = true)

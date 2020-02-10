@@ -2,6 +2,7 @@ package com.agh.goaltracker.ui.goaldetails;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,12 +27,12 @@ import android.widget.TextView;
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
-import com.agh.goaltracker.ui.goals.GoalsViewModel;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 public class GoalDetailsFragment extends Fragment {
     private static final String TAG = "GoalDetailsFragment";
     private static final String EXTRA_GOAL_ID = "GOAL_ID";
+    private static final int REPEAT_DIALOG_FRAGMENT_REQUEST_CODE = 1;
 
     private GoalDetailsViewModel goalDetailsViewModel;
     private Unbinder unbinder;
@@ -110,7 +111,34 @@ public class GoalDetailsFragment extends Fragment {
 
     @OnClick(R.id.repeat_button)
     void setRepeat() {
+        GoalDetailsRepeatDialogFragment goalDetailsRepeatDialogFragment = GoalDetailsRepeatDialogFragment.newInstance();
+        goalDetailsRepeatDialogFragment.setTargetFragment(this, REPEAT_DIALOG_FRAGMENT_REQUEST_CODE);
+        goalDetailsRepeatDialogFragment.show(getActivity().getSupportFragmentManager(), "");
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REPEAT_DIALOG_FRAGMENT_REQUEST_CODE:
+                changeRepeat(resultCode);
+        }
+    }
+
+    // TODO: 10/02/20 handle repeat change
+    void changeRepeat(int resultCode) {
+        Log.d(TAG, "changeRepeat() called with: resultCode = [" + resultCode + "]");
+        switch (resultCode) {
+            case GoalDetailsRepeatDialogFragment.RESULT_CODE_NEVER:
+                break;
+            case GoalDetailsRepeatDialogFragment.RESULT_CODE_DAILY:
+                break;
+            case GoalDetailsRepeatDialogFragment.RESULT_CODE_WEEKLY:
+                break;
+            case GoalDetailsRepeatDialogFragment.RESULT_CODE_MONTHLY:
+                break;
+
+        }
     }
 
     void showGoal(Goal goal) {
