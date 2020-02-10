@@ -1,4 +1,4 @@
-package com.agh.goaltracker.goals.ui.goals;
+package com.agh.goaltracker.ui.goals;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
-import com.agh.goaltracker.addgoal.AddGoalActivity;
+import com.agh.goaltracker.AddGoalActivity;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
@@ -116,8 +116,6 @@ public class GoalsFragment extends Fragment {
         unbinder.unbind();
     }
 
-    // ----------------- item touch helper for swiping ----------------------
-
     ItemTouchHelper helper = new ItemTouchHelper(
             new ItemTouchHelper.SimpleCallback(0,
                     ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -136,12 +134,12 @@ public class GoalsFragment extends Fragment {
                     Toast.makeText(getContext(), "Deleting " +
                             goal.getTitle(), Toast.LENGTH_LONG).show();
 
-                    goalsViewModel.delete(goal); // TODO deleting problems
+                    goalsViewModel.delete(goal);
                 }});
 
     @OnClick(R.id.add_goal_fab)
     public void navigateToAddGoalActivity() {
-        Intent intent = AddGoalActivity.createIntent(getContext()); // TODO start act for result?
+        Intent intent = AddGoalActivity.createIntent(getContext());
         startActivity(intent);
     }
 

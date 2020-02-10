@@ -21,7 +21,7 @@ public class DefaultGoalRepository implements GoalRepository {
 
     @Override
     public void saveGoal(Goal goal) {
-        GoalDatabase.databaseWriteExecutor.execute(() -> localGoalDataSource.saveGoal(goal));
+        localGoalDataSource.saveGoal(goal);
     }
 
     @Override

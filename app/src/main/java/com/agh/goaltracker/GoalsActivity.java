@@ -1,9 +1,8 @@
-package com.agh.goaltracker.goals;
+package com.agh.goaltracker;
 
 import android.os.Bundle;
 
-import com.agh.goaltracker.R;
-import com.agh.goaltracker.goals.ui.goals.GoalsFragment;
+import com.agh.goaltracker.ui.goals.GoalsFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 

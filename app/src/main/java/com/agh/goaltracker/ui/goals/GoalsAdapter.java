@@ -1,4 +1,4 @@
-package com.agh.goaltracker.goals.ui.goals;
+package com.agh.goaltracker.ui.goals;
 
 import android.view.LayoutInflater;
 import android.view.View;
