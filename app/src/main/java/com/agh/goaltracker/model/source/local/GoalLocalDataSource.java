@@ -23,7 +23,8 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void saveGoal(Goal goal) {
-        goalDao.insertGoal(goal);
+        new InsertAsyncTask(goalDao).execute(goal);
+//        goalDao.insertGoal(goal);
     }
 
 
@@ -34,7 +35,8 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void updateGoal(Goal goal) {
-        goalDao.updateGoal(goal);
+        new UpdateAsyncTask(goalDao).execute(goal);
+//        goalDao.updateGoal(goal);
     }
 
     @Override
@@ -44,20 +46,49 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void deleteGoal(Goal goal) {
-        new DeletePersonAsyncTask(goalDao).execute(goal);
-        goalDao.deleteGoal(goal);
+        new DeleteGoalAsyncTask(goalDao).execute(goal);
     }
 
-    private static class DeletePersonAsyncTask extends AsyncTask<Goal, Void, Void> {
+    private static class DeleteGoalAsyncTask extends AsyncTask<Goal, Void, Void> {
         private GoalDao mAsyncTaskDao;
 
-        DeletePersonAsyncTask(GoalDao dao) {
+        DeleteGoalAsyncTask(GoalDao dao) {
             mAsyncTaskDao = dao;
         }
 
         @Override
         protected Void doInBackground(final Goal... params) {
             mAsyncTaskDao.deleteGoal(params[0]);
+            return null;
+        }
+    }
+
+    private static class InsertAsyncTask extends AsyncTask<Goal, Void, Void> {
+
+        private final GoalDao asyncGoalDao;
+
+        InsertAsyncTask(GoalDao GoalDao) {
+            asyncGoalDao = GoalDao;
+        }
+
+        @Override
+        protected Void doInBackground(final Goal... words) {
+            asyncGoalDao.insertGoal(words[0]);
+            return null;
+        }
+    }
+    
+    private static class UpdateAsyncTask extends AsyncTask<Goal, Void, Void> {
+
+        private final GoalDao asyncGoalDao;
+
+        UpdateAsyncTask(GoalDao GoalDao) {
+            asyncGoalDao = GoalDao;
+        }
+
+        @Override
+        protected Void doInBackground(final Goal... words) {
+            asyncGoalDao.updateGoal(words[0]);
             return null;
         }
     }
