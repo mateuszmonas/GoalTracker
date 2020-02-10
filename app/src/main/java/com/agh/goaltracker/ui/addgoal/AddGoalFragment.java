@@ -1,4 +1,4 @@
-package com.agh.goaltracker.addgoal.ui.addgoal;
+package com.agh.goaltracker.ui.addgoal;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;

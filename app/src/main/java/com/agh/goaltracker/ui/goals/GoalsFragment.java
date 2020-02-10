@@ -1,4 +1,4 @@
-package com.agh.goaltracker.goals.ui.goals;
+package com.agh.goaltracker.ui.goals;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
-import com.agh.goaltracker.addgoal.AddGoalActivity;
+import com.agh.goaltracker.AddGoalActivity;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 

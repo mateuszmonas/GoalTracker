@@ -1,4 +1,4 @@
-package com.agh.goaltracker.goals.ui.goals;
+package com.agh.goaltracker.ui.goals;
 
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalRepository;
