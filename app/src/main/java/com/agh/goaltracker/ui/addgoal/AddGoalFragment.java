@@ -17,10 +17,7 @@ import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
-<<<<<<< HEAD
 import java.text.DateFormat;
-=======
->>>>>>> 4cbf4719824a3daf35257e9ea25fdb00df7d10de
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,10 +39,8 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
 
     @BindView(R.id.goal_name_txt)
     EditText goalName;
-<<<<<<< HEAD
     @BindView(R.id.chosen_date)
     TextView chosenDateTV;
-=======
     @BindView(R.id.event_goal_txt)
     EditText eventGoal;
     @BindView(R.id.timeChoserLayout)
@@ -54,7 +49,6 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     EditText hourET;
     @BindView(R.id.min_txt)
     EditText minET;
->>>>>>> 4cbf4719824a3daf35257e9ea25fdb00df7d10de
     Date chosenDate = null;
     private boolean countAsMinutes = true;
     private AddGoalViewModel addGoalViewModel;
@@ -143,15 +137,9 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     }
 
     @OnClick(R.id.set_goal)
-<<<<<<< HEAD
-    public void setGoal() { // TODO set goal
-        Toast.makeText(getContext(), countAsMinutes ? "display hour and minute chooser popup" : "display popup to enter nr of events", Toast.LENGTH_SHORT).show();
-
-=======
     public void setGoal() {
         if(countAsMinutes) minutesGoal.setVisibility(View.VISIBLE);
         else eventGoal.setVisibility(View.VISIBLE);
->>>>>>> 4cbf4719824a3daf35257e9ea25fdb00df7d10de
     }
 
     @OnClick({R.id.radio_as_events, R.id.radio_as_min})
@@ -173,13 +161,10 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     public void onDateSet(DatePicker view, int year, int month, int day) {
         try {
             chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse(""+day+month+"/"+year);
-<<<<<<< HEAD
             Toast.makeText(getContext(), chosenDate.toString(), Toast.LENGTH_SHORT).show();
 
             DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy", Locale.ENGLISH);
             chosenDateTV.setText(dateFormat.format(chosenDate));
-=======
->>>>>>> 4cbf4719824a3daf35257e9ea25fdb00df7d10de
         } catch (ParseException e) {
             e.printStackTrace();
         }
