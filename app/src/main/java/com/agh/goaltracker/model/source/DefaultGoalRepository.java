@@ -1,7 +1,6 @@
 package com.agh.goaltracker.model.source;
 
 import com.agh.goaltracker.model.Goal;
-import com.agh.goaltracker.model.source.local.GoalDatabase;
 
 import java.util.List;
 

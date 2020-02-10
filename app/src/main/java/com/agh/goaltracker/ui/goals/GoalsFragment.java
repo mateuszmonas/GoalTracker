@@ -11,10 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.agh.goaltracker.AddGoalActivity;
 import com.agh.goaltracker.GoalDetailsActivity;
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
-import com.agh.goaltracker.AddGoalActivity;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
@@ -37,6 +37,27 @@ public class GoalsFragment extends Fragment {
     RecyclerView goalsRecyclerView;
     private GoalsViewModel goalsViewModel;
     private GoalsAdapter goalsAdapter;
+    ItemTouchHelper helper = new ItemTouchHelper(
+            new ItemTouchHelper.SimpleCallback(0,
+                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView,
+                                      RecyclerView.ViewHolder viewHolder,
+                                      RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder,
+                                     int direction) {
+                    int position = viewHolder.getAdapterPosition();
+                    Goal goal = goalsAdapter.getItemAt(position);
+                    Toast.makeText(getContext(), "Deleting " +
+                            goal.getTitle(), Toast.LENGTH_LONG).show();
+
+                    goalsViewModel.delete(goal);
+                }
+            });
     private Unbinder unbinder;
     private GoalsListListener goalsListListener = new GoalsListListener() {
         @Override
@@ -116,27 +137,6 @@ public class GoalsFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-
-    ItemTouchHelper helper = new ItemTouchHelper(
-            new ItemTouchHelper.SimpleCallback(0,
-                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                @Override
-                public boolean onMove(RecyclerView recyclerView,
-                                      RecyclerView.ViewHolder viewHolder,
-                                      RecyclerView.ViewHolder target) {
-                    return false;
-                }
-
-                @Override
-                public void onSwiped(RecyclerView.ViewHolder viewHolder,
-                                     int direction) {
-                    int position = viewHolder.getAdapterPosition();
-                    Goal goal = goalsAdapter.getItemAt(position);
-                    Toast.makeText(getContext(), "Deleting " +
-                            goal.getTitle(), Toast.LENGTH_LONG).show();
-
-                    goalsViewModel.delete(goal);
-                }});
 
     @OnClick(R.id.add_goal_fab)
     public void navigateToAddGoalActivity() {

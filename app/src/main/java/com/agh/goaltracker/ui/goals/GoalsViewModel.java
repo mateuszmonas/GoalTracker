@@ -26,7 +26,7 @@ public class GoalsViewModel extends ViewModel {
         _goals = this.goalRepository.observeGoals();
     }
 
-    public void delete(Goal goal){ // TODO handle delete error?
+    public void delete(Goal goal) { // TODO handle delete error?
         goalRepository.deleteGoal(goal);
     }
 

@@ -1,19 +1,6 @@
 package com.agh.goaltracker.ui.goaldetails;
 
-import androidx.lifecycle.ViewModelProvider;
-
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,14 +18,18 @@ import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
+
 public class GoalDetailsFragment extends Fragment {
     private static final String TAG = "GoalDetailsFragment";
     private static final String EXTRA_GOAL_ID = "GOAL_ID";
-    private static final int REPEAT_DIALOG_FRAGMENT_REQUEST_CODE = 1;
-
-    private GoalDetailsViewModel goalDetailsViewModel;
-    private Unbinder unbinder;
-
     @BindView(R.id.goal_name)
     TextView goalName;
     @BindView(R.id.goal_progress_image)
@@ -47,6 +38,8 @@ public class GoalDetailsFragment extends Fragment {
     ProgressBar goalProgressBar;
     @BindView(R.id.due_date)
     TextView dueDate;
+    private GoalDetailsViewModel goalDetailsViewModel;
+    private Unbinder unbinder;
 
     public static GoalDetailsFragment newInstance(int goalId) {
         GoalDetailsFragment fragment = new GoalDetailsFragment();
@@ -89,9 +82,14 @@ public class GoalDetailsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.edit_task) {
-            // TODO: 09/02/20 implement edit goal details
-            Log.d(TAG, "onOptionsItemSelected() called with: item = [" + item + "]");
+        Log.d(TAG, "onOptionsItemSelected() called with: item = [" + item + "]");
+        switch (item.getItemId()) {
+            case R.id.edit_task:
+                // TODO: 09/02/20 implement edit goal details
+                return true;
+            case R.id.delete_task:
+                // TODO: 09/02/20 implement delete goal
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -114,6 +112,7 @@ public class GoalDetailsFragment extends Fragment {
     @OnClick(R.id.repeat_button)
     void openChangeRepeatDialog() {
         new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Repeat")
                 .setSingleChoiceItems(RepeatOption.stringValues(), 1, (dialog, which) -> {
                     changeRepeat(RepeatOption.values()[which]);
                     dialog.dismiss();
@@ -140,7 +139,7 @@ public class GoalDetailsFragment extends Fragment {
         goalName.setText(goal.getTitle());
     }
 
-    enum RepeatOption{
+    enum RepeatOption {
         NEVER("never"), DAILY("daily"), WEEKLY("weekly"), MONTHLY("monthly");
 
         private String text;
@@ -149,17 +148,17 @@ public class GoalDetailsFragment extends Fragment {
             this.text = text;
         }
 
-        @Override
-        public String toString() {
-            return text;
-        }
-
         public static String[] stringValues() {
             String[] result = new String[values().length];
             for (int i = 0; i < values().length; i++) {
                 result[i] = values()[i].toString();
             }
             return result;
+        }
+
+        @Override
+        public String toString() {
+            return text;
         }
     }
 }

@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
@@ -69,7 +68,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public Goal getItemAt(int position){
+    public Goal getItemAt(int position) {
         return goals.get(position);
     }
 
@@ -89,10 +88,10 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
             ButterKnife.bind(this, itemView);
         }
 
-        public void setGoal(Goal goal){
+        public void setGoal(Goal goal) {
             this.goal = goal;
             progressBar.setMax(goal.totalGoal);
-            if(goal.getCurrentProgress() <= goal.getTotalGoal())
+            if (goal.getCurrentProgress() <= goal.getTotalGoal())
                 progressBar.setProgress(goal.getCurrentProgress());
         }
     }

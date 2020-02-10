@@ -83,19 +83,19 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     public void addGoal() {
         String name = goalName.getText().toString();
         int goal = 0;
-        if(countAsMinutes){
-        goal = convertTime(hourET.getText().toString(), minET.getText().toString());
-        }else if(!"".equals(eventGoal.getText().toString()))
-                goal = Integer.parseInt(eventGoal.getText().toString());
+        if (countAsMinutes) {
+            goal = convertTime(hourET.getText().toString(), minET.getText().toString());
+        } else if (!"".equals(eventGoal.getText().toString()))
+            goal = Integer.parseInt(eventGoal.getText().toString());
 
         addGoalViewModel.saveGoal(new Goal(name, chosenDate, countAsMinutes, goal));
     }
 
-    private int convertTime(String hours, String minutes){
-        int res=0;
-        if(!"".equals(hours))
-            res += 60*Integer.parseInt(hours);
-        if(!"".equals(minutes))
+    private int convertTime(String hours, String minutes) {
+        int res = 0;
+        if (!"".equals(hours))
+            res += 60 * Integer.parseInt(hours);
+        if (!"".equals(minutes))
             res += Integer.parseInt(minutes);
         return res;
     }
@@ -134,7 +134,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
 
     @OnClick(R.id.set_goal)
     public void setGoal() {
-        if(countAsMinutes) minutesGoal.setVisibility(View.VISIBLE);
+        if (countAsMinutes) minutesGoal.setVisibility(View.VISIBLE);
         else eventGoal.setVisibility(View.VISIBLE);
     }
 
@@ -156,7 +156,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         try {
-            chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse(""+day+month+"/"+year);
+            chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse("" + day + month + "/" + year);
         } catch (ParseException e) {
             e.printStackTrace();
         }
