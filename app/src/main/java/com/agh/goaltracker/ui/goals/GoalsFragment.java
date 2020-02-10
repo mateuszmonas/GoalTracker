@@ -80,7 +80,7 @@ public class GoalsFragment extends Fragment {
         goalsViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 ((GoalTrackerApplication) getActivity().getApplication()).getGoalRepository()
         )).get(GoalsViewModel.class);
-        goalsViewModel.getGoals().observe(getViewLifecycleOwner(), goals -> goalsAdapter.updateData(goals));
+        goalsViewModel.goals.observe(getViewLifecycleOwner(), goals -> goalsAdapter.updateData(goals));
     }
 
     @Override

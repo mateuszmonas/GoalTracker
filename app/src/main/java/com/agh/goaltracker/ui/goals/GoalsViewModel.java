@@ -17,16 +17,13 @@ public class GoalsViewModel extends ViewModel {
     MutableLiveData<Set<GoalsFilterType>> _filters = new MutableLiveData<>(new HashSet<>(Collections.singletonList(GoalsFilterType.CURRENT_GOALS)));
     LiveData<Set<GoalsFilterType>> filters = _filters;
     private GoalRepository goalRepository;
-    private LiveData<List<Goal>> goals;
+    private LiveData<List<Goal>> _goals;
+    LiveData<List<Goal>> goals = Transformations.switchMap(_filters, filterList -> Transformations.switchMap(_goals, goalList -> new MutableLiveData<>(applyFilters(goalList, filterList))));
 
     public GoalsViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
         _filters.getValue().add(GoalsFilterType.CURRENT_GOALS);
-        goals = this.goalRepository.observeGoals();
-    }
-
-    public LiveData<List<Goal>> getGoals() {
-        return Transformations.switchMap(_filters, filterList -> Transformations.switchMap(goals, goalList -> new MutableLiveData<>(applyFilters(goalList, filterList))));
+        _goals = this.goalRepository.observeGoals();
     }
 
     public void delete(Goal goal){ // TODO handle delete error?
