@@ -112,6 +112,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     @OnClick(R.id.set_goal)
     public void setGoal() { // TODO set goal
         Toast.makeText(getContext(), countAsMinutes ? "display hour and minute chooser popup" : "display popup to enter nr of events", Toast.LENGTH_SHORT).show();
+
     }
 
     @OnClick({R.id.radio_as_events, R.id.radio_as_min})
@@ -131,7 +132,6 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     public void onDateSet(DatePicker view, int year, int month, int day) {
         try {
             chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse(""+day+month+"/"+year);
-            Toast.makeText(getContext(), chosenDate.toString(), Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
