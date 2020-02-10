@@ -11,9 +11,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import com.agh.goaltracker.ui.goals.GoalsViewModel;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 public class GoalDetailsFragment extends Fragment {
+    private static final String TAG = "GoalDetailsFragment";
     private static final String EXTRA_GOAL_ID = "GOAL_ID";
 
     private GoalDetailsViewModel goalDetailsViewModel;
@@ -70,6 +73,15 @@ public class GoalDetailsFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.goal_details_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.edit_task) {
+            // TODO: 09/02/20 implement edit goal details
+            Log.d(TAG, "onOptionsItemSelected() called with: item = [" + item + "]");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     void showGoal(Goal goal) {
