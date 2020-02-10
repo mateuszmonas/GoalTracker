@@ -76,7 +76,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         Goal goal;
         @BindView(R.id.goal_title)
         TextView goalTitle;
-        @BindView(R.id.due_date)
+        @BindView(R.id.goal_due_date)
         TextView dueDate;
         @BindView(R.id.plant)
         ImageView plant;

@@ -19,6 +19,10 @@ import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -37,8 +41,8 @@ public class GoalDetailsFragment extends Fragment {
     ImageView goalProgressImageView;
     @BindView(R.id.goal_progress_bar)
     ProgressBar goalProgressBar;
-    @BindView(R.id.due_date)
-    TextView dueDate;
+    @BindView(R.id.goal_due_date)
+    TextView goalDueDate;
     private GoalDetailsViewModel goalDetailsViewModel;
     private Unbinder unbinder;
 
@@ -152,6 +156,13 @@ public class GoalDetailsFragment extends Fragment {
             return;
         }
         goalName.setText(goal.getTitle());
+        DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy", Locale.ENGLISH);
+        if (goal.getDueDate() == null) {
+            goalDueDate.setText("unlimited");
+        } else {
+            goalDueDate.setText(dateFormat.format(goal.getDueDate()));
+        }
+        goalProgressBar.setProgress(goal.getCurrentProgress());
     }
 
     enum RepeatOption {
@@ -163,6 +174,7 @@ public class GoalDetailsFragment extends Fragment {
             this.text = text;
         }
 
+        // used so we can pass the values to MaterialAlertDialogBuilder
         public static String[] stringValues() {
             String[] result = new String[values().length];
             for (int i = 0; i < values().length; i++) {

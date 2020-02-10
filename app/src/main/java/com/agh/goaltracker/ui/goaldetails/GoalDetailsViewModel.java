@@ -18,7 +18,6 @@ public class GoalDetailsViewModel extends ViewModel {
 
     public GoalDetailsViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
-
     }
 
     void start(int goalId) {
