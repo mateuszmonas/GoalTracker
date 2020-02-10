@@ -21,9 +21,8 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void saveGoal(Goal goal) {
-        goalDao.insertGoal(goal);
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.insertGoal(goal));
     }
-
 
     @Override
     public LiveData<Goal> observeGoal(int goalId) {
@@ -32,16 +31,16 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void updateGoal(Goal goal) {
-        goalDao.updateGoal(goal);
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.updateGoal(goal));
     }
 
     @Override
     public void deleteGoals(List<Goal> goals) {
-        goalDao.deleteGoals(goals);
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.deleteGoals(goals));
     }
 
     @Override
     public void deleteGoal(Goal goal) {
-        goalDao.deleteGoal(goal);
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.deleteGoal(goal));
     }
 }

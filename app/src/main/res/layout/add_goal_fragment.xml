@@ -5,7 +5,7 @@
     android:id="@+id/addgoal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="addgoal.ui.addgoal.AddGoalFragment">
+    tools:context=".ui.addgoal.AddGoalFragment">
 
     <Button
         android:id="@+id/create_goal_btn"

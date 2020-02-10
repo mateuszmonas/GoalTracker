@@ -1,4 +1,4 @@
-package com.agh.goaltracker.goals.ui.goals;
+package com.agh.goaltracker.ui.goals;
 
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalRepository;
@@ -24,6 +24,10 @@ public class GoalsViewModel extends ViewModel {
         this.goalRepository = goalRepository;
         _filters.getValue().add(GoalsFilterType.CURRENT_GOALS);
         _goals = this.goalRepository.observeGoals();
+    }
+
+    public void delete(Goal goal){ // TODO handle delete error?
+        goalRepository.deleteGoal(goal);
     }
 
     public void setFiltering(GoalsFilterType filterType) {

@@ -11,8 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".GoalDetailsActivity"></activity>
-        <activity android:name=".addgoal.AddGoalActivity" />
-        <activity android:name=".goals.GoalsActivity">
+        <activity android:name=".AddGoalActivity" />
+        <activity android:name=".GoalsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

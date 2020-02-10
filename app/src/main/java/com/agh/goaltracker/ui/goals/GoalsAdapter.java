@@ -1,4 +1,4 @@
-package com.agh.goaltracker.goals.ui.goals;
+package com.agh.goaltracker.ui.goals;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +64,10 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
     void updateData(List<Goal> goals) {
         this.goals = goals;
         notifyDataSetChanged();
+    }
+
+    public Goal getItemAt(int position){
+        return goals.get(position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
