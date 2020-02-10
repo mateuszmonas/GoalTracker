@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -68,6 +70,7 @@ public class GoalsFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         goalsRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         goalsRecyclerView.setAdapter(goalsAdapter);
+        helper.attachToRecyclerView(goalsRecyclerView);
         return view;
     }
 
@@ -112,6 +115,29 @@ public class GoalsFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    // ----------------- item touch helper for swiping ----------------------
+
+    ItemTouchHelper helper = new ItemTouchHelper(
+            new ItemTouchHelper.SimpleCallback(0,
+                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView,
+                                      RecyclerView.ViewHolder viewHolder,
+                                      RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder,
+                                     int direction) {
+                    int position = viewHolder.getAdapterPosition();
+                    Goal goal = goalsAdapter.getItemAt(position);
+                    Toast.makeText(getContext(), "Deleting " +
+                            goal.getTitle(), Toast.LENGTH_LONG).show();
+
+                    goalsViewModel.delete(goal); // TODO deleting problems
+                }});
 
     @OnClick(R.id.add_goal_fab)
     public void navigateToAddGoalActivity() {
