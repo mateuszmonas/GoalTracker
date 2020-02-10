@@ -1,7 +1,6 @@
 package com.agh.goaltracker.ui.addgoal;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agh.goaltracker.GoalTrackerApplication;
@@ -16,6 +16,7 @@ import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,6 +38,8 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
 
     @BindView(R.id.goal_name_txt)
     EditText goalName;
+    @BindView(R.id.chosen_date)
+    TextView chosenDateTV;
     Date chosenDate = null;
     private boolean countAsMinutes = true;
     private int goal = 0;
@@ -133,6 +136,9 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
         try {
             chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse(""+day+month+"/"+year);
             Toast.makeText(getContext(), chosenDate.toString(), Toast.LENGTH_SHORT).show();
+
+            DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy", Locale.ENGLISH);
+            chosenDateTV.setText(dateFormat.format(chosenDate));
         } catch (ParseException e) {
             e.printStackTrace();
         }
