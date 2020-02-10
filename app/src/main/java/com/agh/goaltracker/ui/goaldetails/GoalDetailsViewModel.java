@@ -13,11 +13,20 @@ public class GoalDetailsViewModel extends ViewModel {
     private MutableLiveData<Integer> goalId = new MutableLiveData<>();
     LiveData<Goal> goal = Transformations.switchMap(goalId, goalId -> goalRepository.observeGoal(goalId));
 
+    private MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>();
+    LiveData<Boolean> isDeleted = _isDeleted;
+
     public GoalDetailsViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
+
     }
 
     void start(int goalId) {
         this.goalId.setValue(goalId);
+    }
+
+    void deleteGoal() {
+        goalRepository.deleteGoal(goal.getValue());
+        _isDeleted.setValue(true);
     }
 }

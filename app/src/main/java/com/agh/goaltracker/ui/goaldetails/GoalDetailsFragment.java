@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
@@ -71,6 +72,7 @@ public class GoalDetailsFragment extends Fragment {
                 ((GoalTrackerApplication) getActivity().getApplication()).getGoalRepository()
         )).get(GoalDetailsViewModel.class);
         goalDetailsViewModel.goal.observe(getViewLifecycleOwner(), this::showGoal);
+        goalDetailsViewModel.isDeleted.observe(getViewLifecycleOwner(), this::goalDeleted);
         goalDetailsViewModel.start(getArguments().getInt(EXTRA_GOAL_ID));
     }
 
@@ -84,11 +86,11 @@ public class GoalDetailsFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected() called with: item = [" + item + "]");
         switch (item.getItemId()) {
-            case R.id.edit_task:
+            case R.id.edit_goal:
                 // TODO: 09/02/20 implement edit goal details
                 return true;
-            case R.id.delete_task:
-                // TODO: 09/02/20 implement delete goal
+            case R.id.delete_goal:
+                goalDetailsViewModel.deleteGoal();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -135,7 +137,20 @@ public class GoalDetailsFragment extends Fragment {
         }
     }
 
+    private void goalDeleted(boolean success) {
+        if (success) {
+            Toast.makeText(
+                    getContext(),
+                    "deleted!",
+                    Toast.LENGTH_SHORT).show();
+            getActivity().finish();
+        }
+    }
+
     void showGoal(Goal goal) {
+        if (goal == null) {
+            return;
+        }
         goalName.setText(goal.getTitle());
     }
 
