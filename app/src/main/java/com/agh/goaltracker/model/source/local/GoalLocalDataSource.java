@@ -1,5 +1,7 @@
 package com.agh.goaltracker.model.source.local;
 
+import android.os.AsyncTask;
+
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalDataSource;
 
@@ -42,6 +44,21 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void deleteGoal(Goal goal) {
+        new DeletePersonAsyncTask(goalDao).execute(goal);
         goalDao.deleteGoal(goal);
+    }
+
+    private static class DeletePersonAsyncTask extends AsyncTask<Goal, Void, Void> {
+        private GoalDao mAsyncTaskDao;
+
+        DeletePersonAsyncTask(GoalDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Goal... params) {
+            mAsyncTaskDao.deleteGoal(params[0]);
+            return null;
+        }
     }
 }

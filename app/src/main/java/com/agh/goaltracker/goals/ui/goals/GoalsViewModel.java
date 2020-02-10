@@ -29,6 +29,10 @@ public class GoalsViewModel extends ViewModel {
         return Transformations.switchMap(_filters, filterList -> Transformations.switchMap(goals, goalList -> new MutableLiveData<>(applyFilters(goalList, filterList))));
     }
 
+    public void delete(Goal goal){ // TODO handle delete error?
+        goalRepository.deleteGoal(goal);
+    }
+
     public void setFiltering(GoalsFilterType filterType) {
         Set<GoalsFilterType> currentFilters = _filters.getValue();
         if (currentFilters.contains(filterType)) {

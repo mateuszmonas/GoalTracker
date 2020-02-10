@@ -66,6 +66,10 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public Goal getItemAt(int position){
+        return goals.get(position);
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         Goal goal;
         @BindView(R.id.goal_title)
