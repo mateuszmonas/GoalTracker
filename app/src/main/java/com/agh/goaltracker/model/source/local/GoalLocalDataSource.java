@@ -1,7 +1,5 @@
 package com.agh.goaltracker.model.source.local;
 
-import android.os.AsyncTask;
-
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalDataSource;
 
@@ -23,10 +21,8 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void saveGoal(Goal goal) {
-        new InsertAsyncTask(goalDao).execute(goal);
-//        goalDao.insertGoal(goal);
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.insertGoal(goal));
     }
-
 
     @Override
     public LiveData<Goal> observeGoal(int goalId) {
@@ -35,61 +31,16 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void updateGoal(Goal goal) {
-        new UpdateAsyncTask(goalDao).execute(goal);
-//        goalDao.updateGoal(goal);
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.updateGoal(goal));
     }
 
     @Override
     public void deleteGoals(List<Goal> goals) {
-        goalDao.deleteGoals(goals);
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.deleteGoals(goals));
     }
 
     @Override
     public void deleteGoal(Goal goal) {
-        new DeleteGoalAsyncTask(goalDao).execute(goal);
-    }
-
-    private static class DeleteGoalAsyncTask extends AsyncTask<Goal, Void, Void> {
-        private GoalDao mAsyncTaskDao;
-
-        DeleteGoalAsyncTask(GoalDao dao) {
-            mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final Goal... params) {
-            mAsyncTaskDao.deleteGoal(params[0]);
-            return null;
-        }
-    }
-
-    private static class InsertAsyncTask extends AsyncTask<Goal, Void, Void> {
-
-        private final GoalDao asyncGoalDao;
-
-        InsertAsyncTask(GoalDao GoalDao) {
-            asyncGoalDao = GoalDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Goal... words) {
-            asyncGoalDao.insertGoal(words[0]);
-            return null;
-        }
-    }
-    
-    private static class UpdateAsyncTask extends AsyncTask<Goal, Void, Void> {
-
-        private final GoalDao asyncGoalDao;
-
-        UpdateAsyncTask(GoalDao GoalDao) {
-            asyncGoalDao = GoalDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Goal... words) {
-            asyncGoalDao.updateGoal(words[0]);
-            return null;
-        }
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.deleteGoal(goal));
     }
 }
