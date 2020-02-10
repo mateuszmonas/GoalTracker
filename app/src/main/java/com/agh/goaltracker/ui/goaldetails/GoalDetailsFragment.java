@@ -2,6 +2,7 @@ package com.agh.goaltracker.ui.goaldetails;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -29,7 +30,6 @@ import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.dialog.MaterialDialogs;
 
 public class GoalDetailsFragment extends Fragment {
     private static final String TAG = "GoalDetailsFragment";
@@ -113,35 +113,26 @@ public class GoalDetailsFragment extends Fragment {
 
     @OnClick(R.id.repeat_button)
     void openChangeRepeatDialog() {
-
-
-                GoalDetailsRepeatDialogFragment goalDetailsRepeatDialogFragment = GoalDetailsRepeatDialogFragment.newInstance();
-        goalDetailsRepeatDialogFragment.setTargetFragment(this, REPEAT_DIALOG_FRAGMENT_REQUEST_CODE);
-        goalDetailsRepeatDialogFragment.show(getActivity().getSupportFragmentManager(), GoalDetailsRepeatDialogFragment.TAG);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REPEAT_DIALOG_FRAGMENT_REQUEST_CODE:
-                changeRepeat(resultCode);
-        }
+        new MaterialAlertDialogBuilder(getContext())
+                .setSingleChoiceItems(RepeatOption.stringValues(), 1, (dialog, which) -> {
+                    changeRepeat(RepeatOption.values()[which]);
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     // TODO: 10/02/20 handle repeat change
-    void changeRepeat(int resultCode) {
-        Log.d(TAG, "changeRepeat() called with: resultCode = [" + resultCode + "]");
-        switch (resultCode) {
-            case GoalDetailsRepeatDialogFragment.RESULT_CODE_NEVER:
+    void changeRepeat(RepeatOption repeatOption) {
+        Log.d(TAG, "changeRepeat() called with: repeatOption = [" + repeatOption + "]");
+        switch (repeatOption) {
+            case NEVER:
                 break;
-            case GoalDetailsRepeatDialogFragment.RESULT_CODE_DAILY:
+            case DAILY:
                 break;
-            case GoalDetailsRepeatDialogFragment.RESULT_CODE_WEEKLY:
+            case WEEKLY:
                 break;
-            case GoalDetailsRepeatDialogFragment.RESULT_CODE_MONTHLY:
+            case MONTHLY:
                 break;
-
         }
     }
 
@@ -149,4 +140,26 @@ public class GoalDetailsFragment extends Fragment {
         goalName.setText(goal.getTitle());
     }
 
+    enum RepeatOption{
+        NEVER("never"), DAILY("daily"), WEEKLY("weekly"), MONTHLY("monthly");
+
+        private String text;
+
+        RepeatOption(String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+
+        public static String[] stringValues() {
+            String[] result = new String[values().length];
+            for (int i = 0; i < values().length; i++) {
+                result[i] = values()[i].toString();
+            }
+            return result;
+        }
+    }
 }

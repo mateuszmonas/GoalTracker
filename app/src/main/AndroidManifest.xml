@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddGoalActivity"></activity>
+        <activity android:name=".AddGoalActivity"/>
+        <activity android:name=".GoalDetailsActivity"/>
         <activity android:name=".GoalsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

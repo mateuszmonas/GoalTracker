@@ -17,7 +17,7 @@ public class GoalTrackerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        deleteDatabase("goals"); TODO uncomment
+        deleteDatabase("goals");
         GoalDatabase goalDatabase = Room.databaseBuilder(getApplicationContext(), GoalDatabase.class, "goals").build();
         goalRepository = new DefaultGoalRepository(new GoalLocalDataSource(goalDatabase.goalDao()));
         goalRepository.saveGoal(new Goal("first"));
