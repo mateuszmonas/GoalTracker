@@ -94,7 +94,6 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
             progressBar.setMax(goal.totalGoal);
             if(goal.getCurrentProgress() <= goal.getTotalGoal())
                 progressBar.setProgress(goal.getCurrentProgress());
-
         }
     }
 
