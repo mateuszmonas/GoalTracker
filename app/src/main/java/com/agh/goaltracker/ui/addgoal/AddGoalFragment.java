@@ -1,13 +1,13 @@
 package com.agh.goaltracker.ui.addgoal;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -37,9 +37,16 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
 
     @BindView(R.id.goal_name_txt)
     EditText goalName;
+    @BindView(R.id.event_goal_txt)
+    EditText eventGoal;
+    @BindView(R.id.timeChoserLayout)
+    LinearLayout minutesGoal;
+    @BindView(R.id.hour_txt)
+    EditText hourET;
+    @BindView(R.id.min_txt)
+    EditText minET;
     Date chosenDate = null;
     private boolean countAsMinutes = true;
-    private int goal = 0;
     private AddGoalViewModel addGoalViewModel;
     private Unbinder unbinder;
 
@@ -75,8 +82,24 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     @OnClick(R.id.create_goal_btn)
     public void addGoal() {
         String name = goalName.getText().toString();
+        int goal = 0;
+        if(countAsMinutes){
+        goal = convertTime(hourET.getText().toString(), minET.getText().toString());
+        }else if(!"".equals(eventGoal.getText().toString()))
+                goal = Integer.parseInt(eventGoal.getText().toString());
+
         addGoalViewModel.saveGoal(new Goal(name, chosenDate, countAsMinutes, goal));
     }
+
+    private int convertTime(String hours, String minutes){
+        int res=0;
+        if(!"".equals(hours))
+            res += 60*Integer.parseInt(hours);
+        if(!"".equals(minutes))
+            res += Integer.parseInt(minutes);
+        return res;
+    }
+
 
     private void showErrorMessage(AddGoalViewModel.SaveGoalError error) {
         String message = "";
@@ -110,9 +133,9 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     }
 
     @OnClick(R.id.set_goal)
-    public void setGoal() { // TODO set goal
-        Toast.makeText(getContext(), countAsMinutes ? "display hour and minute chooser popup" : "display popup to enter nr of events", Toast.LENGTH_SHORT).show();
-
+    public void setGoal() {
+        if(countAsMinutes) minutesGoal.setVisibility(View.VISIBLE);
+        else eventGoal.setVisibility(View.VISIBLE);
     }
 
     @OnClick({R.id.radio_as_events, R.id.radio_as_min})
@@ -126,6 +149,8 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
                 if (checked) countAsMinutes = true;
                 break;
         }
+        minutesGoal.setVisibility(View.GONE);
+        eventGoal.setVisibility(View.GONE);
     }
 
     @Override
