@@ -52,9 +52,9 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         } else {
             holder.dueDate.setText(dateFormat.format(goal.getDueDate()));
         }
-        holder.itemView.setOnClickListener(v -> goalsListListener.goToGoalDetailsActivity(goal));
+        holder.itemView.setOnClickListener(v -> goalsListListener.goToGoalDetailsActivity(goal.goalId));
         holder.itemView.setOnLongClickListener(v -> {
-            goalsListListener.goToEditGoalDetailsActivity(goal);
+            goalsListListener.goToEditGoalDetailsActivity(goal.goalId);
             return true;
         });
     }
