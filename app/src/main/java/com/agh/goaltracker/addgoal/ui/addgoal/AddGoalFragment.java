@@ -16,12 +16,15 @@ import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import butterknife.BindView;
@@ -30,7 +33,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
-public class AddGoalFragment extends Fragment {
+public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.goal_name_txt)
     EditText goalName;
@@ -96,9 +99,14 @@ public class AddGoalFragment extends Fragment {
     }
 
     @OnClick(R.id.choose_date)
-    public void setDueDate() { // TODO choose date from calendar
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+    public void setDueDate() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+
+        DatePickerDialog dialog = new DatePickerDialog(getContext(), this,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+        dialog.show();
+
     }
 
     @OnClick(R.id.set_goal)
@@ -119,23 +127,13 @@ public class AddGoalFragment extends Fragment {
         }
     }
 
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            return new DatePickerDialog(getActivity(), this, year, month, day);
-        }
-
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
-            Toast.makeText(getContext(), year + " " + month + " " + day, Toast.LENGTH_SHORT).show();
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        try {
+            chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse(""+day+month+"/"+year);
+            Toast.makeText(getContext(), chosenDate.toString(), Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
