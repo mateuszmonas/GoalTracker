@@ -3,7 +3,10 @@ package com.agh.goaltracker.ui.goals;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
@@ -39,7 +42,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Goal goal = goals.get(position);
-        holder.goal = goal;
+        holder.setGoal(goal);
         holder.goalTitle.setText(goal.getTitle());
 
         DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy", Locale.ENGLISH);
@@ -76,10 +79,21 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         TextView goalTitle;
         @BindView(R.id.due_date)
         TextView dueDate;
+        @BindView(R.id.plant)
+        ImageView plant;
+        @BindView(R.id.progress_bar)
+        ProgressBar progressBar;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        public void setGoal(Goal goal){
+            this.goal = goal;
+            progressBar.setMax(goal.totalGoal);
+            if(goal.getCurrentProgress() <= goal.getTotalGoal())
+                progressBar.setProgress(goal.getCurrentProgress());
         }
     }
 
