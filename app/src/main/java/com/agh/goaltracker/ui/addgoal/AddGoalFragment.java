@@ -83,6 +83,12 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
         unbinder.unbind();
     }
 
+    @OnClick(R.id.unset_date)
+    public void unsetDate(){
+        chosenDate = null;
+        chosenDateTV.setText(getString(R.string.unset));
+    }
+
     @OnClick(R.id.create_goal_btn)
     public void addGoal() {
         String name = goalName.getText().toString();
@@ -114,6 +120,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
         }
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
+
 
     private void finishActivity(boolean success) {
         if (success) {
@@ -160,11 +167,12 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         try {
-            chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse(""+day+month+"/"+year);
-            Toast.makeText(getContext(), chosenDate.toString(), Toast.LENGTH_SHORT).show();
+            chosenDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(""+day+"/"+(month+1)+"/"+year);
 
-            DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy", Locale.ENGLISH);
+            DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH);
             chosenDateTV.setText(dateFormat.format(chosenDate));
+            if(chosenDate.compareTo(new Date())<0)
+                Toast.makeText(getContext(), "you chose a date from the past", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
