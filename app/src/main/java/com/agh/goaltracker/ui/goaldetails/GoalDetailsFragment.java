@@ -104,8 +104,7 @@ public class GoalDetailsFragment extends Fragment {
     // TODO: 11/02/20 popup: nr of events/time spent
     @OnClick(R.id.record_progress_button)
     void recordPastProgress() {
-        View view = getLayoutInflater().inflate(R.layout.record_past_progress_dialog, null);
-        new GoalDetailsRecordPastProgressionDialogBuilder(getContext(), goalDetailsViewModel.goal.getValue())
+                new GoalDetailsRecordPastProgressionDialogBuilder(getContext(), goalDetailsViewModel.goal.getValue())
                 .setPositiveButtonListener(result -> Toast.makeText(getContext(), Integer.toString(result), Toast.LENGTH_SHORT).show())
                 .show();
     }

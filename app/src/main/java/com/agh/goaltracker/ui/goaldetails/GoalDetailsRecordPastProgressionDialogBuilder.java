@@ -1,5 +1,6 @@
 package com.agh.goaltracker.ui.goaldetails;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 public class GoalDetailsRecordPastProgressionDialogBuilder {
 
     private MaterialAlertDialogBuilder builder;
+    private Dialog dialog;
     private Goal goal;
 
     @BindView(R.id.number_of_events)
@@ -49,15 +51,15 @@ public class GoalDetailsRecordPastProgressionDialogBuilder {
             timeChooserLayout.setVisibility(View.GONE);
             numberOfEvents.setVisibility(View.VISIBLE);
         }
+        positiveButton.setOnClickListener(v -> dialog.dismiss());
+        negativeButton.setOnClickListener(v -> dialog.dismiss());
     }
 
     GoalDetailsRecordPastProgressionDialogBuilder setPositiveButtonListener(OnClickListener onClickListener) {
-        positiveButton.setOnClickListener(v -> onClickListener.onClick(getResult()));
-        return this;
-    }
-
-    GoalDetailsRecordPastProgressionDialogBuilder setNegativeButtonListener(OnClickListener onClickListener) {
-        negativeButton.setOnClickListener(v -> onClickListener.onClick(-1));
+        positiveButton.setOnClickListener(v -> {
+            onClickListener.onClick(getResult());
+            dialog.dismiss();
+        });
         return this;
     }
 
@@ -77,7 +79,8 @@ public class GoalDetailsRecordPastProgressionDialogBuilder {
     }
 
     void show() {
-        builder.show();
+        dialog = builder.create();
+        dialog.show();
     }
 
     interface OnClickListener {
