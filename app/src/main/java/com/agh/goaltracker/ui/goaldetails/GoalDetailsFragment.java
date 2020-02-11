@@ -1,5 +1,6 @@
 package com.agh.goaltracker.ui.goaldetails;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -100,21 +101,28 @@ public class GoalDetailsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    // TODO: 11/02/20 popup: nr of events/time spent
     @OnClick(R.id.record_progress_button)
     void recordPastProgress() {
-
+        View view = getLayoutInflater().inflate(R.layout.record_past_progress_dialog, null);
+        new GoalDetailsRecordPastProgressionDialogBuilder(getContext(), goalDetailsViewModel.goal.getValue())
+                .setPositiveButtonListener(result -> Toast.makeText(getContext(), Integer.toString(result), Toast.LENGTH_SHORT).show())
+                .show();
     }
 
+    // TODO: 11/02/20 add+1/start timer with notification
     @OnClick(R.id.contribute_now_button)
     void contributeNow() {
 
     }
 
+    // TODO: 11/02/20 open calendar and time picker and create notification
     @OnClick(R.id.set_notification_button)
     void setNotification() {
 
     }
 
+    // TODO: 11/02/20 select current repeat status
     @OnClick(R.id.repeat_button)
     void openChangeRepeatDialog() {
         new MaterialAlertDialogBuilder(getContext())
@@ -143,10 +151,7 @@ public class GoalDetailsFragment extends Fragment {
 
     private void goalDeleted(boolean success) {
         if (success) {
-            Toast.makeText(
-                    getContext(),
-                    "deleted!",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "deleted!", Toast.LENGTH_SHORT).show();
             getActivity().finish();
         }
     }
