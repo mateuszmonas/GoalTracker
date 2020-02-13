@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GoalTracker</string>
+    <string name="contribution_notification_channel">GoalTracker</string>
+    <string name="contribution_notification_channel_description">GoalTracker</string>
 </resources>

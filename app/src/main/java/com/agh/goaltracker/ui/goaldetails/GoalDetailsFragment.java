@@ -1,6 +1,9 @@
 package com.agh.goaltracker.ui.goaldetails;
 
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +17,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.agh.goaltracker.GoalDetailsActivity;
 import com.agh.goaltracker.GoalTrackerApplication;
+import com.agh.goaltracker.GoalsActivity;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
@@ -26,6 +31,8 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import butterknife.BindView;
@@ -101,17 +108,34 @@ public class GoalDetailsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    // TODO: 11/02/20 popup: nr of events/time spent
     @OnClick(R.id.record_progress_button)
     void recordPastProgress() {
-                new GoalDetailsRecordPastProgressionDialogBuilder(getContext(), goalDetailsViewModel.goal.getValue())
-                .setPositiveButtonListener(result -> Toast.makeText(getContext(), Integer.toString(result), Toast.LENGTH_SHORT).show())
-                .show();
+        new GoalDetailsRecordPastProgressionDialogBuilder(getContext(), goalDetailsViewModel.goal.getValue())
+            .setPositiveButtonListener(result -> Toast.makeText(getContext(), Integer.toString(result), Toast.LENGTH_SHORT).show())
+            .show();
     }
 
     // TODO: 11/02/20 add+1/start timer with notification
     @OnClick(R.id.contribute_now_button)
     void contributeNow() {
+        Goal goal = goalDetailsViewModel.goal.getValue();
+
+        Intent intent = GoalDetailsActivity.createIntent(getContext(), goal.getGoalId());
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(getContext());
+        taskStackBuilder.addNextIntent(GoalsActivity.createIntent(getContext()));
+        taskStackBuilder.addNextIntent(intent);
+
+        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "CHANNEL_ID")
+                .setSmallIcon(R.drawable.ic_add_black_24dp)
+                .setContentTitle(goal.getTitle())
+                .setContentText("contributing")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
+        notificationManagerCompat.notify(0, builder.build());
 
     }
 
