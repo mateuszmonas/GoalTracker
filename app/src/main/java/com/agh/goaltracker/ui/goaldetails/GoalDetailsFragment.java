@@ -111,8 +111,9 @@ public class GoalDetailsFragment extends Fragment {
     // TODO: 11/02/20 add+1/start timer with notification
     @OnClick(R.id.contribute_now_button)
     void contributeNow() {
-
+        goalDetailsViewModel.startContributing();
     }
+
     // TODO: 11/02/20 open calendar and time picker and create notification
     @OnClick(R.id.set_notification_button)
     void setNotification() {
@@ -165,6 +166,12 @@ public class GoalDetailsFragment extends Fragment {
             goalDueDate.setText(dateFormat.format(goal.getDueDate()));
         }
         goalProgressBar.setProgress(goal.getCurrentProgress());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     enum RepeatOption {
