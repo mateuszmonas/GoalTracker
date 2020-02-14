@@ -60,12 +60,12 @@
         android:text="contribute now"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/set_notification_button"
+        app:layout_constraintBottom_toTopOf="@id/set_reminder_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
     <Button
-        android:id="@+id/set_notification_button"
-        android:text="set notification"
+        android:id="@+id/set_reminder_button"
+        android:text="set reminder"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/repeat_button"

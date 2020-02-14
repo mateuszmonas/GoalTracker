@@ -1,5 +1,8 @@
 package com.agh.goaltracker.ui.goaldetails;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,14 +17,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.agh.goaltracker.GoalDetailsActivity;
 import com.agh.goaltracker.GoalTrackerApplication;
+import com.agh.goaltracker.GoalsActivity;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
+import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
 import com.agh.goaltracker.util.ViewModelFactory;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -32,6 +39,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.content.Context.ALARM_SERVICE;
 
 public class GoalDetailsFragment extends Fragment {
     private static final String TAG = "GoalDetailsFragment";
@@ -115,9 +124,22 @@ public class GoalDetailsFragment extends Fragment {
     }
 
     // TODO: 11/02/20 open calendar and time picker and create notification
-    @OnClick(R.id.set_notification_button)
-    void setNotification() {
+    @OnClick(R.id.set_reminder_button)
+    void setReminder() {
 
+        Goal goal = goalDetailsViewModel.goal.getValue();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, 5);
+        Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
+
+        intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goal.getGoalId());
+        intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goal.getTitle());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
     // TODO: 11/02/20 select current repeat status

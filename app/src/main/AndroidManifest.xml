@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.agh.goaltracker">
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:name=".GoalTrackerApplication"
         android:allowBackup="true"
@@ -10,12 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddGoalActivity"/>
-        <activity android:name=".GoalDetailsActivity" android:parentActivityName=".GoalsActivity"/>
-        <service
-            android:name=".services.GoalContributionService"
-            android:enabled="true"
-            android:exported="true"/>
+        <receiver android:name=".receivers.GoalReminderBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="NOTIFICATION_SERVICE" />
+            </intent-filter>
+        </receiver>
+
+
+        <activity android:name=".AddGoalActivity" />
+        <activity
+            android:name=".GoalDetailsActivity"
+            android:parentActivityName=".GoalsActivity" />
+
         <activity android:name=".GoalsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
