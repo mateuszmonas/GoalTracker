@@ -131,49 +131,51 @@ public class GoalDetailsFragment extends Fragment {
         displayDatePicker();
     }
 
-    void displayDatePicker() {
+    private void displayDatePicker() {
         Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(getContext(), this::displayTimePicker,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    void displayTimePicker(DatePicker view, int year, int month, int day) {
+    private void displayTimePicker(DatePicker view, int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         new TimePickerDialog(getContext(), (view1, hour, minute) -> {
             setReminder(year, month, day, hour, minute);
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
     }
 
-    void setReminder(int year, int month, int day, int hour, int minute){
+    private void setReminder(int year, int month, int day, int hour, int minute){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, hour, minute);
+        calendar.set(year, month, day, hour, minute, 0);
         if (calendar.getTime().before(Calendar.getInstance().getTime())) {
             Toast.makeText(getContext(), "can't select date from the past", Toast.LENGTH_LONG).show();
             return;
         }
-        Toast.makeText(getContext(), "reminder set for: " + SimpleDateFormat.getDateTimeInstance().format(calendar.getTime()), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Reminder set for: " + SimpleDateFormat.getDateTimeInstance().format(calendar.getTime()), Toast.LENGTH_LONG).show();
 
         Goal goal = goalDetailsViewModel.goal.getValue();
 
         Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goal.getGoalId());
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goal.getTitle());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), goal.getGoalId(), intent, 0);
 
         AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
-    void cancelReminder() {
+    private void cancelReminder() {
         Goal goal = goalDetailsViewModel.goal.getValue();
         Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goal.getGoalId());
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goal.getTitle());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), goal.getGoalId(), intent, 0);
 
         AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
+
+        Toast.makeText(getContext(), "Reminder canceled", Toast.LENGTH_LONG).show();
     }
 
     // TODO: 11/02/20 select current repeat status
@@ -189,7 +191,7 @@ public class GoalDetailsFragment extends Fragment {
     }
 
     // TODO: 10/02/20 handle repeat change
-    void changeRepeat(RepeatOption repeatOption) {
+    private void changeRepeat(RepeatOption repeatOption) {
         Log.d(TAG, "changeRepeat() called with: repeatOption = [" + repeatOption + "]");
         switch (repeatOption) {
             case NEVER:
@@ -210,7 +212,7 @@ public class GoalDetailsFragment extends Fragment {
         }
     }
 
-    void showGoal(Goal goal) {
+    private void showGoal(Goal goal) {
         if (goal == null) {
             return;
         }
@@ -221,7 +223,12 @@ public class GoalDetailsFragment extends Fragment {
         } else {
             goalDueDate.setText(dateFormat.format(goal.getDueDate()));
         }
-        goalProgressBar.setProgress(goal.getCurrentProgress());
+        if (goal.getTotalGoal() > 0) {
+            goalProgressBar.setMax(goal.getTotalGoal());
+            goalProgressBar.setProgress(goal.getCurrentProgress());
+        }else {
+            goalProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
