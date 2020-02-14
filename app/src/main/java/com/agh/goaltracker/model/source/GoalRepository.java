@@ -18,7 +18,7 @@ public interface GoalRepository {
 
     void updateGoal(Goal goal);
 
-    void increaseProgress(int goalId);
+    void increaseProgress(int goalId, int amount);
 
     void deleteGoals(List<Goal> goals);
 

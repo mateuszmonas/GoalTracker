@@ -26,8 +26,8 @@ interface GoalDao {
     @Query("select * from goals where goal_id=:goalId")
     Goal getGoal(int goalId);
 
-    @Query("update goals set current_progress = current_progress+1 where goal_id=:goalId")
-    void increaseProgress(int goalId);
+    @Query("update goals set current_progress = current_progress + :amount where goal_id=:goalId")
+    void increaseProgress(int goalId, int amount);
 
     @Update
     void updateGoal(Goal goal);

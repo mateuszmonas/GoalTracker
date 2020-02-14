@@ -119,7 +119,7 @@ public class GoalDetailsFragment extends Fragment {
     @OnClick(R.id.record_progress_button)
     void recordPastProgress() {
         new GoalDetailsRecordPastProgressionDialogBuilder(getContext(), goalDetailsViewModel.goal.getValue())
-            .setPositiveButtonListener(result -> Toast.makeText(getContext(), Integer.toString(result), Toast.LENGTH_SHORT).show())
+            .setPositiveButtonListener(goalDetailsViewModel::recordPastProgress)
             .show();
     }
 
