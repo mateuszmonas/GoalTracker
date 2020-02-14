@@ -24,8 +24,18 @@ public class DefaultGoalRepository implements GoalRepository {
     }
 
     @Override
+    public void increaseProgress(int goalId) {
+        localGoalDataSource.increaseProgress(goalId);
+    }
+
+    @Override
     public LiveData<Goal> observeGoal(int goalId) {
         return localGoalDataSource.observeGoal(goalId);
+    }
+
+    @Override
+    public Goal getGoal(int goalId) {
+        return localGoalDataSource.getGoal(goalId);
     }
 
     @Override

@@ -28,4 +28,13 @@ public class GoalDetailsViewModel extends ViewModel {
         goalRepository.deleteGoal(goal.getValue());
         _isDeleted.setValue(true);
     }
+
+    void startContributing() {
+        Goal goal = this.goal.getValue();
+        if (goal.isProgressAsMinutes()) {
+            // TODO: 14/02/20
+        } else {
+            goalRepository.increaseProgress(goal.getGoalId());
+        }
+    }
 }

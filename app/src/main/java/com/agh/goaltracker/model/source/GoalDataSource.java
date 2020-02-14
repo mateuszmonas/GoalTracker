@@ -14,7 +14,10 @@ public interface GoalDataSource {
 
     LiveData<Goal> observeGoal(int goalId);
 
+    Goal getGoal(int goalId);
+
     void updateGoal(Goal goal);
+    void increaseProgress(int goalId);
 
     void deleteGoals(List<Goal> goals);
 

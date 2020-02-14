@@ -23,6 +23,11 @@ interface GoalDao {
     @Query("select * from goals where goal_id=:goalId")
     LiveData<Goal> observeGoal(int goalId);
 
+    @Query("select * from goals where goal_id=:goalId")
+    Goal getGoal(int goalId);
+
+    @Query("update goals set current_progress = current_progress+1 where goal_id=:goalId")
+    void increaseProgress(int goalId);
 
     @Update
     void updateGoal(Goal goal);
