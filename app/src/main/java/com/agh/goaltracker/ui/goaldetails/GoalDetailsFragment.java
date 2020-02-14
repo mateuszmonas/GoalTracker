@@ -3,7 +3,6 @@ package com.agh.goaltracker.ui.goaldetails;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,23 +17,18 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.agh.goaltracker.GoalDetailsActivity;
 import com.agh.goaltracker.GoalTrackerApplication;
-import com.agh.goaltracker.GoalsActivity;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
 import com.agh.goaltracker.util.ViewModelFactory;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -112,6 +106,9 @@ public class GoalDetailsFragment extends Fragment {
             case R.id.delete_goal:
                 goalDetailsViewModel.deleteGoal();
                 return true;
+            case R.id.cancel_reminder:
+                cancelReminder();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -148,7 +145,6 @@ public class GoalDetailsFragment extends Fragment {
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
     }
 
-    // TODO: 14/02/20 allow removing reminders
     void setReminder(int year, int month, int day, int hour, int minute){
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute);
@@ -163,11 +159,21 @@ public class GoalDetailsFragment extends Fragment {
         Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goal.getGoalId());
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goal.getTitle());
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+    void cancelReminder() {
+        Goal goal = goalDetailsViewModel.goal.getValue();
+        Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
+        intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goal.getGoalId());
+        intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goal.getTitle());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 
     // TODO: 11/02/20 select current repeat status
