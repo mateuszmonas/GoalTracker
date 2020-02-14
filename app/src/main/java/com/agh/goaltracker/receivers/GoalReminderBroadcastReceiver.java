@@ -26,6 +26,7 @@ public class GoalReminderBroadcastReceiver extends BroadcastReceiver {
         int goalId = intent.getIntExtra(EXTRA_GOAL_ID, -1);
         String title = intent.getStringExtra(EXTRA_GOAL_TITLE);
 
+        // create activity stack for content intent
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntent(GoalsActivity.createIntent(context));
         stackBuilder.addNextIntent(GoalDetailsActivity.createIntent(context, goalId));

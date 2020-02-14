@@ -1,8 +1,10 @@
 package com.agh.goaltracker.ui.goaldetails;
 
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.agh.goaltracker.GoalDetailsActivity;
@@ -25,10 +29,12 @@ import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
 import com.agh.goaltracker.util.ViewModelFactory;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -123,14 +129,29 @@ public class GoalDetailsFragment extends Fragment {
         goalDetailsViewModel.startContributing();
     }
 
-    // TODO: 11/02/20 open calendar and time picker and create notification
     @OnClick(R.id.set_reminder_button)
-    void setReminder() {
+    void startSettingReminder() {
+        displayDatePicker(Calendar.getInstance());
+    }
 
+    void displayDatePicker(Calendar calendar) {
+        new DatePickerDialog(getContext(), this::displayTimePicker,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    void displayTimePicker(DatePicker view, int year, int month, int day) {
+        new TimePickerDialog(getContext(), (view1, hour, minute) -> {
+            setReminder(year, month, day, hour, minute);
+        }, 0, 0, true).show();
+    }
+
+    void setReminder(int year, int month, int day, int hour, int minute){
         Goal goal = goalDetailsViewModel.goal.getValue();
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, 5);
+        calendar.set(year, month, day, hour, minute);
+
         Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
 
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goal.getGoalId());
@@ -140,6 +161,11 @@ public class GoalDetailsFragment extends Fragment {
 
         AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        Date date = calendar.getTime();
+        String strDate = SimpleDateFormat.getDateTimeInstance().format(date);
+
+        Toast.makeText(getContext(), "reminder set for: " + strDate, Toast.LENGTH_LONG).show();
     }
 
     // TODO: 11/02/20 select current repeat status
