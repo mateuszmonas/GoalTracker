@@ -131,29 +131,36 @@ public class GoalDetailsFragment extends Fragment {
 
     @OnClick(R.id.set_reminder_button)
     void startSettingReminder() {
-        displayDatePicker(Calendar.getInstance());
+        displayDatePicker();
     }
 
-    void displayDatePicker(Calendar calendar) {
+    void displayDatePicker() {
+        Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(getContext(), this::displayTimePicker,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     void displayTimePicker(DatePicker view, int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
         new TimePickerDialog(getContext(), (view1, hour, minute) -> {
             setReminder(year, month, day, hour, minute);
-        }, 0, 0, true).show();
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
     }
 
+    // TODO: 14/02/20 allow removing reminders
     void setReminder(int year, int month, int day, int hour, int minute){
-        Goal goal = goalDetailsViewModel.goal.getValue();
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, hour, minute);
+        if (calendar.getTime().before(Calendar.getInstance().getTime())) {
+            Toast.makeText(getContext(), "can't select date from the past", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Toast.makeText(getContext(), "reminder set for: " + SimpleDateFormat.getDateTimeInstance().format(calendar.getTime()), Toast.LENGTH_LONG).show();
+
+        Goal goal = goalDetailsViewModel.goal.getValue();
 
         Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
-
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goal.getGoalId());
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goal.getTitle());
 
@@ -161,11 +168,6 @@ public class GoalDetailsFragment extends Fragment {
 
         AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-        Date date = calendar.getTime();
-        String strDate = SimpleDateFormat.getDateTimeInstance().format(date);
-
-        Toast.makeText(getContext(), "reminder set for: " + strDate, Toast.LENGTH_LONG).show();
     }
 
     // TODO: 11/02/20 select current repeat status
