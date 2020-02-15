@@ -217,11 +217,10 @@ public class GoalDetailsFragment extends Fragment {
             return;
         }
         goalName.setText(goal.getTitle());
-        DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy", Locale.ENGLISH);
         if (goal.getDueDate() == null) {
             goalDueDate.setText("unlimited");
         } else {
-            goalDueDate.setText(dateFormat.format(goal.getDueDate()));
+            goalDueDate.setText(SimpleDateFormat.getDateInstance().format(goal.getDueDate()));
         }
         if (goal.getTotalGoal() > 0) {
             goalProgressBar.setMax(goal.getTotalGoal());
