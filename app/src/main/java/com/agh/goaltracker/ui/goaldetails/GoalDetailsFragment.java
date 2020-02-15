@@ -24,12 +24,9 @@ import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
 import com.agh.goaltracker.util.ViewModelFactory;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -181,13 +178,15 @@ public class GoalDetailsFragment extends Fragment {
     // TODO: 11/02/20 select current repeat status
     @OnClick(R.id.repeat_button)
     void openChangeRepeatDialog() {
-        new MaterialAlertDialogBuilder(getContext())
-                .setTitle("Repeat")
-                .setSingleChoiceItems(RepeatOption.stringValues(), 1, (dialog, which) -> {
-                    changeRepeat(RepeatOption.values()[which]);
-                    dialog.dismiss();
-                })
-                .show();
+        SetReminderDialogFragment.newInstance(goalDetailsViewModel.goal.getValue().getGoalId())
+                .show(getActivity().getSupportFragmentManager(), "");
+        //        new MaterialAlertDialogBuilder(getContext())
+//                .setTitle("Repeat")
+//                .setSingleChoiceItems(RepeatOption.stringValues(), 1, (dialog, which) -> {
+//                    changeRepeat(RepeatOption.values()[which]);
+//                    dialog.dismiss();
+//                })
+//                .show();
     }
 
     // TODO: 10/02/20 handle repeat change
