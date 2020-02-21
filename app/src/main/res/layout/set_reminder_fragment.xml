@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"/>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/repeat_layout"
         android:orientation="horizontal"
         android:layout_width="match_parent"

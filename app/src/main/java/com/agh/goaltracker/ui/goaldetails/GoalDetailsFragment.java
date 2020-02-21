@@ -175,8 +175,7 @@ public class GoalDetailsFragment extends Fragment {
         Toast.makeText(getContext(), "Reminder canceled", Toast.LENGTH_LONG).show();
     }
 
-    // TODO: 11/02/20 select current repeat status
-    @OnClick(R.id.repeat_button)
+    @OnClick(R.id.set_reminder_button)
     void openChangeRepeatDialog() {
         SetReminderDialogFragment.newInstance(goalDetailsViewModel.goal.getValue().getGoalId())
                 .show(getActivity().getSupportFragmentManager(), "");
