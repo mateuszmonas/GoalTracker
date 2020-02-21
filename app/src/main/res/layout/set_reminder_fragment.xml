@@ -66,10 +66,17 @@
             android:layout_height="wrap_content"
             android:ems="10"/>
 
-        <Button
-            android:id="@+id/repeat_interval_button"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/repeat_interval_text_input_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <AutoCompleteTextView
+                android:id="@+id/selected_repeat_interval"
+                android:editable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
