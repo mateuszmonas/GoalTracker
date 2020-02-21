@@ -62,6 +62,7 @@
 
         <EditText
             android:id="@+id/repeat_interval_edit_text"
+            android:hint="interval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"/>

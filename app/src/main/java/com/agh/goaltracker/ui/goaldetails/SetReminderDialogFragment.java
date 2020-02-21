@@ -23,7 +23,10 @@ import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -135,7 +138,23 @@ public class SetReminderDialogFragment extends DialogFragment{
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), goalId, intent, 0);
 
             AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, chosenDateTimeCalendar.getTimeInMillis(), pendingIntent);
+
+            if (repeatCheckbox.isChecked()) {
+                RepeatInterval interval = RepeatInterval.values()[Arrays.asList(RepeatInterval.getStringValues()).indexOf(selectedRepeatInterval.getText().toString())];
+                long intervalInMillis = 0;
+                switch (interval) {
+                    case HOURS:
+                        intervalInMillis = TimeUnit.HOURS.toMillis(Integer.valueOf(repeatIntervalEditText.getText().toString()));
+                        break;
+                    case DAYS:
+                        intervalInMillis = TimeUnit.DAYS.toMillis(Integer.valueOf(repeatIntervalEditText.getText().toString()));
+                        break;
+                }
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, chosenDateTimeCalendar.getTimeInMillis(), intervalInMillis, pendingIntent);
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, chosenDateTimeCalendar.getTimeInMillis(), pendingIntent);
+            }
+
             toastText = "Reminder set for: " + SimpleDateFormat.getDateTimeInstance().format(chosenDateTimeCalendar.getTime());
             dismiss();
         }
