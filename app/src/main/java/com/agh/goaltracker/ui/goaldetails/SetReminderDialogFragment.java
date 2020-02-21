@@ -1,8 +1,10 @@
 package com.agh.goaltracker.ui.goaldetails;
 
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,7 @@ import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +49,7 @@ public class SetReminderDialogFragment extends DialogFragment{
     private static final String EXTRA_GOAL_TITLE = "GOAL_TITLE";
     Unbinder unbinder;
 
-    Calendar chosenDateTimeCalendar;
+    Calendar chosenDateTimeCalendar = Calendar.getInstance();
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -70,7 +74,7 @@ public class SetReminderDialogFragment extends DialogFragment{
     @BindView(R.id.selected_repeat_interval)
     AutoCompleteTextView selectedRepeatInterval;
     int goalId;
-    int goalTitle;
+    String goalTitle;
 
     public static SetReminderDialogFragment newInstance(int goalId) {
         final SetReminderDialogFragment fragment = new SetReminderDialogFragment();
@@ -91,6 +95,8 @@ public class SetReminderDialogFragment extends DialogFragment{
         toolbar.setNavigationOnClickListener(v -> dismiss());
         toolbar.setTitle("Create reminder");
 
+        goalId = getArguments().getInt(EXTRA_GOAL_ID);
+        goalTitle = getArguments().getString(EXTRA_GOAL_TITLE);
 
         selectedRepeatInterval.setText(RepeatInterval.getStringValues()[0], false);
         ArrayAdapter<String> adapter =
@@ -118,6 +124,31 @@ public class SetReminderDialogFragment extends DialogFragment{
     void onRepeatCheckboxCheck(CompoundButton buttonView, boolean isChecked) {
         repeatLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
         repeatIntervalEditText.setText("");
+    }
+
+    @OnClick({R.id.choose_date, R.id.choose_date})
+    void onChoseDateClick() {
+        Calendar calendar = Calendar.getInstance();
+        new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
+            chosenDateTimeCalendar.set(Calendar.YEAR, year);
+            chosenDateTimeCalendar.set(Calendar.MONTH, month);
+            chosenDateTimeCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            chosenDateTextView.setText(SimpleDateFormat.getDateInstance().format(chosenDateTimeCalendar.getTime()));
+        },
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    @OnClick({R.id.choose_time, R.id.chosen_time})
+    void onChoseTimeClick() {
+        Calendar calendar = Calendar.getInstance();
+        new TimePickerDialog(getContext(), (view, hour, minute) -> {
+            chosenDateTimeCalendar.set(Calendar.HOUR_OF_DAY, hour);
+            chosenDateTimeCalendar.set(Calendar.MINUTE, minute);
+            chosenDateTimeCalendar.set(Calendar.SECOND, 0);
+            chosenTimeTextView.setText(SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(chosenDateTimeCalendar.getTime()));
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+
     }
 
     @OnClick(R.id.save_reminder)
@@ -155,7 +186,7 @@ public class SetReminderDialogFragment extends DialogFragment{
                 alarmManager.set(AlarmManager.RTC_WAKEUP, chosenDateTimeCalendar.getTimeInMillis(), pendingIntent);
             }
 
-            toastText = "Reminder set for: " + SimpleDateFormat.getDateTimeInstance().format(chosenDateTimeCalendar.getTime());
+            toastText = "Reminder set for: " + SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(chosenDateTimeCalendar.getTime());
             dismiss();
         }
         Toast.makeText(getContext(), toastText, Toast.LENGTH_LONG).show();
