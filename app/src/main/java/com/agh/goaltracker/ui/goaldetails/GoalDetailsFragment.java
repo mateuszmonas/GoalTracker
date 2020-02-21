@@ -123,45 +123,6 @@ public class GoalDetailsFragment extends Fragment {
         goalDetailsViewModel.startContributing();
     }
 
-    @OnClick(R.id.set_reminder_button)
-    void startSettingReminder() {
-        displayDatePicker();
-    }
-
-    private void displayDatePicker() {
-        Calendar calendar = Calendar.getInstance();
-        new DatePickerDialog(getContext(), this::displayTimePicker,
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
-    private void displayTimePicker(DatePicker view, int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        new TimePickerDialog(getContext(), (view1, hour, minute) -> {
-            setReminder(year, month, day, hour, minute);
-        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
-    }
-
-    private void setReminder(int year, int month, int day, int hour, int minute){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, hour, minute, 0);
-        if (calendar.getTime().before(Calendar.getInstance().getTime())) {
-            Toast.makeText(getContext(), "can't select date from the past", Toast.LENGTH_LONG).show();
-            return;
-        }
-        Toast.makeText(getContext(), "Reminder set for: " + SimpleDateFormat.getDateTimeInstance().format(calendar.getTime()), Toast.LENGTH_LONG).show();
-
-        Goal goal = goalDetailsViewModel.goal.getValue();
-
-        Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
-        intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goal.getGoalId());
-        intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goal.getTitle());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), goal.getGoalId(), intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-    }
-
     private void cancelReminder() {
         Goal goal = goalDetailsViewModel.goal.getValue();
         Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);

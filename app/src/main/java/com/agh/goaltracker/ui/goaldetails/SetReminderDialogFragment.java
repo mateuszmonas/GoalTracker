@@ -1,10 +1,12 @@
 package com.agh.goaltracker.ui.goaldetails;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -13,26 +15,34 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.agh.goaltracker.R;
+import com.agh.goaltracker.model.Goal;
+import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.content.Context.ALARM_SERVICE;
+
 public class SetReminderDialogFragment extends DialogFragment{
 
     private static final String EXTRA_GOAL_ID = "GOAL_ID";
+    private static final String EXTRA_GOAL_TITLE = "GOAL_TITLE";
     Unbinder unbinder;
+
+    Calendar chosenDateTimeCalendar;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -56,12 +66,15 @@ public class SetReminderDialogFragment extends DialogFragment{
 
     @BindView(R.id.selected_repeat_interval)
     AutoCompleteTextView selectedRepeatInterval;
+    int goalId;
+    int goalTitle;
 
     public static SetReminderDialogFragment newInstance(int goalId) {
         final SetReminderDialogFragment fragment = new SetReminderDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(EXTRA_GOAL_ID, goalId);
-            fragment.setArguments(bundle);
+        bundle.putInt(EXTRA_GOAL_ID, goalId);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -75,13 +88,14 @@ public class SetReminderDialogFragment extends DialogFragment{
         toolbar.setNavigationOnClickListener(v -> dismiss());
         toolbar.setTitle("Create reminder");
 
+
+        selectedRepeatInterval.setText(RepeatInterval.getStringValues()[0], false);
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
                         getContext(),
                         R.layout.set_reminder_interval_popup_item,
-                        RepeatInterval.stringValues());
+                        RepeatInterval.getStringValues());
         selectedRepeatInterval.setAdapter(adapter);
-        selectedRepeatInterval.setListSelection(0);
 
         return view;
     }
@@ -103,6 +117,30 @@ public class SetReminderDialogFragment extends DialogFragment{
         repeatIntervalEditText.setText("");
     }
 
+    @OnClick(R.id.save_reminder)
+    void onSaveReminderClick() {
+        String toastText;
+        if (chosenDateTextView.getText().toString().equals("")) {
+            toastText = "reminder date not selected";
+        } else if (chosenTimeTextView.getText().toString().equals("")) {
+            toastText = "reminder time not selected";
+        } else if(repeatCheckbox.isChecked() && repeatIntervalEditText.getText().toString().equals("")) {
+            toastText = "reminder interval not selected";
+        }else if(chosenDateTimeCalendar.getTime().before(Calendar.getInstance().getTime())){
+            toastText = "selected date from the past";
+        }else {
+            Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
+            intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goalId);
+            intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goalTitle);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), goalId, intent, 0);
+
+            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, chosenDateTimeCalendar.getTimeInMillis(), pendingIntent);
+            toastText = "Reminder set for: " + SimpleDateFormat.getDateTimeInstance().format(chosenDateTimeCalendar.getTime());
+            dismiss();
+        }
+        Toast.makeText(getContext(), toastText, Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -123,7 +161,7 @@ public class SetReminderDialogFragment extends DialogFragment{
             this.text = text;
         }
 
-        public static String[] stringValues() {
+        public static String[] getStringValues() {
             String[] result = new String[values().length];
             for (int i = 0; i < values().length; i++) {
                 result[i] = values()[i].toString();
