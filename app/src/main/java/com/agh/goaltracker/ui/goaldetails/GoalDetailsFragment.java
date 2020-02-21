@@ -180,28 +180,6 @@ public class GoalDetailsFragment extends Fragment {
     void openChangeRepeatDialog() {
         SetReminderDialogFragment.newInstance(goalDetailsViewModel.goal.getValue().getGoalId())
                 .show(getActivity().getSupportFragmentManager(), "");
-        //        new MaterialAlertDialogBuilder(getContext())
-//                .setTitle("Repeat")
-//                .setSingleChoiceItems(RepeatOption.stringValues(), 1, (dialog, which) -> {
-//                    changeRepeat(RepeatOption.values()[which]);
-//                    dialog.dismiss();
-//                })
-//                .show();
-    }
-
-    // TODO: 10/02/20 handle repeat change
-    private void changeRepeat(RepeatOption repeatOption) {
-        Log.d(TAG, "changeRepeat() called with: repeatOption = [" + repeatOption + "]");
-        switch (repeatOption) {
-            case NEVER:
-                break;
-            case DAILY:
-                break;
-            case WEEKLY:
-                break;
-            case MONTHLY:
-                break;
-        }
     }
 
     private void goalDeleted(boolean success) {
@@ -235,27 +213,4 @@ public class GoalDetailsFragment extends Fragment {
         unbinder.unbind();
     }
 
-    enum RepeatOption {
-        NEVER("never"), DAILY("daily"), WEEKLY("weekly"), MONTHLY("monthly");
-
-        private String text;
-
-        RepeatOption(String text) {
-            this.text = text;
-        }
-
-        // used so we can pass the values to MaterialAlertDialogBuilder
-        public static String[] stringValues() {
-            String[] result = new String[values().length];
-            for (int i = 0; i < values().length; i++) {
-                result[i] = values()[i].toString();
-            }
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
-    }
 }
