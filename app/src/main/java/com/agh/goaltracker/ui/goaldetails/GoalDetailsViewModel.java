@@ -3,6 +3,7 @@ package com.agh.goaltracker.ui.goaldetails;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalRepository;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -16,8 +17,9 @@ public class GoalDetailsViewModel extends ViewModel {
     private MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>();
     LiveData<Boolean> isDeleted = _isDeleted;
 
-    private MutableLiveData<Boolean> _startContributing = new MutableLiveData<>();
-    LiveData<Boolean> startContributing = _startContributing;
+    LiveData<Boolean> isGoalContributing = Transformations.switchMap(goalId, goalId -> goalRepository.observeGoalContributing(goalId));
+    MutableLiveData<Boolean> _startGoalContributing = new MutableLiveData<>();
+    LiveData<Boolean> startGoalContributing = _startGoalContributing;
 
     public GoalDetailsViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
@@ -40,9 +42,14 @@ public class GoalDetailsViewModel extends ViewModel {
     void startContributing() {
         Goal goal = this.goal.getValue();
         if (goal.isProgressAsMinutes()) {
-            _startContributing.setValue(true);
+            _startGoalContributing.setValue(true);
         } else {
             goalRepository.increaseProgress(goal.getGoalId(), 1);
         }
     }
+
+    void stopContributing() {
+        _startGoalContributing.setValue(false);
+    }
+
 }

@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -47,6 +48,10 @@ public class GoalDetailsFragment extends Fragment {
     ProgressBar goalProgressBar;
     @BindView(R.id.goal_due_date)
     TextView goalDueDate;
+    @BindView(R.id.stop_contributing_button)
+    Button stopContributingButton;
+    @BindView(R.id.start_contributing_button)
+    Button startContributingButton;
     @BindView(R.id.goal_progress_text)
     TextView goalProgressText;
     private GoalDetailsViewModel goalDetailsViewModel;
@@ -83,7 +88,8 @@ public class GoalDetailsFragment extends Fragment {
         )).get(GoalDetailsViewModel.class);
         goalDetailsViewModel.goal.observe(getViewLifecycleOwner(), this::showGoal);
         goalDetailsViewModel.isDeleted.observe(getViewLifecycleOwner(), this::goalDeleted);
-        goalDetailsViewModel.startContributing.observe(getViewLifecycleOwner(), this::startGoalContributionService);
+        goalDetailsViewModel.isGoalContributing.observe(getViewLifecycleOwner(), this::changeContributionButton);
+        goalDetailsViewModel.startGoalContributing.observe(getViewLifecycleOwner(), this::startContributionService);
         goalDetailsViewModel.start(getArguments().getInt(EXTRA_GOAL_ID));
     }
 
@@ -119,8 +125,13 @@ public class GoalDetailsFragment extends Fragment {
 
     // TODO: 11/02/20 add+1/start timer with notification
     @OnClick(R.id.start_contributing_button)
-    void contributeNow() {
+    void onStartContributingButtonClick() {
         goalDetailsViewModel.startContributing();
+    }
+
+    @OnClick(R.id.stop_contributing_button)
+    void onStopContributingButtonClick() {
+        goalDetailsViewModel.stopContributing();
     }
 
     private void cancelReminder() {
@@ -168,8 +179,23 @@ public class GoalDetailsFragment extends Fragment {
         goalProgressText.setText(goal.progressToString());
     }
 
-    void startGoalContributionService(boolean start) {
-        Intent intent = GoalContributionService.createIntent(getContext(), goalDetailsViewModel.goal.getValue().getGoalId());
+    private void changeContributionButton(boolean contributing) {
+        if(contributing){
+            startContributingButton.setVisibility(View.GONE);
+            stopContributingButton.setVisibility(View.VISIBLE);
+        }else {
+            startContributingButton.setVisibility(View.VISIBLE);
+            stopContributingButton.setVisibility(View.GONE);
+        }
+    }
+
+    void startContributionService(boolean contributing) {
+        Intent intent;
+        if (contributing) {
+            intent = GoalContributionService.createStartContributingIntent(getContext(), goalDetailsViewModel.goal.getValue().getGoalId());
+        }else {
+            intent = GoalContributionService.createStopContributingIntent(getContext(), goalDetailsViewModel.goal.getValue().getGoalId());
+        }
         getContext().startService(intent);
     }
 

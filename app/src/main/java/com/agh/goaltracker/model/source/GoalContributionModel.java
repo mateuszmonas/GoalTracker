@@ -8,15 +8,18 @@ import androidx.lifecycle.MutableLiveData;
 
 public class GoalContributionModel {
 
-    MutableLiveData<Set<Integer>> contributingGoalsIds = new MutableLiveData<>(new HashSet<>());
+    private MutableLiveData<Set<Integer>> contributingGoalsIds = new MutableLiveData<>(new HashSet<>());
     private static GoalContributionModel instance = new GoalContributionModel();
 
     public static GoalContributionModel getInstance() {
         return instance;
     }
 
-    public LiveData<Set<Integer>> getContributingGoalsIds() {
+    public LiveData<Set<Integer>> observeContributingGoalsIds() {
         return contributingGoalsIds;
+    }
+    public Set<Integer> getContributingGoalsIds() {
+        return contributingGoalsIds.getValue();
     }
 
     public void addContributingGoalId(int goalId) {
