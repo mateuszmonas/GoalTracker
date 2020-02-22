@@ -100,6 +100,8 @@ public class SetReminderDialogFragment extends DialogFragment {
                         R.layout.set_reminder_interval_popup_item,
                         RepeatInterval.getStringValues());
         selectedRepeatInterval.setAdapter(adapter);
+        chosenDateTextView.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(chosenDateTimeCalendar.getTime()));
+        chosenTimeTextView.setText(DateFormat.getTimeInstance(DateFormat.SHORT).format(chosenDateTimeCalendar.getTime()));
 
         return view;
     }
@@ -123,27 +125,38 @@ public class SetReminderDialogFragment extends DialogFragment {
 
     @OnClick({R.id.choose_date, R.id.chosen_date})
     void onChoseDateClick() {
-        Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
             chosenDateTimeCalendar.set(Calendar.YEAR, year);
             chosenDateTimeCalendar.set(Calendar.MONTH, month);
             chosenDateTimeCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             chosenDateTextView.setText(SimpleDateFormat.getDateInstance().format(chosenDateTimeCalendar.getTime()));
         },
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show();
+                chosenDateTimeCalendar.get(Calendar.YEAR), chosenDateTimeCalendar.get(Calendar.MONTH),
+                chosenDateTimeCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     @OnClick({R.id.choose_time, R.id.chosen_time})
     void onChoseTimeClick() {
-        Calendar calendar = Calendar.getInstance();
         new TimePickerDialog(getContext(), (view, hour, minute) -> {
             chosenDateTimeCalendar.set(Calendar.HOUR_OF_DAY, hour);
             chosenDateTimeCalendar.set(Calendar.MINUTE, minute);
             chosenDateTimeCalendar.set(Calendar.SECOND, 0);
             chosenTimeTextView.setText(SimpleDateFormat.getTimeInstance(DateFormat.SHORT).format(chosenDateTimeCalendar.getTime()));
-        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+        }, chosenDateTimeCalendar.get(Calendar.HOUR_OF_DAY), chosenDateTimeCalendar.get(Calendar.MINUTE), true).show();
 
+    }
+
+    long getRepeatIntervalInMillis(int interval, RepeatInterval repeatInterval) {
+        long intervalInMillis = 0;
+        switch (repeatInterval) {
+            case HOURS:
+                intervalInMillis = TimeUnit.HOURS.toMillis(interval);
+                break;
+            case DAYS:
+                intervalInMillis = TimeUnit.DAYS.toMillis(interval);
+                break;
+        }
+        return intervalInMillis;
     }
 
     @OnClick(R.id.save_reminder)
@@ -166,16 +179,9 @@ public class SetReminderDialogFragment extends DialogFragment {
             AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
 
             if (repeatCheckbox.isChecked()) {
-                RepeatInterval interval = RepeatInterval.values()[Arrays.asList(RepeatInterval.getStringValues()).indexOf(selectedRepeatInterval.getText().toString())];
-                long intervalInMillis = 0;
-                switch (interval) {
-                    case HOURS:
-                        intervalInMillis = TimeUnit.HOURS.toMillis(Integer.valueOf(repeatIntervalEditText.getText().toString()));
-                        break;
-                    case DAYS:
-                        intervalInMillis = TimeUnit.DAYS.toMillis(Integer.valueOf(repeatIntervalEditText.getText().toString()));
-                        break;
-                }
+                RepeatInterval repeatInterval = RepeatInterval.getRepeatInterval(selectedRepeatInterval.getText().toString());
+                int interval = Integer.valueOf(repeatIntervalEditText.getText().toString());
+                long intervalInMillis = getRepeatIntervalInMillis(interval, repeatInterval);
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, chosenDateTimeCalendar.getTimeInMillis(), intervalInMillis, pendingIntent);
             } else {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, chosenDateTimeCalendar.getTimeInMillis(), pendingIntent);
@@ -212,6 +218,14 @@ public class SetReminderDialogFragment extends DialogFragment {
                 result[i] = values()[i].toString();
             }
             return result;
+        }
+
+        static RepeatInterval getRepeatInterval(String repeatInterval){
+            int index = Arrays.asList(RepeatInterval.getStringValues()).indexOf(repeatInterval);
+            if(index == -1){
+                return null;
+            }
+            return RepeatInterval.values()[Arrays.asList(RepeatInterval.getStringValues()).indexOf(repeatInterval)];
         }
 
         @Override
