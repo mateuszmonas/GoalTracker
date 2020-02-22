@@ -3,7 +3,6 @@ package com.agh.goaltracker.ui.goaldetails;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalRepository;
 
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -17,7 +16,7 @@ public class GoalDetailsViewModel extends ViewModel {
     private MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>();
     LiveData<Boolean> isDeleted = _isDeleted;
 
-    LiveData<Boolean> isGoalContributing = Transformations.switchMap(goalId, goalId -> goalRepository.observeGoalContributing(goalId));
+    LiveData<Boolean> isGoalContributing = Transformations.switchMap(goalId, goalId -> goalRepository.observeContributingGoal(goalId));
     MutableLiveData<Boolean> _startGoalContributing = new MutableLiveData<>();
     LiveData<Boolean> startGoalContributing = _startGoalContributing;
 

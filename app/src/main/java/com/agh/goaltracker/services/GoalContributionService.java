@@ -7,7 +7,12 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.agh.goaltracker.GoalTrackerApplication;
+import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalRepository;
+
+import java.util.Set;
+
+import androidx.lifecycle.LiveData;
 
 public class GoalContributionService extends Service {
     GoalRepository goalRepository;
@@ -16,6 +21,21 @@ public class GoalContributionService extends Service {
 
     private static final String ACTION_START_CONTRIBUTING = "START_CONTRIBUTING";
     private static final String ACTION_STOP_CONTRIBUTING = "STOP_CONTRIBUTING";
+
+    boolean threadRunning = true;
+    Set<Integer> contributingGoalsIds;
+    Thread contributionThread = new Thread(() -> {
+        while (threadRunning) {
+            for (Integer contributingGoalsId : contributingGoalsIds) {
+                goalRepository.increaseProgress(contributingGoalsId, 1);
+            }
+            try {
+                Thread.sleep(60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    });
 
     public static Intent createStartContributingIntent(Context context, int goalId) {
         Intent intent = new Intent(context, GoalContributionService.class);
@@ -35,6 +55,8 @@ public class GoalContributionService extends Service {
     public void onCreate() {
         super.onCreate();
         goalRepository = ((GoalTrackerApplication) getApplication()).getGoalRepository();
+        contributingGoalsIds = goalRepository.getContributingGoalsIds();
+        contributionThread.start();
     }
 
     @Override
@@ -55,6 +77,12 @@ public class GoalContributionService extends Service {
         }
         Log.d(TAG, "onStartCommand: "+ a);
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        threadRunning = false;
+        super.onDestroy();
     }
 
     @Override

@@ -58,7 +58,7 @@ public class DefaultGoalRepository implements GoalRepository {
     }
 
     @Override
-    public LiveData<Boolean> observeGoalContributing(int goalId) {
+    public LiveData<Boolean> observeContributingGoal(int goalId) {
         GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
         return Transformations.switchMap(goalContributionModel.observeContributingGoalsIds(), contributingGoalIds -> new MutableLiveData<>(contributingGoalIds.contains(goalId)));
     }
@@ -67,6 +67,12 @@ public class DefaultGoalRepository implements GoalRepository {
     public Set<Integer> getContributingGoalsIds() {
         GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
         return goalContributionModel.getContributingGoalsIds();
+    }
+
+    @Override
+    public LiveData<Set<Integer>> observeContributingGoalsIds() {
+        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
+        return goalContributionModel.observeContributingGoalsIds();
     }
 
     @Override
