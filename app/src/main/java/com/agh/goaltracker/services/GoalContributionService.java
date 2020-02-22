@@ -7,21 +7,16 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.agh.goaltracker.GoalTrackerApplication;
-import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalRepository;
 
 import java.util.Set;
 
-import androidx.lifecycle.LiveData;
-
 public class GoalContributionService extends Service {
-    GoalRepository goalRepository;
     private static final String EXTRA_GOAL_ID = "GOAL_ID";
     private static final String TAG = "GoalContributionService";
-
     private static final String ACTION_START_CONTRIBUTING = "START_CONTRIBUTING";
     private static final String ACTION_STOP_CONTRIBUTING = "STOP_CONTRIBUTING";
-
+    GoalRepository goalRepository;
     boolean threadRunning = true;
     Set<Integer> contributingGoalsIds;
     Thread contributionThread = new Thread(() -> {
@@ -75,7 +70,7 @@ public class GoalContributionService extends Service {
         for (Integer contributingGoalsId : goalRepository.getContributingGoalsIds()) {
             a += contributingGoalsId + " ";
         }
-        Log.d(TAG, "onStartCommand: "+ a);
+        Log.d(TAG, "onStartCommand: " + a);
         return super.onStartCommand(intent, flags, startId);
     }
 

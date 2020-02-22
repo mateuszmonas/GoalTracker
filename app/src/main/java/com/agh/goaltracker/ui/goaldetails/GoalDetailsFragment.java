@@ -180,10 +180,10 @@ public class GoalDetailsFragment extends Fragment {
     }
 
     private void changeContributionButton(boolean contributing) {
-        if(contributing){
+        if (contributing) {
             startContributingButton.setVisibility(View.GONE);
             stopContributingButton.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             startContributingButton.setVisibility(View.VISIBLE);
             stopContributingButton.setVisibility(View.GONE);
         }
@@ -193,7 +193,7 @@ public class GoalDetailsFragment extends Fragment {
         Intent intent;
         if (contributing) {
             intent = GoalContributionService.createStartContributingIntent(getContext(), goalDetailsViewModel.goal.getValue().getGoalId());
-        }else {
+        } else {
             intent = GoalContributionService.createStopContributingIntent(getContext(), goalDetailsViewModel.goal.getValue().getGoalId());
         }
         getContext().startService(intent);

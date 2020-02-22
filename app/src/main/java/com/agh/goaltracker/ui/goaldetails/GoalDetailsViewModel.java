@@ -9,16 +9,14 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 public class GoalDetailsViewModel extends ViewModel {
+    MutableLiveData<Boolean> _startGoalContributing = new MutableLiveData<>();
+    LiveData<Boolean> startGoalContributing = _startGoalContributing;
     private GoalRepository goalRepository;
     private MutableLiveData<Integer> goalId = new MutableLiveData<>();
     LiveData<Goal> goal = Transformations.switchMap(goalId, goalId -> goalRepository.observeGoal(goalId));
-
+    LiveData<Boolean> isGoalContributing = Transformations.switchMap(goalId, goalId -> goalRepository.observeContributingGoal(goalId));
     private MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>();
     LiveData<Boolean> isDeleted = _isDeleted;
-
-    LiveData<Boolean> isGoalContributing = Transformations.switchMap(goalId, goalId -> goalRepository.observeContributingGoal(goalId));
-    MutableLiveData<Boolean> _startGoalContributing = new MutableLiveData<>();
-    LiveData<Boolean> startGoalContributing = _startGoalContributing;
 
     public GoalDetailsViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;

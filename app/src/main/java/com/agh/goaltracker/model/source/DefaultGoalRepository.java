@@ -5,7 +5,6 @@ import com.agh.goaltracker.model.Goal;
 import java.util.List;
 import java.util.Set;
 
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;

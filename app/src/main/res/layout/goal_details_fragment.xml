@@ -69,23 +69,22 @@
         android:id="@+id/contribution_buttons_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/set_reminder_button"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/start_contributing_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="start contribution"/>
+            android:text="start contribution" />
 
         <Button
-            android:visibility="gone"
             android:id="@+id/stop_contributing_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="stop contribution" />
+            android:text="stop contribution"
+            android:visibility="gone" />
 
     </FrameLayout>
 
