@@ -3,8 +3,12 @@ package com.agh.goaltracker.model.source;
 import com.agh.goaltracker.model.Goal;
 
 import java.util.List;
+import java.util.Set;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 public class DefaultGoalRepository implements GoalRepository {
     private GoalDataSource localGoalDataSource;
@@ -51,5 +55,11 @@ public class DefaultGoalRepository implements GoalRepository {
     @Override
     public void deleteGoal(Goal goal) {
         localGoalDataSource.deleteGoal(goal);
+    }
+
+    @Override
+    public LiveData<Boolean> observeGoalContributing(Goal goal) {
+        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
+        return Transformations.switchMap(goalContributionModel.contributingGoalsIds, contributingGoalIds -> new MutableLiveData<>(contributingGoalIds.contains(goal.getGoalId())));
     }
 }

@@ -16,6 +16,9 @@ public class GoalDetailsViewModel extends ViewModel {
     private MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>();
     LiveData<Boolean> isDeleted = _isDeleted;
 
+    private MutableLiveData<Boolean> _startContributing = new MutableLiveData<>();
+    LiveData<Boolean> startContributing = _startContributing;
+
     public GoalDetailsViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
     }
@@ -37,7 +40,7 @@ public class GoalDetailsViewModel extends ViewModel {
     void startContributing() {
         Goal goal = this.goal.getValue();
         if (goal.isProgressAsMinutes()) {
-            // TODO: 14/02/20
+            _startContributing.setValue(true);
         } else {
             goalRepository.increaseProgress(goal.getGoalId(), 1);
         }

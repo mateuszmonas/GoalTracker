@@ -20,6 +20,7 @@ import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
+import com.agh.goaltracker.services.GoalContributionService;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 import java.text.SimpleDateFormat;
@@ -82,6 +83,7 @@ public class GoalDetailsFragment extends Fragment {
         )).get(GoalDetailsViewModel.class);
         goalDetailsViewModel.goal.observe(getViewLifecycleOwner(), this::showGoal);
         goalDetailsViewModel.isDeleted.observe(getViewLifecycleOwner(), this::goalDeleted);
+        goalDetailsViewModel.startContributing.observe(getViewLifecycleOwner(), this::startGoalContributionService);
         goalDetailsViewModel.start(getArguments().getInt(EXTRA_GOAL_ID));
     }
 
@@ -116,7 +118,7 @@ public class GoalDetailsFragment extends Fragment {
     }
 
     // TODO: 11/02/20 add+1/start timer with notification
-    @OnClick(R.id.contribute_now_button)
+    @OnClick(R.id.start_contributing_button)
     void contributeNow() {
         goalDetailsViewModel.startContributing();
     }
@@ -164,6 +166,11 @@ public class GoalDetailsFragment extends Fragment {
             goalProgressBar.setVisibility(View.INVISIBLE);
         }
         goalProgressText.setText(goal.progressToString());
+    }
+
+    void startGoalContributionService(boolean start) {
+        Intent intent = GoalContributionService.createIntent(getContext(), goalDetailsViewModel.goal.getValue().getGoalId());
+        getContext().startService(intent);
     }
 
     @Override

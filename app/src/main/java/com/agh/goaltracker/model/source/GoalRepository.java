@@ -23,4 +23,6 @@ public interface GoalRepository {
     void deleteGoals(List<Goal> goals);
 
     void deleteGoal(Goal goal);
+
+    LiveData<Boolean> observeGoalContributing(Goal goal);
 }

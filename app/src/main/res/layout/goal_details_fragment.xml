@@ -61,18 +61,33 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="record previous progress"
-        app:layout_constraintBottom_toTopOf="@id/contribute_now_button"
+        app:layout_constraintBottom_toTopOf="@id/contribution_buttons_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/contribute_now_button"
+    <FrameLayout
+        android:id="@+id/contribution_buttons_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="contribute now"
-        app:layout_constraintBottom_toTopOf="@id/set_reminder_button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/set_reminder_button"
+        >
+
+        <Button
+            android:id="@+id/start_contributing_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="start contribution"/>
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/stop_contributing_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="stop contribution" />
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/set_reminder_button"
