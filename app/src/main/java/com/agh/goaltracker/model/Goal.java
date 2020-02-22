@@ -1,6 +1,7 @@
 package com.agh.goaltracker.model;
 
 import java.util.Date;
+import java.util.Locale;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -68,5 +69,24 @@ public class Goal {
 
     public int getTotalGoal() {
         return totalGoal;
+    }
+
+    public String progressToString() {
+        String result = "";
+        if (progressAsMinutes) {
+            if (totalGoal > 0) {
+                result = String.format(Locale.getDefault(), "%02d:%02d/%02d:%02d", currentProgress / 60, currentProgress % 60, totalGoal / 60, totalGoal % 60);
+            } else {
+                result = String.format(Locale.getDefault(), "%02d:%02d", currentProgress / 60, currentProgress % 60);
+            }
+        } else {
+            if (totalGoal > 0) {
+                result = String.format(Locale.getDefault(), "%d/%d", currentProgress, totalGoal);
+            } else {
+                result = String.format(Locale.getDefault(), "%d", currentProgress);
+            }
+        }
+        return result;
+
     }
 }

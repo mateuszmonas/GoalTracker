@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -15,12 +16,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GoalDetailsRecordPastProgressionDialogBuilder {
+public class RecordPastProgressionDialogBuilder {
 
     @BindView(R.id.number_of_events)
     EditText numberOfEvents;
     @BindView(R.id.time_chooser_layout)
-    LinearLayout timeChooserLayout;
+    ViewGroup timeChooserLayout;
     @BindView(R.id.hours)
     EditText hoursEditText;
     @BindView(R.id.minutes)
@@ -33,7 +34,7 @@ public class GoalDetailsRecordPastProgressionDialogBuilder {
     private Dialog dialog;
     private Goal goal;
 
-    GoalDetailsRecordPastProgressionDialogBuilder(Context context, Goal goal) {
+    RecordPastProgressionDialogBuilder(Context context, Goal goal) {
         this.goal = goal;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.record_past_progress_dialog, null);
@@ -52,7 +53,7 @@ public class GoalDetailsRecordPastProgressionDialogBuilder {
         negativeButton.setOnClickListener(v -> dialog.dismiss());
     }
 
-    GoalDetailsRecordPastProgressionDialogBuilder setPositiveButtonListener(OnClickListener onClickListener) {
+    RecordPastProgressionDialogBuilder setPositiveButtonListener(OnClickListener onClickListener) {
         positiveButton.setOnClickListener(v -> {
             onClickListener.onClick(getResult());
             dialog.dismiss();

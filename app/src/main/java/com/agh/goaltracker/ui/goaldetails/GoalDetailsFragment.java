@@ -23,6 +23,7 @@ import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +47,8 @@ public class GoalDetailsFragment extends Fragment {
     ProgressBar goalProgressBar;
     @BindView(R.id.goal_due_date)
     TextView goalDueDate;
+    @BindView(R.id.goal_progress_text)
+    TextView goalProgressText;
     private GoalDetailsViewModel goalDetailsViewModel;
     private Unbinder unbinder;
 
@@ -108,7 +111,7 @@ public class GoalDetailsFragment extends Fragment {
 
     @OnClick(R.id.record_progress_button)
     void recordPastProgress() {
-        new GoalDetailsRecordPastProgressionDialogBuilder(getContext(), goalDetailsViewModel.goal.getValue())
+        new RecordPastProgressionDialogBuilder(getContext(), goalDetailsViewModel.goal.getValue())
                 .setPositiveButtonListener(goalDetailsViewModel::recordPastProgress)
                 .show();
     }
@@ -159,8 +162,9 @@ public class GoalDetailsFragment extends Fragment {
             goalProgressBar.setMax(goal.getTotalGoal());
             goalProgressBar.setProgress(goal.getCurrentProgress());
         } else {
-            goalProgressBar.setVisibility(View.GONE);
+            goalProgressBar.setVisibility(View.INVISIBLE);
         }
+        goalProgressText.setText(goal.progressToString());
     }
 
     @Override
