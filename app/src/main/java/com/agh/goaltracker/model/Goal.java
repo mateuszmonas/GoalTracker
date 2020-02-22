@@ -72,7 +72,7 @@ public class Goal {
     }
 
     public String progressToString() {
-        String result = "";
+        String result;
         if (progressAsMinutes) {
             if (totalGoal > 0) {
                 result = String.format(Locale.getDefault(), "%02d:%02d/%02d:%02d", currentProgress / 60, currentProgress % 60, totalGoal / 60, totalGoal % 60);

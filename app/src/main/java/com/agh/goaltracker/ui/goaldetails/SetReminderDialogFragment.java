@@ -64,8 +64,6 @@ public class SetReminderDialogFragment extends DialogFragment {
     ViewGroup repeatLayout;
     @BindView(R.id.repeat_interval_edit_text)
     EditText repeatIntervalEditText;
-    @BindView(R.id.save_reminder)
-    Button saveReminderButton;
     @BindView(R.id.selected_repeat_interval)
     AutoCompleteTextView selectedRepeatInterval;
     int goalId;
@@ -96,6 +94,14 @@ public class SetReminderDialogFragment extends DialogFragment {
         unbinder = ButterKnife.bind(this, view);
         toolbar.setNavigationOnClickListener(v -> dismiss());
         toolbar.setTitle("Create reminder");
+        toolbar.inflateMenu(R.menu.set_reminder_toolbar_menu);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_save) {
+                saveReminder();
+                return true;
+            }
+            return false;
+        });
 
         goalId = getArguments().getInt(EXTRA_GOAL_ID);
         goalTitle = getArguments().getString(EXTRA_GOAL_TITLE);
@@ -166,8 +172,7 @@ public class SetReminderDialogFragment extends DialogFragment {
         return intervalInMillis;
     }
 
-    @OnClick(R.id.save_reminder)
-    void onSaveReminderClick() {
+    void saveReminder() {
         String toastText;
         if (chosenDateTextView.getText().toString().equals("")) {
             toastText = "reminder date not selected";
