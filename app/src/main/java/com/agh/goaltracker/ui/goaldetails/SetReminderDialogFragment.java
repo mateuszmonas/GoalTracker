@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -232,9 +231,9 @@ public class SetReminderDialogFragment extends DialogFragment {
             return result;
         }
 
-        static RepeatInterval getRepeatInterval(String repeatInterval){
+        static RepeatInterval getRepeatInterval(String repeatInterval) {
             int index = Arrays.asList(RepeatInterval.getStringValues()).indexOf(repeatInterval);
-            if(index == -1){
+            if (index == -1) {
                 return null;
             }
             return RepeatInterval.values()[Arrays.asList(RepeatInterval.getStringValues()).indexOf(repeatInterval)];
