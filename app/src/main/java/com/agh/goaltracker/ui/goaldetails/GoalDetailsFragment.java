@@ -1,9 +1,7 @@
 package com.agh.goaltracker.ui.goaldetails;
 
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,7 +23,6 @@ import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -113,8 +109,8 @@ public class GoalDetailsFragment extends Fragment {
     @OnClick(R.id.record_progress_button)
     void recordPastProgress() {
         new GoalDetailsRecordPastProgressionDialogBuilder(getContext(), goalDetailsViewModel.goal.getValue())
-            .setPositiveButtonListener(goalDetailsViewModel::recordPastProgress)
-            .show();
+                .setPositiveButtonListener(goalDetailsViewModel::recordPastProgress)
+                .show();
     }
 
     // TODO: 11/02/20 add+1/start timer with notification
@@ -130,7 +126,7 @@ public class GoalDetailsFragment extends Fragment {
         intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goal.getTitle());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), goal.getGoalId(), intent, 0);
 
-        AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
 
         Toast.makeText(getContext(), "Reminder canceled", Toast.LENGTH_LONG).show();
@@ -162,7 +158,7 @@ public class GoalDetailsFragment extends Fragment {
         if (goal.getTotalGoal() > 0) {
             goalProgressBar.setMax(goal.getTotalGoal());
             goalProgressBar.setProgress(goal.getCurrentProgress());
-        }else {
+        } else {
             goalProgressBar.setVisibility(View.GONE);
         }
     }

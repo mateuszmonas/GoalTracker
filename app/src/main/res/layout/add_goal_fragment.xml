@@ -126,11 +126,11 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_goal_txt"
-        android:visibility="gone">
+        app:layout_constraintTop_toBottomOf="@+id/event_goal_txt">
 
         <EditText
             android:id="@+id/hour_txt"

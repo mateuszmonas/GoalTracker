@@ -16,18 +16,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agh.goaltracker.R;
-import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +40,7 @@ import butterknife.Unbinder;
 
 import static android.content.Context.ALARM_SERVICE;
 
-public class SetReminderDialogFragment extends DialogFragment{
+public class SetReminderDialogFragment extends DialogFragment {
 
     private static final String EXTRA_GOAL_ID = "GOAL_ID";
     private static final String EXTRA_GOAL_TITLE = "GOAL_TITLE";
@@ -61,7 +58,6 @@ public class SetReminderDialogFragment extends DialogFragment{
     TextView chosenDateTextView;
     @BindView(R.id.chosen_time)
     TextView chosenTimeTextView;
-
     @BindView(R.id.repeat_checkbox)
     CheckBox repeatCheckbox;
     @BindView(R.id.repeat_layout)
@@ -70,7 +66,6 @@ public class SetReminderDialogFragment extends DialogFragment{
     EditText repeatIntervalEditText;
     @BindView(R.id.save_reminder)
     Button saveReminderButton;
-
     @BindView(R.id.selected_repeat_interval)
     AutoCompleteTextView selectedRepeatInterval;
     int goalId;
@@ -126,7 +121,7 @@ public class SetReminderDialogFragment extends DialogFragment{
         repeatIntervalEditText.setText("");
     }
 
-    @OnClick({R.id.choose_date, R.id.choose_date})
+    @OnClick({R.id.choose_date, R.id.chosen_date})
     void onChoseDateClick() {
         Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
@@ -158,11 +153,11 @@ public class SetReminderDialogFragment extends DialogFragment{
             toastText = "reminder date not selected";
         } else if (chosenTimeTextView.getText().toString().equals("")) {
             toastText = "reminder time not selected";
-        } else if(repeatCheckbox.isChecked() && repeatIntervalEditText.getText().toString().equals("")) {
+        } else if (repeatCheckbox.isChecked() && repeatIntervalEditText.getText().toString().equals("")) {
             toastText = "reminder interval not selected";
-        }else if(chosenDateTimeCalendar.getTime().before(Calendar.getInstance().getTime())){
+        } else if (chosenDateTimeCalendar.getTime().before(Calendar.getInstance().getTime())) {
             toastText = "selected date from the past";
-        }else {
+        } else {
             Intent intent = new Intent(getContext(), GoalReminderBroadcastReceiver.class);
             intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_ID, goalId);
             intent.putExtra(GoalReminderBroadcastReceiver.EXTRA_GOAL_TITLE, goalTitle);

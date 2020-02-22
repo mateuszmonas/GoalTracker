@@ -17,10 +17,6 @@ import butterknife.ButterKnife;
 
 public class GoalDetailsRecordPastProgressionDialogBuilder {
 
-    private MaterialAlertDialogBuilder builder;
-    private Dialog dialog;
-    private Goal goal;
-
     @BindView(R.id.number_of_events)
     EditText numberOfEvents;
     @BindView(R.id.time_chooser_layout)
@@ -29,12 +25,13 @@ public class GoalDetailsRecordPastProgressionDialogBuilder {
     EditText hoursEditText;
     @BindView(R.id.minutes)
     EditText minutesEditText;
-
     @BindView(R.id.positive_button)
     Button positiveButton;
-
     @BindView(R.id.negative_button)
     Button negativeButton;
+    private MaterialAlertDialogBuilder builder;
+    private Dialog dialog;
+    private Goal goal;
 
     GoalDetailsRecordPastProgressionDialogBuilder(Context context, Goal goal) {
         this.goal = goal;
@@ -47,7 +44,7 @@ public class GoalDetailsRecordPastProgressionDialogBuilder {
         if (goal.isProgressAsMinutes()) {
             numberOfEvents.setVisibility(View.GONE);
             timeChooserLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             timeChooserLayout.setVisibility(View.GONE);
             numberOfEvents.setVisibility(View.VISIBLE);
         }
@@ -72,7 +69,7 @@ public class GoalDetailsRecordPastProgressionDialogBuilder {
                 result += 60 * Integer.parseInt(hours);
             if (!minutes.equals(""))
                 result += Integer.parseInt(minutes);
-        } else if(!numberOfEvents.getText().toString().equals("")){
+        } else if (!numberOfEvents.getText().toString().equals("")) {
             result = Integer.parseInt(numberOfEvents.getText().toString());
         }
         return result;
