@@ -30,7 +30,7 @@ public class GoalContributionService extends Service {
                 goalRepository.increaseProgress(contributingGoalsId, 1);
             }
             try {
-                Thread.sleep(60000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
