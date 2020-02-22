@@ -11,9 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.agh.goaltracker.AddGoalActivity;
+import com.agh.goaltracker.GoalDetailsActivity;
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
-import com.agh.goaltracker.AddGoalActivity;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
@@ -36,18 +37,39 @@ public class GoalsFragment extends Fragment {
     RecyclerView goalsRecyclerView;
     private GoalsViewModel goalsViewModel;
     private GoalsAdapter goalsAdapter;
+    ItemTouchHelper helper = new ItemTouchHelper(
+            new ItemTouchHelper.SimpleCallback(0,
+                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView,
+                                      RecyclerView.ViewHolder viewHolder,
+                                      RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder,
+                                     int direction) {
+                    int position = viewHolder.getAdapterPosition();
+                    Goal goal = goalsAdapter.getItemAt(position);
+                    Toast.makeText(getContext(), "Deleting " +
+                            goal.getTitle(), Toast.LENGTH_LONG).show();
+
+                    goalsViewModel.delete(goal);
+                }
+            });
     private Unbinder unbinder;
     private GoalsListListener goalsListListener = new GoalsListListener() {
         @Override
-        public void goToGoalDetailsActivity(Goal goal) {
-            // TODO: 09/02/20 implement goal details
-            Log.d(TAG, "goToGoalDetailsActivity() called with: goal = [" + goal + "]");
+        public void goToGoalDetailsActivity(int goalId) {
+            Intent intent = GoalDetailsActivity.createIntent(getContext(), goalId);
+            startActivity(intent);
         }
 
         @Override
-        public void goToEditGoalDetailsActivity(Goal goal) {
+        public void goToEditGoalDetailsActivity(int goalId) {
             // TODO: 09/02/20 implement edit goal details
-            Log.d(TAG, "goToEditGoalDetailsActivity() called with: goal = [" + goal + "]");
+            Log.d(TAG, "goToEditGoalDetailsActivity() called with: goalId = [" + goalId + "]");
         }
     };
 
@@ -80,7 +102,7 @@ public class GoalsFragment extends Fragment {
         goalsViewModel = new ViewModelProvider(this, new ViewModelFactory(
                 ((GoalTrackerApplication) getActivity().getApplication()).getGoalRepository()
         )).get(GoalsViewModel.class);
-        goalsViewModel.getGoals().observe(getViewLifecycleOwner(), goals -> goalsAdapter.updateData(goals));
+        goalsViewModel.goals.observe(getViewLifecycleOwner(), goals -> goalsAdapter.updateData(goals));
     }
 
     @Override
@@ -116,27 +138,6 @@ public class GoalsFragment extends Fragment {
         unbinder.unbind();
     }
 
-    ItemTouchHelper helper = new ItemTouchHelper(
-            new ItemTouchHelper.SimpleCallback(0,
-                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                @Override
-                public boolean onMove(RecyclerView recyclerView,
-                                      RecyclerView.ViewHolder viewHolder,
-                                      RecyclerView.ViewHolder target) {
-                    return false;
-                }
-
-                @Override
-                public void onSwiped(RecyclerView.ViewHolder viewHolder,
-                                     int direction) {
-                    int position = viewHolder.getAdapterPosition();
-                    Goal goal = goalsAdapter.getItemAt(position);
-                    Toast.makeText(getContext(), "Deleting " +
-                            goal.getTitle(), Toast.LENGTH_LONG).show();
-
-                    goalsViewModel.delete(goal);
-                }});
-
     @OnClick(R.id.add_goal_fab)
     public void navigateToAddGoalActivity() {
         Intent intent = AddGoalActivity.createIntent(getContext());
@@ -144,8 +145,8 @@ public class GoalsFragment extends Fragment {
     }
 
     interface GoalsListListener {
-        void goToGoalDetailsActivity(Goal goal);
+        void goToGoalDetailsActivity(int goalId);
 
-        void goToEditGoalDetailsActivity(Goal goal);
+        void goToEditGoalDetailsActivity(int goalId);
     }
 }

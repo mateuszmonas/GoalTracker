@@ -2,8 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group
         android:id="@+id/filter"
-        android:checkableBehavior="all"
-        >
+        android:checkableBehavior="all">
         <item
             android:id="@+id/current_goals"
             android:checkable="true"

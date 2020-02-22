@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/edit_goal"
+        android:title="Edit goal" />
+    <item
+        android:id="@+id/delete_goal"
+        android:title="Delete goal" />
+    <item
+        android:id="@+id/cancel_reminder"
+        android:title="Cancel reminder" />
+</menu>

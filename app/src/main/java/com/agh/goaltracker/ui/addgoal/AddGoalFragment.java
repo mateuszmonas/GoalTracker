@@ -46,7 +46,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     @BindView(R.id.min_txt)
     EditText minET;
     Date chosenDate = null;
-    private boolean countAsMinutes = true;
+    private boolean countAsTime = true;
     private AddGoalViewModel addGoalViewModel;
     private Unbinder unbinder;
 
@@ -82,24 +82,18 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     @OnClick(R.id.create_goal_btn)
     public void addGoal() {
         String name = goalName.getText().toString();
-        int goal = 0;
-        if(countAsMinutes){
-        goal = convertTime(hourET.getText().toString(), minET.getText().toString());
-        }else if(!"".equals(eventGoal.getText().toString()))
-                goal = Integer.parseInt(eventGoal.getText().toString());
+        Goal goal = null;
+        if (countAsTime) {
+            int hours = hourET.getText().length()==0?0:Integer.valueOf(hourET.getText().toString());
+            int minutes = minET.getText().length()==0?0:Integer.valueOf(minET.getText().toString());
+            goal = new Goal(name, chosenDate, hours, minutes);
+        } else if (!"".equals(eventGoal.getText().toString())){
+            int goalAmount = Integer.parseInt(eventGoal.getText().toString());
+            goal = new Goal(name, chosenDate, goalAmount);
+        }
+        addGoalViewModel.saveGoal(goal);
 
-        addGoalViewModel.saveGoal(new Goal(name, chosenDate, countAsMinutes, goal));
     }
-
-    private int convertTime(String hours, String minutes){
-        int res=0;
-        if(!"".equals(hours))
-            res += 60*Integer.parseInt(hours);
-        if(!"".equals(minutes))
-            res += Integer.parseInt(minutes);
-        return res;
-    }
-
 
     private void showErrorMessage(AddGoalViewModel.SaveGoalError error) {
         String message = "";
@@ -134,7 +128,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
 
     @OnClick(R.id.set_goal)
     public void setGoal() {
-        if(countAsMinutes) minutesGoal.setVisibility(View.VISIBLE);
+        if (countAsTime) minutesGoal.setVisibility(View.VISIBLE);
         else eventGoal.setVisibility(View.VISIBLE);
     }
 
@@ -143,10 +137,10 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
         boolean checked = radioButton.isChecked();
         switch (radioButton.getId()) {
             case R.id.radio_as_events:
-                if (checked) countAsMinutes = false;
+                if (checked) countAsTime = false;
                 break;
             case R.id.radio_as_min:
-                if (checked) countAsMinutes = true;
+                if (checked) countAsTime = true;
                 break;
         }
         minutesGoal.setVisibility(View.GONE);
@@ -156,7 +150,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         try {
-            chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse(""+day+month+"/"+year);
+            chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse("" + day + month + "/" + year);
         } catch (ParseException e) {
             e.printStackTrace();
         }

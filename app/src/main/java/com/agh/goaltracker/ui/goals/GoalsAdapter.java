@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
@@ -52,9 +51,9 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         } else {
             holder.dueDate.setText(dateFormat.format(goal.getDueDate()));
         }
-        holder.itemView.setOnClickListener(v -> goalsListListener.goToGoalDetailsActivity(goal));
+        holder.itemView.setOnClickListener(v -> goalsListListener.goToGoalDetailsActivity(goal.goalId));
         holder.itemView.setOnLongClickListener(v -> {
-            goalsListListener.goToEditGoalDetailsActivity(goal);
+            goalsListListener.goToEditGoalDetailsActivity(goal.goalId);
             return true;
         });
     }
@@ -69,7 +68,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public Goal getItemAt(int position){
+    public Goal getItemAt(int position) {
         return goals.get(position);
     }
 
@@ -77,7 +76,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         Goal goal;
         @BindView(R.id.goal_title)
         TextView goalTitle;
-        @BindView(R.id.due_date)
+        @BindView(R.id.goal_due_date)
         TextView dueDate;
         @BindView(R.id.plant)
         ImageView plant;
@@ -89,11 +88,10 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
             ButterKnife.bind(this, itemView);
         }
 
-        public void setGoal(Goal goal){
+        public void setGoal(Goal goal) {
             this.goal = goal;
             progressBar.setMax(goal.totalGoal);
-            if(goal.getCurrentProgress() <= goal.getTotalGoal())
-                progressBar.setProgress(goal.getCurrentProgress());
+            progressBar.setProgress(goal.getCurrentProgress());
         }
     }
 
