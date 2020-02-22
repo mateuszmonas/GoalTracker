@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
@@ -15,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 
 public class RecordPastProgressionDialogBuilder {
 
@@ -39,7 +39,7 @@ public class RecordPastProgressionDialogBuilder {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.record_past_progress_dialog, null);
         builder = new MaterialAlertDialogBuilder(context)
-                .setTitle("")
+                .setTitle("Record past Progression")
                 .setView(view);
         ButterKnife.bind(this, view);
         if (goal.isProgressAsMinutes()) {
@@ -51,6 +51,7 @@ public class RecordPastProgressionDialogBuilder {
         }
         positiveButton.setOnClickListener(v -> dialog.dismiss());
         negativeButton.setOnClickListener(v -> dialog.dismiss());
+        positiveButton.setEnabled(false);
     }
 
     RecordPastProgressionDialogBuilder setPositiveButtonListener(OnClickListener onClickListener) {
@@ -74,6 +75,16 @@ public class RecordPastProgressionDialogBuilder {
             result = Integer.parseInt(numberOfEvents.getText().toString());
         }
         return result;
+    }
+
+    @OnTextChanged(R.id.number_of_events)
+    void onNumberOfEventsChange(CharSequence text) {
+        positiveButton.setEnabled(text.length() != 0);
+    }
+
+    @OnTextChanged({R.id.hours, R.id.minutes})
+    void onHourOrMinutesChange() {
+        positiveButton.setEnabled(hoursEditText.getText().length() != 0 && minutesEditText.getText().length() != 0);
     }
 
     void show() {
