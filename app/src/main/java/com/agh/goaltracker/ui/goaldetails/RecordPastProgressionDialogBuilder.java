@@ -42,7 +42,7 @@ public class RecordPastProgressionDialogBuilder {
                 .setTitle("Record past Progression")
                 .setView(view);
         ButterKnife.bind(this, view);
-        if (goal.isProgressAsMinutes()) {
+        if (goal.isProgressAsTime()) {
             numberOfEvents.setVisibility(View.GONE);
             timeChooserLayout.setVisibility(View.VISIBLE);
         } else {
@@ -64,7 +64,7 @@ public class RecordPastProgressionDialogBuilder {
 
     private int getResult() {
         int result = 0;
-        if (goal.isProgressAsMinutes()) {
+        if (goal.isProgressAsTime()) {
             String hours = hoursEditText.getText().toString();
             String minutes = minutesEditText.getText().toString();
             if (!hours.equals(""))

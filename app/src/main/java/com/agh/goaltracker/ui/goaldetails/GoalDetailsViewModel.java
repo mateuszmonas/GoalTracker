@@ -38,7 +38,7 @@ public class GoalDetailsViewModel extends ViewModel {
 
     void startContributing() {
         Goal goal = this.goal.getValue();
-        if (goal.isProgressAsMinutes()) {
+        if (goal.isProgressAsTime()) {
             _startGoalContributing.setValue(true);
         } else {
             goalRepository.increaseProgress(goal.getGoalId(), 1);

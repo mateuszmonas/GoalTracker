@@ -21,7 +21,7 @@ public class Goal {
     public Date dueDate;
 
     @ColumnInfo(name = "progress_type_as_minutes")
-    public boolean progressAsMinutes;
+    public boolean progressAsTime;
 
     @ColumnInfo(name = "current_progress")
     public int currentProgress;
@@ -36,15 +36,22 @@ public class Goal {
 
     @Ignore
     public Goal(String title, Date dueDate) {
-        this(title, dueDate, false, 0);
+        this(title, dueDate, 0);
     }
 
-    public Goal(String title, Date dueDate, boolean progressAsMinutes, int totalGoal) {
+    public Goal(String title, Date dueDate, int totalGoal) {
         this.title = title;
         this.dueDate = dueDate;
-        this.progressAsMinutes = progressAsMinutes;
         this.currentProgress = 0;
+        this.progressAsTime = true;
         this.totalGoal = totalGoal;
+    }
+
+    public Goal(String title, Date dueDate, int totalGoalHours, int totalGoalMinutes) {
+        this.title = title;
+        this.dueDate = dueDate;
+        this.progressAsTime = true;
+        this.totalGoal = totalGoalHours * 3600 + totalGoalMinutes * 60;
     }
 
     public String getTitle() {
@@ -59,8 +66,8 @@ public class Goal {
         return dueDate;
     }
 
-    public boolean isProgressAsMinutes() {
-        return progressAsMinutes;
+    public boolean isProgressAsTime() {
+        return progressAsTime;
     }
 
     public int getCurrentProgress() {
@@ -73,11 +80,11 @@ public class Goal {
 
     public String progressToString() {
         String result;
-        if (progressAsMinutes) {
+        if (progressAsTime) {
             if (totalGoal > 0) {
-                result = String.format(Locale.getDefault(), "%02d:%02d/%02d:%02d", currentProgress / 60, currentProgress % 60, totalGoal / 60, totalGoal % 60);
+                result = String.format(Locale.getDefault(), "%02d:%02d:%02d/%02d:%02d:%02d", currentProgress / 3600, currentProgress % 3600 / 60, currentProgress % 60, totalGoal / 3600, totalGoal % 3600 / 60, totalGoal % 60);
             } else {
-                result = String.format(Locale.getDefault(), "%02d:%02d", currentProgress / 60, currentProgress % 60);
+                result = String.format(Locale.getDefault(), "%02d:%02d:%02d", currentProgress / 3600, currentProgress % 3600 / 60, currentProgress % 60);
             }
         } else {
             if (totalGoal > 0) {
