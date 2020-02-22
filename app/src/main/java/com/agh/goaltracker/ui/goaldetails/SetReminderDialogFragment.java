@@ -80,12 +80,19 @@ public class SetReminderDialogFragment extends DialogFragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // to make dialog fullscreen
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.set_reminder_fragment, container, false);
+        View view = inflater.inflate(R.layout.set_reminder_dialog_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
         toolbar.setNavigationOnClickListener(v -> dismiss());
         toolbar.setTitle("Create reminder");
