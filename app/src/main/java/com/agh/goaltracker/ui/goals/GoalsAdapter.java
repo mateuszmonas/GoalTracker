@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +30,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
 
     public GoalsAdapter(GoalsFragment.GoalsListListener goalsListListener) {
         this.goalsListListener = goalsListListener;
+        setHasStableIds(true);
     }
 
     @NonNull
@@ -63,13 +65,39 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         return goals.size();
     }
 
-    void updateData(List<Goal> goals) {
-        this.goals = goals;
-        notifyDataSetChanged();
+    void updateData(List<Goal> newGoals) {
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return goals.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newGoals.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return goals.get(oldItemPosition).equals(newGoals.get(newItemPosition));
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                return goals.get(oldItemPosition).equals(newGoals.get(newItemPosition));
+            }
+        });
+        this.goals = newGoals;
+        result.dispatchUpdatesTo(this);
     }
 
     public Goal getItemAt(int position) {
         return goals.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return goals.get(position).getGoalId();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

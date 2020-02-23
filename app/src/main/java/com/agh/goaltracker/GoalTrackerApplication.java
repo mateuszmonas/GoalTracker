@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
+import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.DefaultGoalRepository;
 import com.agh.goaltracker.model.source.GoalRepository;
 import com.agh.goaltracker.model.source.local.GoalDatabase;
@@ -23,10 +24,18 @@ public class GoalTrackerApplication extends Application {
         super.onCreate();
         GoalDatabase goalDatabase = Room.databaseBuilder(getApplicationContext(), GoalDatabase.class, "goals").build();
         goalRepository = new DefaultGoalRepository(new GoalLocalDataSource(goalDatabase.goalDao()));
-//        deleteDatabase("goals");
-//        goalRepository.saveGoal(new Goal("first", null,  2, 0));
-//        goalRepository.saveGoal(new Goal("second"));
-//        goalRepository.saveGoal(new Goal("last", null, 1, 0));
+        deleteDatabase("goals");
+        goalRepository.saveGoal(new Goal("1", null,  0, 1));
+        goalRepository.saveGoal(new Goal("2"));
+        goalRepository.saveGoal(new Goal("3", null, 0, 1));
+        goalRepository.saveGoal(new Goal("4", null, 0, 1));
+        goalRepository.saveGoal(new Goal("5", null, 0, 1));
+        goalRepository.saveGoal(new Goal("6", null, 0, 1));
+        goalRepository.saveGoal(new Goal("7", null, 0, 1));
+        goalRepository.saveGoal(new Goal("8", null, 0, 1));
+        goalRepository.saveGoal(new Goal("9", null, 0, 1));
+        goalRepository.saveGoal(new Goal("01", null, 0,1));
+        goalRepository.saveGoal(new Goal("02", null, 0,1));
         createNotificationChannel();
     }
 

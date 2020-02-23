@@ -5,6 +5,7 @@ import com.agh.goaltracker.util.ProgressDrawable;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -111,6 +112,23 @@ public class Goal {
             }
         }
         return result;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Goal goal = (Goal) o;
+        return goalId == goal.goalId &&
+                progressAsTime == goal.progressAsTime &&
+                currentProgress == goal.currentProgress &&
+                totalGoal == goal.totalGoal &&
+                Objects.equals(title, goal.title) &&
+                Objects.equals(dueDate, goal.dueDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(goalId, title, dueDate, progressAsTime, currentProgress, totalGoal);
     }
 }
