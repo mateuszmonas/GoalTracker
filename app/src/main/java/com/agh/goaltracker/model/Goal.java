@@ -46,7 +46,7 @@ public class Goal {
         this.title = title;
         this.dueDate = dueDate;
         this.currentProgress = 0;
-        this.progressAsTime = true;
+        this.progressAsTime = false;
         this.totalGoal = totalGoal;
     }
 
