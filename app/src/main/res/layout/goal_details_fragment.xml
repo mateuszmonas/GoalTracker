@@ -18,14 +18,14 @@
 
     <ImageView
         android:id="@+id/goal_progress_image"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:contentDescription="growing phase"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:contentDescription="@string/growing_phase1"
         app:layout_constraintBottom_toTopOf="@id/goal_progress_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/goal_name"
-        app:srcCompat="@drawable/growing1" />
+        app:srcCompat="@drawable/plant1" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/goal_progress_text"

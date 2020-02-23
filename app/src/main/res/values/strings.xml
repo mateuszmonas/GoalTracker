@@ -5,4 +5,5 @@
     <string name="contribution_notification_channel_description">GoalTracker</string>
     <string name="event_goal_progression_text">%1$d/%2$d</string>
     <string name="time_goal_progression_text">%1$s/%2$s</string>
+    <string name="growing_phase1">growing phase #1</string>
 </resources>
