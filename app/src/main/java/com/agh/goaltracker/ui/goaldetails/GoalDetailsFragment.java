@@ -190,7 +190,6 @@ public class GoalDetailsFragment extends Fragment {
         }else {
             goalProgressImageView.setImageResource(R.drawable.plant4);
         }
-
     }
 
     private void changeContributionButton(boolean contributing) {

@@ -94,7 +94,20 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
                 progressBar.setVisibility(View.GONE);
             progressBar.setMax(goal.totalGoal);
             progressBar.setProgress(goal.getCurrentProgress());
-            plant.setImageResource(R.drawable.plant1);
+            if(goal.getTotalGoal()>0)
+                displayPlantProgress((double)goal.getCurrentProgress()/(double)goal.getTotalGoal());
+        }
+        // TODO: unify plant progress w/ GoalDetailsFragment
+        void displayPlantProgress(double completedRatio){
+            if (completedRatio<0.2){
+                plant.setImageResource(R.drawable.plant1);
+            }else if(completedRatio <0.5){
+                plant.setImageResource(R.drawable.plant2);
+            }else if(completedRatio <0.9){
+                plant.setImageResource(R.drawable.plant3);
+            }else {
+                plant.setImageResource(R.drawable.plant4);
+            }
         }
     }
 
