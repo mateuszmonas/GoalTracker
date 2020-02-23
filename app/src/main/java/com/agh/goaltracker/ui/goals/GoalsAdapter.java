@@ -90,6 +90,8 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
 
         public void setGoal(Goal goal) {
             this.goal = goal;
+            if(goal.getTotalGoal() == 0)
+                progressBar.setVisibility(View.GONE);
             progressBar.setMax(goal.totalGoal);
             progressBar.setProgress(goal.getCurrentProgress());
         }
