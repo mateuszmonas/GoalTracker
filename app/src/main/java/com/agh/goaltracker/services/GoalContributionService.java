@@ -30,6 +30,7 @@ public class GoalContributionService extends LifecycleService {
     private static final String TAG = "GoalContributionService";
     private static final String ACTION_START_CONTRIBUTING = "START_CONTRIBUTING";
     private static final String ACTION_STOP_CONTRIBUTING = "STOP_CONTRIBUTING";
+    private static final String ACTION_STOP_ALL_CONTRIBUTING = "STOP_ALL_CONTRIBUTING";
     private static final int NOTIFICATION_ID = 1;
     GoalRepository goalRepository;
     boolean threadRunning = true;
@@ -63,6 +64,12 @@ public class GoalContributionService extends LifecycleService {
         return intent;
     }
 
+    public static Intent createStopAllContributingIntent(Context context) {
+        Intent intent = new Intent(context, GoalContributionService.class);
+        intent.setAction(ACTION_STOP_ALL_CONTRIBUTING);
+        return intent;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -72,7 +79,7 @@ public class GoalContributionService extends LifecycleService {
     }
 
 
-    // FIXME: 23/02/20 probably should refractor this
+    // FIXME: 23/02/20 probably should refactor this
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
@@ -84,7 +91,9 @@ public class GoalContributionService extends LifecycleService {
                 break;
             case ACTION_STOP_CONTRIBUTING:
                 goalRepository.stopContributingToGoal(goalId);
-                goalRepository.observeGoal(goalId).removeObserver(this::updateSingleGoalNotification);
+                break;
+            case ACTION_STOP_ALL_CONTRIBUTING:
+                goalRepository.removeAllContributingGoalIds();
                 break;
         }
 
@@ -109,6 +118,10 @@ public class GoalContributionService extends LifecycleService {
             PendingIntent goalsActivityPendingIntent =
                     PendingIntent.getActivity(this, 0, goalsActivityIntent, 0);
 
+            Intent stopAllContributionServiceIntent = GoalContributionService.createStopAllContributingIntent(this);
+            PendingIntent stopAllContributingPendingIntent =
+                    PendingIntent.getService(this, 0, stopAllContributionServiceIntent, 0);
+
             Notification n = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
                     // TODO: 23/02/20 change icon
                     .setSmallIcon(R.drawable.ic_add_black_24dp)
@@ -116,6 +129,7 @@ public class GoalContributionService extends LifecycleService {
                     .setContentText("Tap to open")
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setContentIntent(goalsActivityPendingIntent)
+                    .addAction(R.drawable.ic_add_black_24dp, "Stop all", stopAllContributingPendingIntent)
                     .build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(NOTIFICATION_ID, n);
@@ -126,13 +140,17 @@ public class GoalContributionService extends LifecycleService {
     }
 
     void updateSingleGoalNotification(Goal goal) {
-        TaskStackBuilder stackBuilder = TaskStackBuilder
+        TaskStackBuilder goalDetailsStackBuilder = TaskStackBuilder
                 .create(this)
                 .addNextIntent(GoalsActivity.createIntent(this))
                 .addNextIntent(GoalDetailsActivity.createIntent(this, goal.getGoalId()));
 
-        PendingIntent pendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent goalDetailsPendingIntent =
+                goalDetailsStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent stopContributionServiceIntent = GoalContributionService.createStopContributingIntent(this, goal.getGoalId());
+        PendingIntent stopContributingPendingIntent =
+                PendingIntent.getService(this, 0, stopContributionServiceIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
                 // TODO: 23/02/20 change icon
@@ -140,7 +158,8 @@ public class GoalContributionService extends LifecycleService {
                 .setContentTitle(goal.getTitle())
                 .setContentText(goal.progressToString())
                 .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(goalDetailsPendingIntent)
+                .addAction(R.drawable.ic_add_black_24dp, "Stop", stopContributingPendingIntent)
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

@@ -34,4 +34,10 @@ public class GoalContributionModel {
         values.remove(goalId);
         contributingGoalsIds.postValue(values);
     }
+
+    public void removeAllContributingGoalIds() {
+        Set<Integer> values = contributingGoalsIds.getValue();
+        values.clear();
+        contributingGoalsIds.postValue(values);
+    }
 }
