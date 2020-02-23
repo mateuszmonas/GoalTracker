@@ -137,25 +137,25 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
 
     }
 
-    @OnClick(R.id.set_goal)
-    public void setGoal() {
-        if (countAsTime) minutesGoal.setVisibility(View.VISIBLE);
-        else eventGoal.setVisibility(View.VISIBLE);
-    }
-
     @OnClick({R.id.radio_as_events, R.id.radio_as_min})
     public void onRadioButtonClicked(RadioButton radioButton) {
         boolean checked = radioButton.isChecked();
         switch (radioButton.getId()) {
             case R.id.radio_as_events:
-                if (checked) countAsTime = false;
+                if (checked) {
+                    countAsTime = false;
+                    minutesGoal.setVisibility(View.GONE);
+                    eventGoal.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.radio_as_min:
-                if (checked) countAsTime = true;
+                if (checked) {
+                    countAsTime = true;
+                    minutesGoal.setVisibility(View.VISIBLE);
+                    eventGoal.setVisibility(View.GONE);
+                }
                 break;
         }
-        minutesGoal.setVisibility(View.GONE);
-        eventGoal.setVisibility(View.GONE);
     }
 
     @Override
