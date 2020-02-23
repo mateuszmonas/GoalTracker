@@ -9,21 +9,28 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.agh.goaltracker.GoalDetailsActivity;
 import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.GoalsActivity;
 import com.agh.goaltracker.R;
+import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalRepository;
 
+import java.util.Locale;
 import java.util.Set;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
+import androidx.lifecycle.LifecycleService;
+import androidx.lifecycle.LiveData;
 
 
-public class GoalContributionService extends Service {
+public class GoalContributionService extends LifecycleService {
     private static final String EXTRA_GOAL_ID = "GOAL_ID";
     private static final String TAG = "GoalContributionService";
     private static final String ACTION_START_CONTRIBUTING = "START_CONTRIBUTING";
     private static final String ACTION_STOP_CONTRIBUTING = "STOP_CONTRIBUTING";
+    private static final int NOTIFICATION_ID = 1;
     GoalRepository goalRepository;
     boolean threadRunning = true;
     Set<Integer> contributingGoalsIds;
@@ -39,6 +46,8 @@ public class GoalContributionService extends Service {
             }
         }
     });
+
+    LiveData<Goal> observedGoal;
 
     public static Intent createStartContributingIntent(Context context, int goalId) {
         Intent intent = new Intent(context, GoalContributionService.class);
@@ -62,8 +71,11 @@ public class GoalContributionService extends Service {
         contributionThread.start();
     }
 
+
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
         int goalId = intent.getIntExtra(EXTRA_GOAL_ID, -1);
         final String action = intent.getAction();
         switch (action) {
@@ -72,29 +84,74 @@ public class GoalContributionService extends Service {
                 break;
             case ACTION_STOP_CONTRIBUTING:
                 goalRepository.stopContributingToGoal(goalId);
+                goalRepository.observeGoal(goalId).removeObserver(this::updateSingleGoalNotification);
                 break;
         }
 
-        Intent notificationIntent = GoalsActivity.createIntent(this);
-        PendingIntent pendingIntent =
-                PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        Notification notification = new NotificationCompat.Builder(this, "CHANNEL_ID")
+                .setSmallIcon(R.drawable.ic_add_black_24dp)
+                .setContentTitle("temp")
+                .setContentText("temp")
+                .setPriority(NotificationManager.IMPORTANCE_LOW)
+                .build();
+        startForeground(NOTIFICATION_ID, notification);
 
 
-        String a = "";
-        for (Integer contributingGoalsId : goalRepository.getContributingGoalsIds()) {
-            a += contributingGoalsId + " ";
+        if(goalRepository.getContributingGoalsIds().isEmpty()){
+            stopSelf();
+            return START_NOT_STICKY;
+        } else if (goalRepository.getContributingGoalsIds().size() == 1) {
+            observedGoal = goalRepository.observeGoal(goalRepository.getContributingGoalsIds().iterator().next());
+            observedGoal.observe(this, this::updateSingleGoalNotification);
+        } else if (goalRepository.getContributingGoalsIds().size() > 1) {
+            observedGoal.removeObservers(this);
+            Intent goalsActivityIntent = GoalsActivity.createIntent(this);
+            PendingIntent goalsActivityPendingIntent =
+                    PendingIntent.getActivity(this, 0, goalsActivityIntent, 0);
+
+            Notification n = new NotificationCompat.Builder(this, "CHANNEL_ID")
+                    // TODO: 23/02/20 change icon
+                    .setSmallIcon(R.drawable.ic_add_black_24dp)
+                    .setContentTitle(String.format(Locale.getDefault(), "contributing to %d goals", goalRepository.getContributingGoalsIds().size()))
+                    .setContentText("whatever")
+                    .setPriority(NotificationManager.IMPORTANCE_LOW)
+                    .setContentIntent(goalsActivityPendingIntent)
+                    .build();
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(NOTIFICATION_ID, n);
         }
+
+
+        return START_NOT_STICKY;
+    }
+
+    Notification getSingleGoalNotification(Goal goal) {
+        TaskStackBuilder stackBuilder = TaskStackBuilder
+                .create(this)
+                .addNextIntent(GoalsActivity.createIntent(this))
+                .addNextIntent(GoalDetailsActivity.createIntent(this, goal.getGoalId()));
+
+        PendingIntent pendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
         Notification notification = new NotificationCompat.Builder(this, "CHANNEL_ID")
                 // TODO: 23/02/20 change icon
                 .setSmallIcon(R.drawable.ic_add_black_24dp)
-                .setContentTitle("title")
-                .setContentText(a)
-                .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                .setContentTitle(goal.getTitle())
+                .setContentText(goal.progressToString())
+                .setPriority(NotificationManager.IMPORTANCE_LOW)
                 .setContentIntent(pendingIntent)
                 .build();
 
-        startForeground(1, notification);
-        return START_NOT_STICKY;
+        return notification;
+    }
+
+
+
+    void updateSingleGoalNotification(Goal goal) {
+        Notification notification = getSingleGoalNotification(goal);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFICATION_ID, notification);
     }
 
     @Override
@@ -105,6 +162,7 @@ public class GoalContributionService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        super.onBind(intent);
         return null;
     }
 }
