@@ -173,23 +173,11 @@ public class GoalDetailsFragment extends Fragment {
         if (goal.getTotalGoal() > 0) {
             goalProgressBar.setMax(goal.getTotalGoal());
             goalProgressBar.setProgress(goal.getCurrentProgress());
-            goalProgressImageView.setImageResource(getCurrentPlant((double)goal.getCurrentProgress()/goal.getTotalGoal()));
+            goalProgressImageView.setImageResource(goal.getProgressDrawable().resource_id);
         } else {
             goalProgressBar.setVisibility(View.INVISIBLE);
         }
         goalProgressText.setText(goal.progressToString());
-    }
-
-    int getCurrentPlant(double completedRatio){
-        if (completedRatio<0.2){
-            return R.drawable.plant1;
-        }else if(completedRatio <0.5){
-            return R.drawable.plant2;
-        }else if(completedRatio <0.9){
-            return R.drawable.plant3;
-        }else {
-            return R.drawable.plant4;
-        }
     }
 
     private void changeContributionButton(boolean contributing) {

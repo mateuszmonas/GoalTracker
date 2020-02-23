@@ -1,5 +1,8 @@
 package com.agh.goaltracker.model;
 
+import com.agh.goaltracker.R;
+import com.agh.goaltracker.util.ProgressDrawable;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -76,6 +79,20 @@ public class Goal {
 
     public int getTotalGoal() {
         return totalGoal;
+    }
+
+    public ProgressDrawable getProgressDrawable() {
+        double completedRatio = (double) currentProgress / totalGoal;
+        if (completedRatio<0.2){
+            return ProgressDrawable.PLANT1;
+        }else if(completedRatio <0.5){
+            return ProgressDrawable.PLANT2;
+        }else if(completedRatio <0.9){
+            return ProgressDrawable.PLANT3;
+        }else {
+            return ProgressDrawable.PLANT4;
+        }
+
     }
 
     public String progressToString() {
