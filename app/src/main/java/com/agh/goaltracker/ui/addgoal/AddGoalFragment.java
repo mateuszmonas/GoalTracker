@@ -9,6 +9,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agh.goaltracker.GoalTrackerApplication;
@@ -16,6 +17,7 @@ import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,6 +39,8 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
 
     @BindView(R.id.goal_name_txt)
     EditText goalName;
+    @BindView(R.id.chosen_date)
+    TextView chosenDateTV;
     @BindView(R.id.event_goal_txt)
     EditText eventGoal;
     @BindView(R.id.timeChoserLayout)
@@ -79,6 +83,12 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
         unbinder.unbind();
     }
 
+    @OnClick(R.id.unset_date)
+    public void unsetDate(){
+        chosenDate = null;
+        chosenDateTV.setText(getString(R.string.unset));
+    }
+
     @OnClick(R.id.create_goal_btn)
     public void addGoal() {
         String name = goalName.getText().toString();
@@ -105,6 +115,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
+
     private void finishActivity(boolean success) {
         if (success) {
             Toast.makeText(
@@ -126,31 +137,36 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
 
     }
 
-    @OnClick(R.id.set_goal)
-    public void setGoal() {
-        if (countAsTime) minutesGoal.setVisibility(View.VISIBLE);
-        else eventGoal.setVisibility(View.VISIBLE);
-    }
-
     @OnClick({R.id.radio_as_events, R.id.radio_as_min})
     public void onRadioButtonClicked(RadioButton radioButton) {
         boolean checked = radioButton.isChecked();
         switch (radioButton.getId()) {
             case R.id.radio_as_events:
-                if (checked) countAsTime = false;
+                if (checked) {
+                    countAsTime = false;
+                    minutesGoal.setVisibility(View.GONE);
+                    eventGoal.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.radio_as_min:
-                if (checked) countAsTime = true;
+                if (checked) {
+                    countAsTime = true;
+                    minutesGoal.setVisibility(View.VISIBLE);
+                    eventGoal.setVisibility(View.GONE);
+                }
                 break;
         }
-        minutesGoal.setVisibility(View.GONE);
-        eventGoal.setVisibility(View.GONE);
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         try {
-            chosenDate = new SimpleDateFormat("ddMM/yyyy", Locale.ENGLISH).parse("" + day + month + "/" + year);
+            chosenDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(""+day+"/"+(month+1)+"/"+year);
+
+            DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH);
+            chosenDateTV.setText(dateFormat.format(chosenDate));
+            if(chosenDate.compareTo(new Date())<0)
+                Toast.makeText(getContext(), "you chose a date from the past", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
