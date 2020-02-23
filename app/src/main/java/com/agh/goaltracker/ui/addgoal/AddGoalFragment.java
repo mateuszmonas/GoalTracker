@@ -84,7 +84,7 @@ public class AddGoalFragment extends Fragment {
     }
 
     @OnClick(R.id.unset_date)
-    public void unsetDate(){
+    public void unsetDate() {
         chosenDate = null;
         chosenDateTV.setText(getString(R.string.unset));
     }
@@ -160,11 +160,11 @@ public class AddGoalFragment extends Fragment {
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         try {
-            chosenDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(""+day+"/"+(month+1)+"/"+year);
+            chosenDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse("" + day + "/" + (month + 1) + "/" + year);
 
             DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH);
             chosenDateTV.setText(dateFormat.format(chosenDate));
-            if(chosenDate.compareTo(new Date())<0)
+            if (chosenDate.compareTo(new Date()) < 0)
                 Toast.makeText(getContext(), "you chose a date from the past", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();

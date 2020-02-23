@@ -21,7 +21,6 @@ import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
-import com.agh.goaltracker.services.GoalContributionService;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 import java.text.SimpleDateFormat;

@@ -35,5 +35,5 @@ public interface GoalRepository {
 
     void stopContributingToGoal(int goalId);
 
-    public void removeAllContributingGoalIds();
+    void removeAllContributingGoalIds();
 }

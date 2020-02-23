@@ -2,15 +2,11 @@ package com.agh.goaltracker.model.source;
 
 import com.agh.goaltracker.model.Goal;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
 public class DefaultGoalRepository implements GoalRepository {
