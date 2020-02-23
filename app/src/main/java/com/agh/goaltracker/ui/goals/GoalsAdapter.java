@@ -94,6 +94,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
                 progressBar.setVisibility(View.GONE);
             progressBar.setMax(goal.totalGoal);
             progressBar.setProgress(goal.getCurrentProgress());
+            plant.setImageResource(R.drawable.plant1);
         }
     }
 
