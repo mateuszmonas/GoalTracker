@@ -171,10 +171,4 @@ public class GoalContributionService extends LifecycleService {
         threadRunning = false;
         super.onDestroy();
     }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        super.onBind(intent);
-        return null;
-    }
 }
