@@ -17,9 +17,9 @@
         <service
             android:name=".services.GoalContributionService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false"/>
 
-        <receiver android:name=".receivers.GoalReminderBroadcastReceiver">
+        <receiver android:name=".receivers.GoalReminderBroadcastReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="NOTIFICATION_SERVICE" />
             </intent-filter>

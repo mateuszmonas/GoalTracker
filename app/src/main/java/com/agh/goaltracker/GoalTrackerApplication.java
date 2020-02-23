@@ -39,7 +39,7 @@ public class GoalTrackerApplication extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.contribution_notification_channel);
             String description = getString(R.string.contribution_notification_channel_description);
-            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, NotificationManager.IMPORTANCE_LOW);
             channel.setSound(null, null);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
