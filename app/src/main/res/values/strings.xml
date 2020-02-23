@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">GoalTracker</string>
     <string name="unset">unset</string>
+    <string name="contribution_notification_channel">GoalTracker</string>
+    <string name="contribution_notification_channel_description">GoalTracker</string>
+    <string name="event_goal_progression_text">%1$d/%2$d</string>
+    <string name="time_goal_progression_text">%1$s/%2$s</string>
 </resources>
