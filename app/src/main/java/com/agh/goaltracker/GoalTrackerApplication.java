@@ -5,7 +5,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
-import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.DefaultGoalRepository;
 import com.agh.goaltracker.model.source.GoalRepository;
 import com.agh.goaltracker.model.source.local.GoalDatabase;
@@ -15,6 +14,7 @@ import androidx.room.Room;
 
 public class GoalTrackerApplication extends Application {
 
+    public static final String CONTRIBUTION_NOTIFICATION_CHANNEL_ID = "CONTRIBUTION_NOTIFICATION_CHANNEL";
     private GoalRepository goalRepository;
 
     @Override
@@ -39,7 +39,7 @@ public class GoalTrackerApplication extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.contribution_notification_channel);
             String description = getString(R.string.contribution_notification_channel_description);
-            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, NotificationManager.IMPORTANCE_LOW);
+            NotificationChannel channel = new NotificationChannel(CONTRIBUTION_NOTIFICATION_CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
             channel.setSound(null, null);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
