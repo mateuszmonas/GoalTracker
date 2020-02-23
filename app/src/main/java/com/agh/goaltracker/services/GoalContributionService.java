@@ -119,7 +119,7 @@ public class GoalContributionService extends LifecycleService {
 
             Intent stopContributionServiceIntent = GoalContributionService.createStopContributingIntent(this, goal.getGoalId());
             PendingIntent stopContributingPendingIntent =
-                    PendingIntent.getService(this, 0, stopContributionServiceIntent, 0);
+                    PendingIntent.getService(this, 0, stopContributionServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Notification notification = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
                     // TODO: 23/02/20 change icon
@@ -155,11 +155,11 @@ public class GoalContributionService extends LifecycleService {
             observedGoal.removeObservers(this);
             Intent goalsActivityIntent = GoalsActivity.createIntent(this);
             PendingIntent goalsActivityPendingIntent =
-                    PendingIntent.getActivity(this, 0, goalsActivityIntent, 0);
+                    PendingIntent.getActivity(this, 0, goalsActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent stopAllContributionServiceIntent = GoalContributionService.createStopAllContributingIntent(this);
             PendingIntent stopAllContributingPendingIntent =
-                    PendingIntent.getService(this, 0, stopAllContributionServiceIntent, 0);
+                    PendingIntent.getService(this, 0, stopAllContributionServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Notification n = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
                     // TODO: 23/02/20 change icon
