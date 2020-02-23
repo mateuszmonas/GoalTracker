@@ -3,11 +3,9 @@ package com.agh.goaltracker.services;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.agh.goaltracker.GoalDetailsActivity;
 import com.agh.goaltracker.GoalTrackerApplication;
@@ -23,6 +21,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 import androidx.lifecycle.LifecycleService;
 import androidx.lifecycle.LiveData;
+
+import static com.agh.goaltracker.GoalTrackerApplication.CONTRIBUTION_NOTIFICATION_CHANNEL_ID;
 
 
 public class GoalContributionService extends LifecycleService {
@@ -72,7 +72,7 @@ public class GoalContributionService extends LifecycleService {
     }
 
 
-
+    // FIXME: 23/02/20 probably should refractor this
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
@@ -88,18 +88,18 @@ public class GoalContributionService extends LifecycleService {
                 break;
         }
 
-        Notification notification = new NotificationCompat.Builder(this, "CHANNEL_ID")
+        Notification notification = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
+                // TODO: 23/02/20 change icon
                 .setSmallIcon(R.drawable.ic_add_black_24dp)
                 .setContentTitle("temp")
                 .setContentText("temp")
-                .setPriority(NotificationManager.IMPORTANCE_LOW)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build();
         startForeground(NOTIFICATION_ID, notification);
 
 
-        if(goalRepository.getContributingGoalsIds().isEmpty()){
+        if (goalRepository.getContributingGoalsIds().isEmpty()) {
             stopSelf();
-            return START_NOT_STICKY;
         } else if (goalRepository.getContributingGoalsIds().size() == 1) {
             observedGoal = goalRepository.observeGoal(goalRepository.getContributingGoalsIds().iterator().next());
             observedGoal.observe(this, this::updateSingleGoalNotification);
@@ -109,12 +109,12 @@ public class GoalContributionService extends LifecycleService {
             PendingIntent goalsActivityPendingIntent =
                     PendingIntent.getActivity(this, 0, goalsActivityIntent, 0);
 
-            Notification n = new NotificationCompat.Builder(this, "CHANNEL_ID")
+            Notification n = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
                     // TODO: 23/02/20 change icon
                     .setSmallIcon(R.drawable.ic_add_black_24dp)
                     .setContentTitle(String.format(Locale.getDefault(), "contributing to %d goals", goalRepository.getContributingGoalsIds().size()))
-                    .setContentText("whatever")
-                    .setPriority(NotificationManager.IMPORTANCE_LOW)
+                    .setContentText("Tap to open")
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setContentIntent(goalsActivityPendingIntent)
                     .build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -125,7 +125,7 @@ public class GoalContributionService extends LifecycleService {
         return START_NOT_STICKY;
     }
 
-    Notification getSingleGoalNotification(Goal goal) {
+    void updateSingleGoalNotification(Goal goal) {
         TaskStackBuilder stackBuilder = TaskStackBuilder
                 .create(this)
                 .addNextIntent(GoalsActivity.createIntent(this))
@@ -134,22 +134,15 @@ public class GoalContributionService extends LifecycleService {
         PendingIntent pendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification notification = new NotificationCompat.Builder(this, "CHANNEL_ID")
+        Notification notification = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
                 // TODO: 23/02/20 change icon
                 .setSmallIcon(R.drawable.ic_add_black_24dp)
                 .setContentTitle(goal.getTitle())
                 .setContentText(goal.progressToString())
-                .setPriority(NotificationManager.IMPORTANCE_LOW)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setContentIntent(pendingIntent)
                 .build();
 
-        return notification;
-    }
-
-
-
-    void updateSingleGoalNotification(Goal goal) {
-        Notification notification = getSingleGoalNotification(goal);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, notification);
     }
