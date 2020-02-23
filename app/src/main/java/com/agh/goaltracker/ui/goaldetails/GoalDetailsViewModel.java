@@ -9,8 +9,6 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 public class GoalDetailsViewModel extends ViewModel {
-    MutableLiveData<Boolean> _startGoalContributing = new MutableLiveData<>();
-    LiveData<Boolean> startGoalContributing = _startGoalContributing;
     private GoalRepository goalRepository;
     private MutableLiveData<Integer> goalId = new MutableLiveData<>();
     LiveData<Goal> goal = Transformations.switchMap(goalId, goalId -> goalRepository.observeGoal(goalId));
@@ -39,14 +37,15 @@ public class GoalDetailsViewModel extends ViewModel {
     void startContributing() {
         Goal goal = this.goal.getValue();
         if (goal.isProgressAsTime()) {
-            _startGoalContributing.setValue(true);
+            goalRepository.startContributingToGoal(goal.getGoalId());
         } else {
             goalRepository.increaseProgress(goal.getGoalId(), 1);
         }
     }
 
     void stopContributing() {
-        _startGoalContributing.setValue(false);
+        Goal goal = this.goal.getValue();
+        goalRepository.stopContributingToGoal(goal.getGoalId());
     }
 
 }
