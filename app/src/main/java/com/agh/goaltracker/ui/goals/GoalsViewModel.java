@@ -14,7 +14,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 public class GoalsViewModel extends ViewModel {
-    MutableLiveData<Set<GoalsFilterType>> _filters = new MutableLiveData<>(new HashSet<>(Collections.singletonList(GoalsFilterType.CURRENT_GOALS)));
+    private MutableLiveData<Set<GoalsFilterType>> _filters = new MutableLiveData<>(new HashSet<>(Collections.singletonList(GoalsFilterType.CURRENT_GOALS)));
     LiveData<Set<GoalsFilterType>> filters = _filters;
     private GoalRepository goalRepository;
     private LiveData<List<Goal>> _goals;

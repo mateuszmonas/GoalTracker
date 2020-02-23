@@ -54,6 +54,7 @@ public class DefaultGoalRepository implements GoalRepository {
     @Override
     public void deleteGoal(Goal goal) {
         localGoalDataSource.deleteGoal(goal);
+        GoalContributionModel.getInstance().removeContributingGoalId(goal.getGoalId());
     }
 
     @Override
@@ -84,5 +85,11 @@ public class DefaultGoalRepository implements GoalRepository {
     public void stopContributingToGoal(int goalId) {
         GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
         goalContributionModel.removeContributingGoalId(goalId);
+    }
+
+    @Override
+    public void removeAllContributingGoalIds() {
+        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
+        goalContributionModel.removeAllContributingGoalIds();
     }
 }
