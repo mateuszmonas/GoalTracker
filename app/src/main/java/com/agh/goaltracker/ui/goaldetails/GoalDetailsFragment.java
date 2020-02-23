@@ -173,6 +173,7 @@ public class GoalDetailsFragment extends Fragment {
         if (goal.getTotalGoal() > 0) {
             goalProgressBar.setMax(goal.getTotalGoal());
             goalProgressBar.setProgress(goal.getCurrentProgress());
+            goalProgressImageView.setImageResource(goal.getProgressDrawable().resource_id);
         } else {
             goalProgressBar.setVisibility(View.INVISIBLE);
         }
