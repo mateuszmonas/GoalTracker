@@ -85,4 +85,10 @@ public class DefaultGoalRepository implements GoalRepository {
         GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
         goalContributionModel.removeContributingGoalId(goalId);
     }
+
+    @Override
+    public void removeAllContributingGoalIds() {
+        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
+        goalContributionModel.removeAllContributingGoalIds();
+    }
 }
