@@ -110,4 +110,23 @@ public class DefaultGoalRepository implements GoalRepository {
     public LiveData<Goal> observeCompletedGoal() {
         return completedGoal;
     }
+
+    @Override
+    public void contributeToGoals(Set<Integer> goalsIds, int amount) {
+        localGoalDataSource.contributeToGoals(goalsIds, amount);
+        new Thread(() -> {
+            List<Goal> goals = localGoalDataSource.getGoals(goalsIds);
+            for (Goal goal : goals) {
+                if(goal.isCompleted()) {
+                    completedGoal.postValue(goal);
+                    GoalContributionModel.getInstance().removeContributingGoalId(goal.getGoalId());
+                }
+            }
+        }).start();
+    }
+
+    @Override
+    public void contributeToGoals(Set<Integer> goalsIds) {
+        contributeToGoals(goalsIds, 1);
+    }
 }

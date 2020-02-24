@@ -4,6 +4,7 @@ import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalDataSource;
 
 import java.util.List;
+import java.util.Set;
 
 import androidx.lifecycle.LiveData;
 
@@ -26,12 +27,12 @@ public class GoalLocalDataSource implements GoalDataSource {
 
     @Override
     public void contributeToGoal(int goalId, int amount) {
-        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.increaseProgress(goalId, amount));
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.increaseGoalProgress(goalId, amount));
     }
 
     @Override
-    public void contributeToGoal(int goalId) {
-        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.increaseProgress(goalId, 1));
+    public void contributeToGoals(Set<Integer> goalsIds, int amount) {
+        goalDao.increaseGoalsProgress(goalsIds, amount);
     }
 
     @Override
@@ -57,5 +58,10 @@ public class GoalLocalDataSource implements GoalDataSource {
     @Override
     public void deleteGoal(Goal goal) {
         GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.deleteGoal(goal));
+    }
+
+    @Override
+    public List<Goal> getGoals(Set<Integer> goalsIds) {
+        return goalDao.getGoals(goalsIds);
     }
 }

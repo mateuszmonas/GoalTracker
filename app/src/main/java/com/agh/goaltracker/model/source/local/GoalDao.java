@@ -3,6 +3,7 @@ package com.agh.goaltracker.model.source.local;
 import com.agh.goaltracker.model.Goal;
 
 import java.util.List;
+import java.util.Set;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -26,8 +27,14 @@ interface GoalDao {
     @Query("select * from goals where goal_id=:goalId")
     Goal getGoal(int goalId);
 
+    @Query("select * from goals where goal_id in (:goalsIds)")
+    List<Goal> getGoals(Set<Integer> goalsIds);
+
     @Query("update goals set current_progress = current_progress + :amount where goal_id=:goalId")
-    void increaseProgress(int goalId, int amount);
+    void increaseGoalProgress(int goalId, int amount);
+
+    @Query("update goals set current_progress = current_progress + :amount where goal_id in (:goalsIds)")
+    void increaseGoalsProgress(Set<Integer> goalsIds, int amount);
 
     @Update
     void updateGoal(Goal goal);

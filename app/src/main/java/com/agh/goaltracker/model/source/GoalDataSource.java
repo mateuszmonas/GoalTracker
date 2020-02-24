@@ -3,6 +3,7 @@ package com.agh.goaltracker.model.source;
 import com.agh.goaltracker.model.Goal;
 
 import java.util.List;
+import java.util.Set;
 
 import androidx.lifecycle.LiveData;
 
@@ -16,11 +17,13 @@ public interface GoalDataSource {
 
     Goal getGoal(int goalId);
 
+    List<Goal> getGoals(Set<Integer> goalsIds);
+
     void updateGoal(Goal goal);
 
     void contributeToGoal(int goalId, int amount);
 
-    void contributeToGoal(int goalId);
+    void contributeToGoals(Set<Integer> goalsIds, int amount);
 
     void deleteGoals(List<Goal> goals);
 
