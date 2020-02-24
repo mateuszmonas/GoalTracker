@@ -68,9 +68,9 @@ public class RecordPastProgressionDialogBuilder {
             String hours = hoursEditText.getText().toString();
             String minutes = minutesEditText.getText().toString();
             if (!hours.equals(""))
-                result += 60 * Integer.parseInt(hours);
+                result += 3600 * Integer.parseInt(hours);
             if (!minutes.equals(""))
-                result += Integer.parseInt(minutes);
+                result += 60* Integer.parseInt(minutes);
         } else if (!numberOfEvents.getText().toString().equals("")) {
             result = Integer.parseInt(numberOfEvents.getText().toString());
         }
