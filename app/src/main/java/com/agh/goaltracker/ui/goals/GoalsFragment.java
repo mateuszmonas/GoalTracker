@@ -19,6 +19,7 @@ import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.util.ViewModelFactory;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,10 +61,12 @@ public class GoalsFragment extends Fragment {
 
     private void safeDelete(int position) {
         Goal goal = goalsAdapter.getItemAt(position);
-        new AlertDialog.Builder(getContext())
+        new MaterialAlertDialogBuilder(getContext())
                 .setMessage("Are you sure to delete this goal?")
                 .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goalsViewModel.delete(goal))
-                .setNegativeButton(android.R.string.no, (dialog, whichButton) -> goalsAdapter.notifyItemChanged(position)).show();
+                .setNegativeButton(android.R.string.no, (dialog, whichButton) -> goalsAdapter.notifyItemChanged(position))
+                .show();
+
     }
 
     private Unbinder unbinder;
