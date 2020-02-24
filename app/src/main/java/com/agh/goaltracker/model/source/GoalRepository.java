@@ -47,4 +47,6 @@ public interface GoalRepository {
     void stopContributingToGoal(int goalId);
 
     void removeAllContributingGoalIds();
+
+    LiveData<Goal> observeCompletedGoal();
 }

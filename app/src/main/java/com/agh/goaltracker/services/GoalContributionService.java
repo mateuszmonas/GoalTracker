@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.agh.goaltracker.GoalDetailsActivity;
 import com.agh.goaltracker.GoalTrackerApplication;
@@ -81,9 +82,13 @@ public class GoalContributionService extends LifecycleService {
         contributingGoalsIds = goalRepository.observeContributingGoalsIds();
         contributingGoalsIds.observe(this, this::updateNotification);
         contributingGoalsIds.observe(this, this::updateContributingGoalsIdsSet);
+        goalRepository.observeCompletedGoal().observe(this, this::onGoalComplete);
         thread.start();
     }
 
+    void onGoalComplete(Goal goal) {
+        Toast.makeText(this, goal.getTitle() + "has been completed", Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
