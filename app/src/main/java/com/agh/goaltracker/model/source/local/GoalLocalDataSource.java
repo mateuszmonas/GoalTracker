@@ -25,8 +25,13 @@ public class GoalLocalDataSource implements GoalDataSource {
     }
 
     @Override
-    public void increaseProgress(int goalId, int amount) {
+    public void contributeToGoal(int goalId, int amount) {
         GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.increaseProgress(goalId, amount));
+    }
+
+    @Override
+    public void contributeToGoal(int goalId) {
+        GoalDatabase.databaseWriteExecutor.execute(() -> goalDao.increaseProgress(goalId, 1));
     }
 
     @Override

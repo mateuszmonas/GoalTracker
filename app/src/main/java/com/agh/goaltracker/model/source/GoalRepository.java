@@ -19,7 +19,18 @@ public interface GoalRepository {
 
     void updateGoal(Goal goal);
 
-    void increaseProgress(int goalId, int amount);
+    /**
+     * increase goal progression by given amount
+     * @param goalId id of goal to contribute to
+     * @param amount amount to contribute
+     */
+    void contributeToGoal(int goalId, int amount);
+
+    /**
+     * increase goal progression by 1
+     * @param goalId id of goal to contribute to
+     */
+    void contributeToGoal(int goalId);
 
     void deleteGoals(List<Goal> goals);
 

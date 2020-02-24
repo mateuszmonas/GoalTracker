@@ -31,7 +31,7 @@ public class GoalDetailsViewModel extends ViewModel {
 
     void recordPastProgress(int amount) {
         Goal goal = this.goal.getValue();
-        goalRepository.increaseProgress(goal.getGoalId(), amount);
+        goalRepository.contributeToGoal(goal.getGoalId(), amount);
     }
 
     void startContributing() {
@@ -39,7 +39,7 @@ public class GoalDetailsViewModel extends ViewModel {
         if (goal.isProgressAsTime()) {
             goalRepository.startContributingToGoal(goal.getGoalId());
         } else {
-            goalRepository.increaseProgress(goal.getGoalId(), 1);
+            goalRepository.contributeToGoal(goal.getGoalId());
         }
     }
 

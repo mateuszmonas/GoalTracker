@@ -18,7 +18,9 @@ public interface GoalDataSource {
 
     void updateGoal(Goal goal);
 
-    void increaseProgress(int goalId, int amount);
+    void contributeToGoal(int goalId, int amount);
+
+    void contributeToGoal(int goalId);
 
     void deleteGoals(List<Goal> goals);
 

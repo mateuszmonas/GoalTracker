@@ -44,7 +44,7 @@ public class GoalContributionService extends LifecycleService {
     {
         while (serviceRunning) {
             for (Integer goalId : goalIds) {
-                goalRepository.increaseProgress(goalId, 1);
+                goalRepository.contributeToGoal(goalId);
             }
             try {
                 Thread.sleep(1000);

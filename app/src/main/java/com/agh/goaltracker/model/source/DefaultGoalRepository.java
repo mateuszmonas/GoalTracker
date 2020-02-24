@@ -27,8 +27,13 @@ public class DefaultGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void increaseProgress(int goalId, int amount) {
-        localGoalDataSource.increaseProgress(goalId, amount);
+    public void contributeToGoal(int goalId, int amount) {
+        localGoalDataSource.contributeToGoal(goalId, amount);
+    }
+
+    @Override
+    public void contributeToGoal(int goalId) {
+        localGoalDataSource.contributeToGoal(goalId);
     }
 
     @Override
