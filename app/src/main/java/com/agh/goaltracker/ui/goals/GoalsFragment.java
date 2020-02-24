@@ -62,7 +62,8 @@ public class GoalsFragment extends Fragment {
     private void safeDelete(int position) {
         Goal goal = goalsAdapter.getItemAt(position);
         new MaterialAlertDialogBuilder(getContext())
-                .setMessage("Are you sure to delete this goal?")
+                .setTitle("Are you sure to delete this goal?")
+                .setMessage("This action will be irreversible.")
                 .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goalsViewModel.delete(goal))
                 .setNegativeButton(android.R.string.no, (dialog, whichButton) -> goalsAdapter.notifyItemChanged(position))
                 .show();
