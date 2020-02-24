@@ -20,17 +20,26 @@ public abstract class GoalDatabase extends RoomDatabase {
 
     public abstract GoalDao goalDao();
 
-    public static RoomDatabase.Callback CREATE_TRIGGER_CALLBACK = new RoomDatabase.Callback() {
+    public static RoomDatabase.Callback CREATE_TRIGGERS = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
             db.execSQL("" +
-                    "create trigger TRING_goal_completed " +
+                    "create trigger TRIG_contributing_to_completed_goal " +
                     "after update on goals " +
                     "when new.current_progress>new.total_goal and new.total_goal <> 0 " +
                     "begin " +
                     "update goals " +
                     "set current_progress=total_goal " +
+                    "where goal_id=new.goal_id; " +
+                    "end");
+            db.execSQL("" +
+                    "create trigger TRIG_contributing_to_failed_goal " +
+                    "after update on goals " +
+                    "when new.due_date<date('now') " +
+                    "begin " +
+                    "update goals " +
+                    "set current_progress=old.current_progress " +
                     "where goal_id=new.goal_id; " +
                     "end");
         }

@@ -22,7 +22,7 @@ public class GoalTrackerApplication extends Application {
     public void onCreate() {
         super.onCreate();
         GoalDatabase goalDatabase = Room.databaseBuilder(getApplicationContext(), GoalDatabase.class, "goals")
-                .addCallback(GoalDatabase.CREATE_TRIGGER_CALLBACK)
+                .addCallback(GoalDatabase.CREATE_TRIGGERS)
                 .build();
         goalRepository = new DefaultGoalRepository(new GoalLocalDataSource(goalDatabase.goalDao()));
 //        deleteDatabase("goals");

@@ -179,9 +179,9 @@ public class GoalDetailsFragment extends Fragment {
         } else {
             goalProgressBar.setVisibility(View.INVISIBLE);
         }
-        startContributingButton.setEnabled(!goal.isCompleted());
-        recordProgressButton.setEnabled(!goal.isCompleted());
-        setReminderButton.setEnabled(!goal.isCompleted());
+        startContributingButton.setEnabled(!goal.isCompleted() && !goal.isFailed());
+        recordProgressButton.setEnabled(!goal.isCompleted() && !goal.isFailed());
+        setReminderButton.setEnabled(!goal.isCompleted() && !goal.isFailed());
         goalProgressText.setText(goal.progressToString());
     }
 
