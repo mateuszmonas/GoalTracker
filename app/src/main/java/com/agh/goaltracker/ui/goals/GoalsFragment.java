@@ -1,5 +1,7 @@
 package com.agh.goaltracker.ui.goals;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +39,8 @@ public class GoalsFragment extends Fragment {
     RecyclerView goalsRecyclerView;
     private GoalsViewModel goalsViewModel;
     private GoalsAdapter goalsAdapter;
-    ItemTouchHelper helper = new ItemTouchHelper(
+
+    private ItemTouchHelper helper = new ItemTouchHelper(
             new ItemTouchHelper.SimpleCallback(0,
                     ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                 @Override
@@ -51,13 +54,18 @@ public class GoalsFragment extends Fragment {
                 public void onSwiped(RecyclerView.ViewHolder viewHolder,
                                      int direction) {
                     int position = viewHolder.getAdapterPosition();
-                    Goal goal = goalsAdapter.getItemAt(position);
-                    Toast.makeText(getContext(), "Deleting " +
-                            goal.getTitle(), Toast.LENGTH_LONG).show();
-
-                    goalsViewModel.delete(goal);
+                    safeDelete(position);
                 }
             });
+
+    private void safeDelete(int position) {
+        Goal goal = goalsAdapter.getItemAt(position);
+        new AlertDialog.Builder(getContext())
+                .setMessage("Are you sure to delete this goal?")
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goalsViewModel.delete(goal))
+                .setNegativeButton(android.R.string.no, (dialog, whichButton) -> goalsAdapter.notifyItemChanged(position)).show();
+    }
+
     private Unbinder unbinder;
     private GoalsListListener goalsListListener = new GoalsListListener() {
         @Override
