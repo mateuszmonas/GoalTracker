@@ -11,6 +11,7 @@ import androidx.lifecycle.Transformations;
 
 public class DefaultGoalRepository implements GoalRepository {
     private GoalDataSource localGoalDataSource;
+    private MutableLiveData<Goal> completedGoal = new MutableLiveData<>();
 
     public DefaultGoalRepository(GoalDataSource localGoalDataSource) {
         this.localGoalDataSource = localGoalDataSource;
@@ -27,8 +28,20 @@ public class DefaultGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void increaseProgress(int goalId, int amount) {
-        localGoalDataSource.increaseProgress(goalId, amount);
+    public void contributeToGoal(int goalId, int amount) {
+        localGoalDataSource.contributeToGoal(goalId, amount);
+        new Thread(() -> {
+            Goal goal = localGoalDataSource.getGoal(goalId);
+            if(goal.isCompleted()) {
+                completedGoal.postValue(goal);
+                GoalContributionModel.getInstance().removeContributingGoalId(goalId);
+            }
+        }).start();
+    }
+
+    @Override
+    public void contributeToGoal(int goalId) {
+        this.contributeToGoal(goalId, 1);
     }
 
     @Override
@@ -91,5 +104,29 @@ public class DefaultGoalRepository implements GoalRepository {
     public void removeAllContributingGoalIds() {
         GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
         goalContributionModel.removeAllContributingGoalIds();
+    }
+
+    @Override
+    public LiveData<Goal> observeCompletedGoal() {
+        return completedGoal;
+    }
+
+    @Override
+    public void contributeToGoals(Set<Integer> goalsIds, int amount) {
+        localGoalDataSource.contributeToGoals(goalsIds, amount);
+        new Thread(() -> {
+            List<Goal> goals = localGoalDataSource.getGoals(goalsIds);
+            for (Goal goal : goals) {
+                if(goal.isCompleted()) {
+                    completedGoal.postValue(goal);
+                    GoalContributionModel.getInstance().removeContributingGoalId(goal.getGoalId());
+                }
+            }
+        }).start();
+    }
+
+    @Override
+    public void contributeToGoals(Set<Integer> goalsIds) {
+        contributeToGoals(goalsIds, 1);
     }
 }

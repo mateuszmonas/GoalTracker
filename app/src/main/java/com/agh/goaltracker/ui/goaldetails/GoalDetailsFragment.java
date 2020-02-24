@@ -51,8 +51,12 @@ public class GoalDetailsFragment extends Fragment {
     Button stopContributingButton;
     @BindView(R.id.start_contributing_button)
     Button startContributingButton;
+    @BindView(R.id.record_progress_button)
+    Button recordProgressButton;
     @BindView(R.id.goal_progress_text)
     TextView goalProgressText;
+    @BindView(R.id.set_reminder_button)
+    Button setReminderButton;
     private GoalDetailsViewModel goalDetailsViewModel;
     private Unbinder unbinder;
 
@@ -175,6 +179,9 @@ public class GoalDetailsFragment extends Fragment {
         } else {
             goalProgressBar.setVisibility(View.INVISIBLE);
         }
+        startContributingButton.setEnabled(!goal.isCompleted() && !goal.isFailed());
+        recordProgressButton.setEnabled(!goal.isCompleted() && !goal.isFailed());
+        setReminderButton.setEnabled(!goal.isCompleted() && !goal.isFailed());
         goalProgressText.setText(goal.progressToString());
     }
 

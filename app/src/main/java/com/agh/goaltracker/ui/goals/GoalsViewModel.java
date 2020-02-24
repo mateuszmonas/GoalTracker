@@ -3,7 +3,9 @@ package com.agh.goaltracker.ui.goals;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.GoalRepository;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +44,17 @@ public class GoalsViewModel extends ViewModel {
 
     // TODO: 09/02/20 implement filtering
     List<Goal> applyFilters(List<Goal> goals, Set<GoalsFilterType> filterTypes) {
-        return goals;
+        List<Goal> result = new ArrayList<>();
+        for (Goal goal : goals) {
+            if (filterTypes.contains(GoalsFilterType.CURRENT_GOALS) && !goal.isFailed() && !goal.isCompleted()) {
+                result.add(goal);
+            } else if (filterTypes.contains(GoalsFilterType.COMPLETED_GOALS) && goal.isCompleted()) {
+                result.add(goal);
+            } else if (filterTypes.contains(GoalsFilterType.FAILED_GOALS) && goal.isFailed()) {
+                result.add(goal);
+            }
+        }
+        return result;
     }
 
     enum GoalsFilterType {

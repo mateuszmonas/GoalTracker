@@ -19,7 +19,31 @@ public interface GoalRepository {
 
     void updateGoal(Goal goal);
 
-    void increaseProgress(int goalId, int amount);
+    /**
+     * increase goal progression by given amount
+     * @param goalId id of goal to contribute to
+     * @param amount amount to contribute
+     */
+    void contributeToGoal(int goalId, int amount);
+
+    /**
+     * increase goal progression by 1
+     * @param goalId id of goal to contribute to
+     */
+    void contributeToGoal(int goalId);
+
+    /**
+     * increase all given goals progression by given amount
+     * @param goalsIds ids of goals to contribute to
+     * @param amount amount to contribute
+     */
+    void contributeToGoals(Set<Integer> goalsIds, int amount);
+
+    /**
+     * increase all given goals progression by given 1
+     * @param goalsIds ids of goals to contribute to
+     */
+    void contributeToGoals(Set<Integer> goalsIds);
 
     void deleteGoals(List<Goal> goals);
 
@@ -36,4 +60,6 @@ public interface GoalRepository {
     void stopContributingToGoal(int goalId);
 
     void removeAllContributingGoalIds();
+
+    LiveData<Goal> observeCompletedGoal();
 }

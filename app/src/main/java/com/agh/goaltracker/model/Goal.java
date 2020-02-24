@@ -126,6 +126,14 @@ public class Goal {
                 Objects.equals(dueDate, goal.dueDate);
     }
 
+    public boolean isFailed() {
+        return dueDate != null && dueDate.before(new Date()) && currentProgress < totalGoal;
+    }
+
+    public boolean isCompleted() {
+        return totalGoal != 0 && totalGoal <= currentProgress;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(goalId, title, dueDate, progressAsTime, currentProgress, totalGoal);

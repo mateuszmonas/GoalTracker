@@ -21,10 +21,12 @@ public class GoalTrackerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        GoalDatabase goalDatabase = Room.databaseBuilder(getApplicationContext(), GoalDatabase.class, "goals").build();
+        GoalDatabase goalDatabase = Room.databaseBuilder(getApplicationContext(), GoalDatabase.class, "goals")
+                .addCallback(GoalDatabase.CREATE_TRIGGERS)
+                .build();
         goalRepository = new DefaultGoalRepository(new GoalLocalDataSource(goalDatabase.goalDao()));
 //        deleteDatabase("goals");
-//        goalRepository.saveGoal(new Goal("1", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("1", null,  1));
 //        goalRepository.saveGoal(new Goal("2"));
 //        goalRepository.saveGoal(new Goal("3", null, 0, 1));
 //        goalRepository.saveGoal(new Goal("4", null, 0, 1));
