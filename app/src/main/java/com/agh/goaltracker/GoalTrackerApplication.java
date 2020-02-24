@@ -15,19 +15,29 @@ import androidx.room.Room;
 
 public class GoalTrackerApplication extends Application {
 
+    public static final String CONTRIBUTION_NOTIFICATION_CHANNEL_ID = "CONTRIBUTION_NOTIFICATION_CHANNEL";
     private GoalRepository goalRepository;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        deleteDatabase("goals");
         GoalDatabase goalDatabase = Room.databaseBuilder(getApplicationContext(), GoalDatabase.class, "goals").build();
         goalRepository = new DefaultGoalRepository(new GoalLocalDataSource(goalDatabase.goalDao()));
+//        deleteDatabase("goals");
+//        goalRepository.saveGoal(new Goal("1", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("2"));
+//        goalRepository.saveGoal(new Goal("3", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("4", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("5", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("6", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("7", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("8", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("9", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("01", null, 0, 1));
+//        goalRepository.saveGoal(new Goal("02", null, 0, 1));
         createNotificationChannel();
-        goalRepository.saveGoal(new Goal("first", null, 2, 0));
-        goalRepository.saveGoal(new Goal("second"));
-        goalRepository.saveGoal(new Goal("last", null, 0, 2));
     }
+
 
     public GoalRepository getGoalRepository() {
         return goalRepository;
@@ -39,7 +49,7 @@ public class GoalTrackerApplication extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.contribution_notification_channel);
             String description = getString(R.string.contribution_notification_channel_description);
-            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(CONTRIBUTION_NOTIFICATION_CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW);
             channel.setSound(null, null);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance

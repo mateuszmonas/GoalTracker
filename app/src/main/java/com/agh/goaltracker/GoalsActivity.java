@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.agh.goaltracker.services.GoalContributionService;
 import com.agh.goaltracker.ui.goals.GoalsFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ public class GoalsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startService(GoalContributionService.createIntent(getApplicationContext()));
         setContentView(R.layout.goals_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

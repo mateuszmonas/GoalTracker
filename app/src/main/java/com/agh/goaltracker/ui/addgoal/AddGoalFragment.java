@@ -35,7 +35,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
-public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class AddGoalFragment extends Fragment {
 
     @BindView(R.id.goal_name_txt)
     EditText goalName;
@@ -84,7 +84,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     }
 
     @OnClick(R.id.unset_date)
-    public void unsetDate(){
+    public void unsetDate() {
         chosenDate = null;
         chosenDateTV.setText(getString(R.string.unset));
     }
@@ -94,10 +94,10 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
         String name = goalName.getText().toString();
         Goal goal = null;
         if (countAsTime) {
-            int hours = hourET.getText().length()==0?0:Integer.valueOf(hourET.getText().toString());
-            int minutes = minET.getText().length()==0?0:Integer.valueOf(minET.getText().toString());
+            int hours = hourET.getText().length() == 0 ? 0 : Integer.valueOf(hourET.getText().toString());
+            int minutes = minET.getText().length() == 0 ? 0 : Integer.valueOf(minET.getText().toString());
             goal = new Goal(name, chosenDate, hours, minutes);
-        } else if (!"".equals(eventGoal.getText().toString())){
+        } else if (!"".equals(eventGoal.getText().toString())) {
             int goalAmount = Integer.parseInt(eventGoal.getText().toString());
             goal = new Goal(name, chosenDate, goalAmount);
         }
@@ -130,7 +130,7 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
     public void setDueDate() {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 
-        DatePickerDialog dialog = new DatePickerDialog(getContext(), this,
+        DatePickerDialog dialog = new DatePickerDialog(getContext(), this::onDateSet,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();
@@ -158,14 +158,13 @@ public class AddGoalFragment extends Fragment implements DatePickerDialog.OnDate
         }
     }
 
-    @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         try {
-            chosenDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(""+day+"/"+(month+1)+"/"+year);
+            chosenDate = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse("" + day + "/" + (month + 1) + "/" + year);
 
             DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH);
             chosenDateTV.setText(dateFormat.format(chosenDate));
-            if(chosenDate.compareTo(new Date())<0)
+            if (chosenDate.compareTo(new Date()) < 0)
                 Toast.makeText(getContext(), "you chose a date from the past", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();

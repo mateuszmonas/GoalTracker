@@ -70,7 +70,7 @@ public class RecordPastProgressionDialogBuilder {
             if (!hours.equals(""))
                 result += 3600 * Integer.parseInt(hours);
             if (!minutes.equals(""))
-                result += 60* Integer.parseInt(minutes);
+                result += 60 * Integer.parseInt(minutes);
         } else if (!numberOfEvents.getText().toString().equals("")) {
             result = Integer.parseInt(numberOfEvents.getText().toString());
         }
@@ -84,7 +84,7 @@ public class RecordPastProgressionDialogBuilder {
 
     @OnTextChanged({R.id.hours, R.id.minutes})
     void onHourOrMinutesChange() {
-        positiveButton.setEnabled(hoursEditText.getText().length() != 0 && minutesEditText.getText().length() != 0);
+        positiveButton.setEnabled(hoursEditText.getText().length() != 0 || minutesEditText.getText().length() != 0);
     }
 
     void show() {

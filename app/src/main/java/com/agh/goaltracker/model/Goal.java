@@ -1,10 +1,10 @@
 package com.agh.goaltracker.model;
 
-import com.agh.goaltracker.R;
 import com.agh.goaltracker.util.ProgressDrawable;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -46,7 +46,7 @@ public class Goal {
         this.title = title;
         this.dueDate = dueDate;
         this.currentProgress = 0;
-        this.progressAsTime = true;
+        this.progressAsTime = false;
         this.totalGoal = totalGoal;
     }
 
@@ -83,13 +83,13 @@ public class Goal {
 
     public ProgressDrawable getProgressDrawable() {
         double completedRatio = (double) currentProgress / totalGoal;
-        if (completedRatio<0.2){
+        if (completedRatio < 0.2) {
             return ProgressDrawable.PLANT1;
-        }else if(completedRatio <0.5){
+        } else if (completedRatio < 0.5) {
             return ProgressDrawable.PLANT2;
-        }else if(completedRatio <0.9){
+        } else if (completedRatio < 0.9) {
             return ProgressDrawable.PLANT3;
-        }else {
+        } else {
             return ProgressDrawable.PLANT4;
         }
 
@@ -111,6 +111,23 @@ public class Goal {
             }
         }
         return result;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Goal goal = (Goal) o;
+        return goalId == goal.goalId &&
+                progressAsTime == goal.progressAsTime &&
+                currentProgress == goal.currentProgress &&
+                totalGoal == goal.totalGoal &&
+                Objects.equals(title, goal.title) &&
+                Objects.equals(dueDate, goal.dueDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(goalId, title, dueDate, progressAsTime, currentProgress, totalGoal);
     }
 }

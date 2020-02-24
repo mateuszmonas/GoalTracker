@@ -14,6 +14,8 @@ import com.agh.goaltracker.R;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import static com.agh.goaltracker.GoalTrackerApplication.CONTRIBUTION_NOTIFICATION_CHANNEL_ID;
+
 public class GoalReminderBroadcastReceiver extends BroadcastReceiver {
 
     public static final String EXTRA_GOAL_ID = "GOAL_ID";
@@ -32,7 +34,7 @@ public class GoalReminderBroadcastReceiver extends BroadcastReceiver {
         stackBuilder.addNextIntent(GoalDetailsActivity.createIntent(context, goalId));
         PendingIntent goalDetailsPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification notification = new NotificationCompat.Builder(context, "CHANNEL_ID")
+        Notification notification = new NotificationCompat.Builder(context, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_add_black_24dp)
                 .setContentTitle(title)
                 .setContentText("start contributing now")
