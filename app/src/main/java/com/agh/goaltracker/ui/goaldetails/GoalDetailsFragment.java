@@ -177,7 +177,6 @@ public class GoalDetailsFragment extends Fragment {
             goalProgressBar.setProgress(goal.getCurrentProgress());
         } else {
             goalProgressBar.setVisibility(View.INVISIBLE);
-            goalProgressImageView.setImageResource(R.drawable.watering_can);
         }
         goalProgressImageView.setImageResource(goal.getProgressDrawable().resource_id);
         startContributingButton.setEnabled(!goal.isCompleted() && !goal.isFailed());
