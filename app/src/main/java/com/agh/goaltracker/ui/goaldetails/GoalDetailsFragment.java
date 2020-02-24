@@ -21,7 +21,6 @@ import com.agh.goaltracker.GoalTrackerApplication;
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.receivers.GoalReminderBroadcastReceiver;
-import com.agh.goaltracker.services.GoalContributionService;
 import com.agh.goaltracker.util.ViewModelFactory;
 
 import java.text.SimpleDateFormat;
@@ -89,7 +88,6 @@ public class GoalDetailsFragment extends Fragment {
         goalDetailsViewModel.goal.observe(getViewLifecycleOwner(), this::showGoal);
         goalDetailsViewModel.isDeleted.observe(getViewLifecycleOwner(), this::goalDeleted);
         goalDetailsViewModel.isGoalContributing.observe(getViewLifecycleOwner(), this::changeContributionButton);
-        goalDetailsViewModel.startGoalContributing.observe(getViewLifecycleOwner(), this::startContributionService);
         goalDetailsViewModel.start(getArguments().getInt(EXTRA_GOAL_ID));
     }
 
@@ -188,16 +186,6 @@ public class GoalDetailsFragment extends Fragment {
             startContributingButton.setVisibility(View.VISIBLE);
             stopContributingButton.setVisibility(View.GONE);
         }
-    }
-
-    void startContributionService(boolean contributing) {
-        Intent intent;
-        if (contributing) {
-            intent = GoalContributionService.createStartContributingIntent(getContext(), goalDetailsViewModel.goal.getValue().getGoalId());
-        } else {
-            intent = GoalContributionService.createStopContributingIntent(getContext(), goalDetailsViewModel.goal.getValue().getGoalId());
-        }
-        getContext().startService(intent);
     }
 
     @Override
