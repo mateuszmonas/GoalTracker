@@ -121,7 +121,6 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
             progressBar.setProgress(goal.getCurrentProgress());
             if (goal.getTotalGoal() == 0){
                 progressBar.setVisibility(View.GONE);
-                plant.setImageResource(R.drawable.watering_can);
             }
             else {
                 progressBar.setMax(goal.totalGoal);
