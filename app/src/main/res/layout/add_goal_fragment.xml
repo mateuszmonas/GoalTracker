@@ -19,9 +19,11 @@
 
     <EditText
         android:id="@+id/goal_name_txt"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="34dp"
         android:ems="10"
         android:hint="Goal name"
         android:inputType="textPersonName"
@@ -34,14 +36,15 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginBottom="8dp"
-        android:background="#B8B894"
+        android:background="#B4B4B4"
         app:layout_constraintBottom_toTopOf="@+id/radioGroup"
         tools:layout_editor_absoluteX="0dp" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +76,7 @@
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
-        android:background="#B8B894"
+        android:background="#B4B4B4"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -82,7 +85,7 @@
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
-        android:background="#B8B894"
+        android:background="#B4B4B4"
         app:layout_constraintTop_toBottomOf="@+id/chosen_date"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -130,29 +133,29 @@
         android:id="@+id/timeChoserLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_goal_txt">
+        app:layout_constraintTop_toBottomOf="@+id/set_goal">
 
         <EditText
             android:id="@+id/hour_txt"
-            android:layout_width="58dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
             android:hint="hours"
             android:inputType="number"
-            android:textAlignment="center"
-            android:textSize="14sp" />
+            android:textAlignment="viewStart"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="12dp"
+            android:layout_width="14dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text=":"
@@ -160,14 +163,14 @@
 
         <EditText
             android:id="@+id/min_txt"
-            android:layout_width="58dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
             android:hint="minutes"
             android:inputType="number"
-            android:textAlignment="center"
-            android:textSize="14sp" />
+            android:textAlignment="viewStart"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <TextView
