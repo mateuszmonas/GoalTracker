@@ -25,9 +25,9 @@ public abstract class GoalDatabase extends RoomDatabase {
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
             db.execSQL("" +
-                    "create trigger goal_completed " +
+                    "create trigger TRING_goal_completed " +
                     "after update on goals " +
-                    "when new.current_progress>new.total_goal " +
+                    "when new.current_progress>new.total_goal and new.total_goal <> 0 " +
                     "begin " +
                     "update goals " +
                     "set current_progress=total_goal " +
