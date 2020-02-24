@@ -33,7 +33,7 @@ public class DefaultGoalRepository implements GoalRepository {
 
     @Override
     public void contributeToGoal(int goalId) {
-        localGoalDataSource.contributeToGoal(goalId);
+        this.contributeToGoal(goalId, 1);
     }
 
     @Override
