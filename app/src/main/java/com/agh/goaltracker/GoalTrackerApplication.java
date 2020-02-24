@@ -37,7 +37,7 @@ public class GoalTrackerApplication extends Application {
 //        goalRepository.saveGoal(new Goal("9", null, 0, 1));
 //        goalRepository.saveGoal(new Goal("01", null, 0, 1));
 //        goalRepository.saveGoal(new Goal("02", null, 0, 1));
-//        createNotificationChannel();
+        createNotificationChannel();
     }
 
 

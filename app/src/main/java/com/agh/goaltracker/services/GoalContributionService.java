@@ -87,7 +87,7 @@ public class GoalContributionService extends LifecycleService {
     }
 
     void onGoalComplete(Goal goal) {
-        Toast.makeText(this, goal.getTitle() + "has been completed", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, goal.getTitle() + " has been completed", Toast.LENGTH_LONG).show();
     }
 
     @Override
