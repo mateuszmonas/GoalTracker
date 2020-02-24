@@ -97,8 +97,10 @@ public class AddGoalFragment extends Fragment {
             int hours = hourET.getText().length() == 0 ? 0 : Integer.valueOf(hourET.getText().toString());
             int minutes = minET.getText().length() == 0 ? 0 : Integer.valueOf(minET.getText().toString());
             goal = new Goal(name, chosenDate, hours, minutes);
-        } else if (!"".equals(eventGoal.getText().toString())) {
-            int goalAmount = Integer.parseInt(eventGoal.getText().toString());
+        } else {
+            int goalAmount = 0;
+            if (!"".equals(eventGoal.getText().toString()))
+                goalAmount = Integer.parseInt(eventGoal.getText().toString());
             goal = new Goal(name, chosenDate, goalAmount);
         }
         addGoalViewModel.saveGoal(goal);
