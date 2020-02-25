@@ -3,7 +3,6 @@ package com.agh.goaltracker.ui.goals;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -105,7 +104,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder {
         Goal goal;
-        boolean isContributing = true;
+        boolean isContributing = false;
         @BindView(R.id.goal_title)
         TextView goalTitle;
         @BindView(R.id.goal_due_date)
@@ -134,11 +133,17 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         @OnClick(R.id.contribution_btn)
         public void startContributionService(FloatingActionButton btn){
             if(isContributing){
-                isContributing = false;
+                if(goal.isProgressAsTime()){
+                    isContributing = false;
+                    goalsListListener.stopContributing(goal);
+                }
                 btn.setImageResource(R.drawable.ic_add_black_24dp);
             }else{
-                isContributing = true;
-                btn.setImageResource(R.drawable.ic_close_black_24dp);
+                if(goal.isProgressAsTime()){
+                    isContributing = true;
+                    btn.setImageResource(R.drawable.ic_close_black_24dp);
+                }
+                goalsListListener.startContributing(goal);
             }
         }
     }
