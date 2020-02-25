@@ -126,7 +126,7 @@ public class GoalContributionService extends LifecycleService {
 
             Notification notification = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
                     // TODO: 23/02/20 change icon
-                    .setSmallIcon(R.drawable.ic_add_black_24dp)
+                    .setSmallIcon(R.drawable.notification_img)
                     .setContentTitle(goal.getTitle())
                     .setContentText(goal.progressToString())
                     .setPriority(NotificationCompat.PRIORITY_LOW)
