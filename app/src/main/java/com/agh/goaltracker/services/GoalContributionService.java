@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.PowerManager;
 import android.widget.Toast;
 
 import com.agh.goaltracker.GoalDetailsActivity;
@@ -17,6 +18,9 @@ import com.agh.goaltracker.model.source.GoalRepository;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
@@ -25,25 +29,25 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import static com.agh.goaltracker.GoalTrackerApplication.CONTRIBUTION_NOTIFICATION_CHANNEL_ID;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 public class GoalContributionService extends LifecycleService {
+    private static final String TAG = "GoalContributionService";
+    private static final String WAKE_LOCK_TAG = "GoalTracker::GoalContributionService";
     private static final String EXTRA_GOAL_ID = "GOAL_ID";
     private static final String ACTION_START_SERVICE = "START_SERVICE";
     private static final String ACTION_STOP_CONTRIBUTING = "STOP_CONTRIBUTING";
     private static final String ACTION_STOP_ALL_CONTRIBUTING = "STOP_ALL_CONTRIBUTING";
     private static final int NOTIFICATION_ID = 1;
+    private final ScheduledExecutorService scheduler =
+            Executors.newSingleThreadScheduledExecutor();
     GoalRepository goalRepository;
     LiveData<Set<Integer>> contributingGoalsIds;
-
     LiveData<Goal> observedGoal = new MutableLiveData<>();
-
     Set<Integer> goalIds = new HashSet<>();
-
-    boolean serviceRunning = true;
-    Thread thread = new Thread(() ->
-    {
-        while (serviceRunning) {
+    final Runnable goalContributionRunnable = new Runnable() {
+        public void run() {
             goalRepository.contributeToGoals(goalIds);
             try {
                 Thread.sleep(1000);
@@ -51,7 +55,9 @@ public class GoalContributionService extends LifecycleService {
                 e.printStackTrace();
             }
         }
-    });
+    };
+    PowerManager.WakeLock wakeLock;
+    ScheduledFuture<?> goalContributionRunnableHandle;
 
     public static Intent createIntent(Context context) {
         Intent intent = new Intent(context, GoalContributionService.class);
@@ -81,11 +87,38 @@ public class GoalContributionService extends LifecycleService {
         contributingGoalsIds.observe(this, this::updateNotification);
         contributingGoalsIds.observe(this, this::updateContributingGoalsIdsSet);
         goalRepository.observeCompletedGoal().observe(this, this::onGoalComplete);
-        thread.start();
+    }
+
+    void startContributionExecutor() {
+        if (goalContributionRunnableHandle == null) {
+            goalContributionRunnableHandle = scheduler.scheduleAtFixedRate(goalContributionRunnable, 0, 1, SECONDS);
+        }
+    }
+
+    void stopContributorExecutor() {
+        if (goalContributionRunnableHandle != null) {
+            goalContributionRunnableHandle.cancel(false);
+            goalContributionRunnableHandle = null;
+        }
     }
 
     void onGoalComplete(Goal goal) {
         Toast.makeText(this, goal.getTitle() + " has been completed", Toast.LENGTH_LONG).show();
+    }
+
+    void acquireWakeLock() {
+        if (wakeLock == null) {
+            PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+            wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    WAKE_LOCK_TAG);
+        }
+        wakeLock.acquire();
+    }
+
+    void releaseWakeLock() {
+        if (wakeLock != null) {
+            wakeLock.release();
+        }
     }
 
     @Override
@@ -102,8 +135,7 @@ public class GoalContributionService extends LifecycleService {
                 goalRepository.removeAllContributingGoalIds();
                 break;
         }
-
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     void updateContributingGoalsIdsSet(Set<Integer> contributingGoalsIds) {
@@ -142,7 +174,10 @@ public class GoalContributionService extends LifecycleService {
         if (goalsIds.isEmpty()) {
             observedGoal.removeObservers(this);
             stopForeground(true);
+            releaseWakeLock();
+            stopContributorExecutor();
         } else if (goalsIds.size() == 1) {
+            startContributionExecutor();
             Notification notification = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle("temp")
@@ -152,7 +187,9 @@ public class GoalContributionService extends LifecycleService {
             startForeground(NOTIFICATION_ID, notification);
             observedGoal = goalRepository.observeGoal(goalsIds.iterator().next());
             observedGoal.observe(this, this::updateSingleGoalNotification);
+            acquireWakeLock();
         } else if (goalsIds.size() > 1) {
+            startContributionExecutor();
             observedGoal.removeObservers(this);
             Intent goalsActivityIntent = GoalsActivity.createIntent(this);
             PendingIntent goalsActivityPendingIntent =
@@ -172,12 +209,15 @@ public class GoalContributionService extends LifecycleService {
                     .build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(NOTIFICATION_ID, n);
+            acquireWakeLock();
         }
     }
 
     @Override
     public void onDestroy() {
-        serviceRunning = false;
+        goalContributionRunnableHandle.cancel(true);
+        releaseWakeLock();
+        stopContributorExecutor();
         super.onDestroy();
     }
 }

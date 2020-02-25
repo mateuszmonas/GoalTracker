@@ -5,7 +5,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
-import com.agh.goaltracker.model.Goal;
 import com.agh.goaltracker.model.source.DefaultGoalRepository;
 import com.agh.goaltracker.model.source.GoalRepository;
 import com.agh.goaltracker.model.source.local.GoalDatabase;

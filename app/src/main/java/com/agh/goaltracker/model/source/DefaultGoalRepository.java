@@ -32,7 +32,7 @@ public class DefaultGoalRepository implements GoalRepository {
         localGoalDataSource.contributeToGoal(goalId, amount);
         new Thread(() -> {
             Goal goal = localGoalDataSource.getGoal(goalId);
-            if(goal.isCompleted()) {
+            if (goal.isCompleted()) {
                 completedGoal.postValue(goal);
                 GoalContributionModel.getInstance().removeContributingGoalId(goalId);
             }
@@ -117,7 +117,7 @@ public class DefaultGoalRepository implements GoalRepository {
         new Thread(() -> {
             List<Goal> goals = localGoalDataSource.getGoals(goalsIds);
             for (Goal goal : goals) {
-                if(goal.isCompleted()) {
+                if (goal.isCompleted()) {
                     completedGoal.postValue(goal);
                     GoalContributionModel.getInstance().removeContributingGoalId(goal.getGoalId());
                 }
