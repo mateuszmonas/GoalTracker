@@ -57,8 +57,6 @@ public interface GoalRepository {
 
     LiveData<Set<Integer>> observeContributingGoalsIds();
 
-    Set<Integer> getContributingGoalsIds();
-
     void startContributingToGoal(int goalId);
 
     void stopContributingToGoal(int goalId);
