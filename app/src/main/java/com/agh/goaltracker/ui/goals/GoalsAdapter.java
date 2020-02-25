@@ -3,12 +3,14 @@ package com.agh.goaltracker.ui.goals;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.agh.goaltracker.R;
 import com.agh.goaltracker.model.Goal;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> {
 
@@ -102,6 +105,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder {
         Goal goal;
+        boolean isContributing = true;
         @BindView(R.id.goal_title)
         TextView goalTitle;
         @BindView(R.id.goal_due_date)
@@ -125,6 +129,17 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
                 progressBar.setMax(goal.totalGoal);
             }
             plant.setImageResource(goal.getProgressDrawable().resource_id);
+        }
+
+        @OnClick(R.id.contribution_btn)
+        public void startContributionService(FloatingActionButton btn){
+            if(isContributing){
+                isContributing = false;
+                btn.setImageResource(R.drawable.ic_add_black_24dp);
+            }else{
+                isContributing = true;
+                btn.setImageResource(R.drawable.ic_close_black_24dp);
+            }
         }
     }
 }
