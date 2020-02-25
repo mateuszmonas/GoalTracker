@@ -131,15 +131,15 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.ViewHolder> 
         }
 
         @OnClick(R.id.contribution_btn)
-        public void startContributionService(FloatingActionButton btn){
-            if(isContributing){
-                if(goal.isProgressAsTime()){
+        public void startContributionService(FloatingActionButton btn) {
+            if (isContributing) {
+                if (goal.isProgressAsTime()) {
                     isContributing = false;
                     goalsListListener.stopContributing(goal);
                 }
                 btn.setImageResource(R.drawable.ic_add_black_24dp);
-            }else{
-                if(goal.isProgressAsTime()){
+            } else {
+                if (goal.isProgressAsTime()) {
                     isContributing = true;
                     btn.setImageResource(R.drawable.ic_close_black_24dp);
                 }
