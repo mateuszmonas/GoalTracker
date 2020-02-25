@@ -1,7 +1,5 @@
 package com.agh.goaltracker.ui.goals;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.agh.goaltracker.AddGoalActivity;
 import com.agh.goaltracker.GoalDetailsActivity;
@@ -58,18 +55,6 @@ public class GoalsFragment extends Fragment {
                     safeDelete(position);
                 }
             });
-
-    private void safeDelete(int position) {
-        Goal goal = goalsAdapter.getItemAt(position);
-        new MaterialAlertDialogBuilder(getContext())
-                .setTitle("Are you sure to delete this goal?")
-                .setMessage("This action will be irreversible.")
-                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goalsViewModel.delete(goal))
-                .setNegativeButton(android.R.string.no, (dialog, whichButton) -> goalsAdapter.notifyItemChanged(position))
-                .show();
-
-    }
-
     private Unbinder unbinder;
     private GoalsListListener goalsListListener = new GoalsListListener() {
         @Override
@@ -87,6 +72,17 @@ public class GoalsFragment extends Fragment {
 
     public static GoalsFragment newInstance() {
         return new GoalsFragment();
+    }
+
+    private void safeDelete(int position) {
+        Goal goal = goalsAdapter.getItemAt(position);
+        new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Are you sure to delete this goal?")
+                .setMessage("This action will be irreversible.")
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goalsViewModel.delete(goal))
+                .setNegativeButton(android.R.string.no, (dialog, whichButton) -> goalsAdapter.notifyItemChanged(position))
+                .show();
+
     }
 
     @Override

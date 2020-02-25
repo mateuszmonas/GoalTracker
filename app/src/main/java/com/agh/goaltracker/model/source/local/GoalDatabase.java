@@ -17,9 +17,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 public abstract class GoalDatabase extends RoomDatabase {
     public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(4);
-
-    public abstract GoalDao goalDao();
-
     public static RoomDatabase.Callback CREATE_TRIGGERS = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -42,4 +39,6 @@ public abstract class GoalDatabase extends RoomDatabase {
                     "end");
         }
     };
+
+    public abstract GoalDao goalDao();
 }
