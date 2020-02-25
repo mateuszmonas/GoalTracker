@@ -2,6 +2,7 @@ package com.agh.goaltracker.model.source;
 
 import com.agh.goaltracker.model.Goal;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import androidx.lifecycle.Transformations;
 public class DefaultGoalRepository implements GoalRepository {
     private GoalDataSource localGoalDataSource;
     private MutableLiveData<Goal> completedGoal = new MutableLiveData<>();
+    private MutableLiveData<Set<Integer>> contributingGoalsIds = new MutableLiveData<>(new HashSet<>());
 
     public DefaultGoalRepository(GoalDataSource localGoalDataSource) {
         this.localGoalDataSource = localGoalDataSource;
@@ -34,7 +36,7 @@ public class DefaultGoalRepository implements GoalRepository {
             Goal goal = localGoalDataSource.getGoal(goalId);
             if (goal.isCompleted()) {
                 completedGoal.postValue(goal);
-                GoalContributionModel.getInstance().removeContributingGoalId(goalId);
+                stopContributingToGoal(goalId);
             }
         }).start();
     }
@@ -67,43 +69,38 @@ public class DefaultGoalRepository implements GoalRepository {
     @Override
     public void deleteGoal(Goal goal) {
         localGoalDataSource.deleteGoal(goal);
-        GoalContributionModel.getInstance().removeContributingGoalId(goal.getGoalId());
+        stopContributingToGoal(goal.getGoalId());
     }
 
     @Override
     public LiveData<Boolean> observeContributingGoal(int goalId) {
-        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
-        return Transformations.switchMap(goalContributionModel.observeContributingGoalsIds(), contributingGoalIds -> new MutableLiveData<>(contributingGoalIds.contains(goalId)));
-    }
-
-    @Override
-    public Set<Integer> getContributingGoalsIds() {
-        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
-        return goalContributionModel.getContributingGoalsIds();
+        return Transformations.switchMap(contributingGoalsIds, contributingGoalIds -> new MutableLiveData<>(contributingGoalIds.contains(goalId)));
     }
 
     @Override
     public LiveData<Set<Integer>> observeContributingGoalsIds() {
-        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
-        return goalContributionModel.observeContributingGoalsIds();
+        return contributingGoalsIds;
     }
 
     @Override
     public void startContributingToGoal(int goalId) {
-        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
-        goalContributionModel.addContributingGoalId(goalId);
+        Set<Integer> values = contributingGoalsIds.getValue();
+        values.add(goalId);
+        contributingGoalsIds.postValue(values);
     }
 
     @Override
     public void stopContributingToGoal(int goalId) {
-        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
-        goalContributionModel.removeContributingGoalId(goalId);
+        Set<Integer> values = contributingGoalsIds.getValue();
+        values.remove(goalId);
+        contributingGoalsIds.postValue(values);
     }
 
     @Override
     public void removeAllContributingGoalIds() {
-        GoalContributionModel goalContributionModel = GoalContributionModel.getInstance();
-        goalContributionModel.removeAllContributingGoalIds();
+        Set<Integer> values = contributingGoalsIds.getValue();
+        values.clear();
+        contributingGoalsIds.postValue(values);
     }
 
     @Override
@@ -119,7 +116,7 @@ public class DefaultGoalRepository implements GoalRepository {
             for (Goal goal : goals) {
                 if (goal.isCompleted()) {
                     completedGoal.postValue(goal);
-                    GoalContributionModel.getInstance().removeContributingGoalId(goal.getGoalId());
+                    stopContributingToGoal(goal.getGoalId());
                 }
             }
         }).start();
