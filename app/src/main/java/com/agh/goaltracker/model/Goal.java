@@ -82,6 +82,8 @@ public class Goal {
     }
 
     public ProgressDrawable getProgressDrawable() {
+        if (totalGoal == 0)
+            return ProgressDrawable.WATERING_CAN;
         double completedRatio = (double) currentProgress / totalGoal;
         if (completedRatio < 0.2) {
             return ProgressDrawable.PLANT1;
