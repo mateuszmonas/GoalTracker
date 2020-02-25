@@ -83,6 +83,16 @@ public class GoalsFragment extends Fragment {
             // TODO: 09/02/20 implement edit goal details
             Log.d(TAG, "goToEditGoalDetailsActivity() called with: goalId = [" + goalId + "]");
         }
+
+        @Override
+        public void startContributing(Goal goal) {
+            goalsViewModel.startContributing(goal);
+        }
+
+        @Override
+        public void stopContributing(Goal goal) {
+            goalsViewModel.stopContributing(goal);
+        }
     };
 
     public static GoalsFragment newInstance() {
@@ -160,5 +170,9 @@ public class GoalsFragment extends Fragment {
         void goToGoalDetailsActivity(int goalId);
 
         void goToEditGoalDetailsActivity(int goalId);
+
+        void startContributing(Goal goal);
+
+        void stopContributing(Goal goal);
     }
 }
