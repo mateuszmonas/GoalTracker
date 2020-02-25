@@ -27,7 +27,7 @@ public abstract class GoalDatabase extends RoomDatabase {
             db.execSQL("" +
                     "create trigger TRIG_contributing_to_completed_goal " +
                     "after update on goals " +
-                    "when new.current_progress>new.total_goal and new.total_goal <> 0 " +
+                    "when new.total_goal<new.current_progress and new.total_goal <> 0 " +
                     "begin " +
                     "update goals " +
                     "set current_progress=total_goal " +
@@ -35,12 +35,10 @@ public abstract class GoalDatabase extends RoomDatabase {
                     "end");
             db.execSQL("" +
                     "create trigger TRIG_contributing_to_failed_goal " +
-                    "after update on goals " +
-                    "when new.due_date<date('now') " +
+                    "before update on goals " +
+                    "when old.due_date<CAST((julianday('now') - 2440587.5)*86400000 AS INTEGER) " +
                     "begin " +
-                    "update goals " +
-                    "set current_progress=old.current_progress " +
-                    "where goal_id=new.goal_id; " +
+                    "SELECT RAISE(IGNORE); " +
                     "end");
         }
     };
