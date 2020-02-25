@@ -131,7 +131,7 @@ public class GoalContributionService extends LifecycleService {
                     .setContentText(goal.progressToString())
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setContentIntent(goalDetailsPendingIntent)
-                    .addAction(R.drawable.ic_add_black_24dp, "Stop", stopContributingPendingIntent)
+                    .addAction(R.drawable.ic_notification, "Stop", stopContributingPendingIntent)
                     .build();
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
