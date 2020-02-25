@@ -125,13 +125,12 @@ public class GoalContributionService extends LifecycleService {
                     PendingIntent.getService(this, 0, stopContributionServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Notification notification = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
-                    // TODO: 23/02/20 change icon
-                    .setSmallIcon(R.drawable.ic_add_black_24dp)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle(goal.getTitle())
                     .setContentText(goal.progressToString())
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setContentIntent(goalDetailsPendingIntent)
-                    .addAction(R.drawable.ic_add_black_24dp, "Stop", stopContributingPendingIntent)
+                    .addAction(R.drawable.ic_notification, "Stop", stopContributingPendingIntent)
                     .build();
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -145,8 +144,7 @@ public class GoalContributionService extends LifecycleService {
             stopForeground(true);
         } else if (goalsIds.size() == 1) {
             Notification notification = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
-                    // TODO: 23/02/20 change icon
-                    .setSmallIcon(R.drawable.ic_add_black_24dp)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle("temp")
                     .setContentText("temp")
                     .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -165,13 +163,12 @@ public class GoalContributionService extends LifecycleService {
                     PendingIntent.getService(this, 0, stopAllContributionServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Notification n = new NotificationCompat.Builder(this, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
-                    // TODO: 23/02/20 change icon
-                    .setSmallIcon(R.drawable.ic_add_black_24dp)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle(String.format(Locale.getDefault(), "contributing to %d goals", goalsIds.size()))
                     .setContentText("Tap to open")
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setContentIntent(goalsActivityPendingIntent)
-                    .addAction(R.drawable.ic_add_black_24dp, "Stop all", stopAllContributingPendingIntent)
+                    .addAction(R.drawable.ic_notification, "Stop all", stopAllContributingPendingIntent)
                     .build();
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(NOTIFICATION_ID, n);

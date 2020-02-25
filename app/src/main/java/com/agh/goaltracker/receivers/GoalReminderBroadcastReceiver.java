@@ -35,7 +35,7 @@ public class GoalReminderBroadcastReceiver extends BroadcastReceiver {
         PendingIntent goalDetailsPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(context, CONTRIBUTION_NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_add_black_24dp)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText("start contributing now")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
