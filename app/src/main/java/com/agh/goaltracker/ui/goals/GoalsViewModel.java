@@ -42,7 +42,6 @@ public class GoalsViewModel extends ViewModel {
         _filters.setValue(currentFilters);
     }
 
-    // TODO: 09/02/20 implement filtering
     List<Goal> applyFilters(List<Goal> goals, Set<GoalsFilterType> filterTypes) {
         List<Goal> result = new ArrayList<>();
         for (Goal goal : goals) {

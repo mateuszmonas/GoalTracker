@@ -133,7 +133,7 @@ public class Goal {
     }
 
     public boolean isCompleted() {
-        return totalGoal != 0 && totalGoal <= currentProgress;
+        return (totalGoal != 0 && totalGoal <= currentProgress) || (dueDate != null && dueDate.before(new Date()) && totalGoal == 0);
     }
 
     @Override
