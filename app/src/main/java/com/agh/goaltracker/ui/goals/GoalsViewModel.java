@@ -58,4 +58,16 @@ public class GoalsViewModel extends ViewModel {
     enum GoalsFilterType {
         CURRENT_GOALS, COMPLETED_GOALS, FAILED_GOALS
     }
+
+    void startContributing(Goal goal) {
+        if (goal.isProgressAsTime()) {
+            goalRepository.startContributingToGoal(goal.getGoalId());
+        } else {
+            goalRepository.contributeToGoal(goal.getGoalId());
+        }
+    }
+
+    void stopContributing(Goal goal) {
+        goalRepository.stopContributingToGoal(goal.getGoalId());
+    }
 }
